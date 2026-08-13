@@ -6,7 +6,7 @@ import { Contatti, labelsTranslations, SocialItem } from '@/types';
 import Image from 'next/image';
 import ContactsView from '@/components/ContactsView';
 
-async function getContattiData(): Promise<Contatti> {
+async function getContattiData(): Promise<Contatti | null> {
     return await client.fetch(`*[_type == "contatti"][0]{
       telefono,
       email,

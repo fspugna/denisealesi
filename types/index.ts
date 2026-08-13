@@ -22,20 +22,9 @@ export interface PortableImageProps {
 
 export type PortableContentBlock = PortableTextBlock | SanityImage;
 
-export interface HeroLineStyle {
-    carattere?: 'sans' | 'serif';
-    stile?: 'normale' | 'corsivo';
-    peso?: 'leggero' | 'normale' | 'grassetto';
-    dimensione?: 'piccola' | 'media' | 'grande';
-    colore?: 'bianco' | 'tenue' | 'blu';
-}
-
 export interface Header {
-    fotoHeader: SanityImage[];
-    primaRiga?: string;
-    secondaRiga?: string;
-    stilePrimaRiga?: HeroLineStyle;
-    stileSecondaRiga?: HeroLineStyle;
+    ritratto?: SanityImage & {alt?: string};
+    citazione?: PortableTextBlock[];
 }
 
 export interface About {
@@ -51,10 +40,10 @@ export interface SocialItem {
 }
 
 export interface Contatti {
-    telefono: string;
-    email: string;
-    fotoUrl: string;
-    social: SocialItem[];
+    telefono?: string;
+    email?: string;
+    fotoUrl?: string;
+    social?: SocialItem[];
 }
 
 export interface Esposizione {
@@ -96,15 +85,9 @@ export interface Opera {
     immagine: SanityImage;
     descrizione: string;
     audio?: SanityAudioFile;
-}
-
-export interface Galleria {
-    _id: string;
     ordine?: number;
     mostraInHomepage?: boolean;
-    nome: string;
-    opere: Opera[];
-    copertina: SanityImage;
+    anno?: number;
 }
 
 export interface VideoTranslation {
@@ -125,25 +108,13 @@ export interface Video {
     url: string;
 }
 
-export interface HomeData {
-    header: Header;
-    about: About;
-    gallerie: Galleria[];
-    totaleGallerie: number;
-    video?: Video;
-    esposizioni: Esposizione[];
-    notizie: Notizia[];
-    recensioni: Recensione[];
-    contatti: Contatti;
-}
-
 export const labelsTranslations = {
     it: {
         heroLine1: 'La sintesi di una riflessione,',
         heroLine2: "la narrazione di un'esperienza.",
-        artistLabel: "L'Artista",
-        galleries: 'Gallerie',
-        viewMoreGalleries: 'Vedi altre gallerie',
+        artistLabel: "L'autrice",
+        works: 'Opere',
+        viewMoreWorks: 'Scopri tutte le opere',
         artworkAlt: "Opera d'arte",
         videos: 'Video',
         viewAllVideos: 'Vedi tutti i video',
@@ -164,9 +135,9 @@ export const labelsTranslations = {
     en: {
         heroLine1: 'The synthesis of a reflection,',
         heroLine2: 'the narration of an experience.',
-        artistLabel: 'The Artist',
-        galleries: 'Galleries',
-        viewMoreGalleries: 'See more galleries',
+        artistLabel: 'The author',
+        works: 'Works',
+        viewMoreWorks: 'Discover all works',
         artworkAlt: 'Artwork',
         videos: 'Videos',
         viewAllVideos: 'See all videos',
@@ -187,9 +158,9 @@ export const labelsTranslations = {
     es: {
         heroLine1: 'La sintesis de una reflexion,',
         heroLine2: 'la narracion de una experiencia.',
-        artistLabel: 'El Artista',
-        galleries: 'Galerias',
-        viewMoreGalleries: 'Ver más galerías',
+        artistLabel: 'La autora',
+        works: 'Obras',
+        viewMoreWorks: 'Descubre todas las obras',
         artworkAlt: 'Obra de arte',
         videos: 'Videos',
         viewAllVideos: 'Ver todos los videos',

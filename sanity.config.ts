@@ -7,7 +7,7 @@ import {structure} from './sanity/structure'
 export default defineConfig({
     name: 'default',
     title: 'Denise Alesi',
-    projectId: 'vci8k9tk',
+    projectId: 'f7yyl8n6',
     dataset: 'production',
     plugins: [structureTool({structure}), itITLocale()],
     document: {

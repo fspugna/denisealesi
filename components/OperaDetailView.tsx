@@ -14,18 +14,16 @@ import { Opera } from '@/types';
 
 // Mappa dinamica per l'etichetta del pulsante di ritorno in base alla lingua
 const backLabels: Record<string, string> = {
-    it: '← Torna alla galleria',
-    en: '← Back to gallery',
-    es: '← Volver a la galería',
+    it: '← Torna alle opere',
+    en: '← Back to works',
+    es: '← Volver a las obras',
 };
 
 export default function OperaDetailView({ opera }: { opera: Opera }) {
     const [isOpen, setIsOpen] = useState(false);
     const params = useParams();
 
-    // Estraiamo lang e id (ID della galleria) dalle rotte dinamiche app/[lang]/gallerie/[id]/opere/[operaId]
     const lang = (params?.lang as string) || 'it';
-    const galleriaId = params?.id as string;
 
     const backLabel = backLabels[lang] || backLabels.it;
 
@@ -33,13 +31,13 @@ export default function OperaDetailView({ opera }: { opera: Opera }) {
     const audioUrl = opera.audio?.asset?.url;
     const audioTitolo = opera.audio?.titolo || "Ascolta il commento dell'opera";
 
-    const slides = [
+    const slides = imageUrl ? [
         {
             src: imageUrl,
             title: opera.titolo,
             description: opera.descrizione || "",
         }
-    ];
+    ] : [];
 
     useEffect(() => {
         if (isOpen) {
@@ -55,23 +53,20 @@ export default function OperaDetailView({ opera }: { opera: Opera }) {
 
     return (
         <div className="flex flex-col">
-            {/* Link di ritorno alla galleria */}
-            {galleriaId && (
-                <div className="pt-1 mb-4 md:mb-6">
+                <div className="pt-1 mb-8 md:mb-10">
                     <Link
-                        href={`/${lang}/gallerie/${galleriaId}`}
-                        className="inline-flex items-center text-xs uppercase tracking-widest text-[#9ca9af] hover:text-white transition-colors duration-200"
+                        href={`/${lang}/opere`}
+                        className="inline-flex items-center text-[10px] uppercase tracking-[0.24em] text-black/45 hover:text-black transition-colors duration-200"
                     >
                         {backLabel}
                     </Link>
                 </div>
-            )}
 
             <div className="grid md:grid-cols-2 gap-12 items-start">
                 {/* Immagine con click per aprire il Lightbox */}
                 <div
-                    className="relative aspect-[4/5] md:aspect-[3/4] overflow-hidden rounded-lg bg-[#272833] cursor-zoom-in group"
-                    onClick={() => setIsOpen(true)}
+                    className="relative aspect-[4/5] md:aspect-[3/4] overflow-hidden bg-[#d8d0c2] cursor-zoom-in group"
+                    onClick={() => imageUrl && setIsOpen(true)}
                 >
                     {imageUrl && (
                         <Image
@@ -88,11 +83,12 @@ export default function OperaDetailView({ opera }: { opera: Opera }) {
                 </div>
 
                 {/* Dettagli e Audio Player */}
-                <div className="flex flex-col gap-6">
+                <div className="flex flex-col gap-6 md:pt-10">
                     <div>
-                        <h1 className="text-3xl font-serif mb-2">{opera.titolo}</h1>
+                        {opera.anno && <p className="mb-5 text-[9px] uppercase tracking-[0.28em] text-black/45">{opera.anno}</p>}
+                        <h1 className="mb-6 font-serif text-4xl leading-tight md:text-6xl">{opera.titolo}</h1>
                         {opera.descrizione && (
-                            <p className="text-[#9ca9af] leading-relaxed whitespace-pre-line">
+                            <p className="max-w-xl font-serif text-lg leading-relaxed text-[#625d53] whitespace-pre-line">
                                 {opera.descrizione}
                             </p>
                         )}
@@ -100,7 +96,7 @@ export default function OperaDetailView({ opera }: { opera: Opera }) {
 
                     {/* Player Audio */}
                     {audioUrl && (
-                        <div className="p-4 rounded-xl bg-[#272833] border border-white/10 mt-2">
+                        <div className="mt-6 border-t border-black/15 py-6">
                             <p className="text-xs uppercase tracking-widest opacity-60 mb-3">
                                 {audioTitolo}
                             </p>

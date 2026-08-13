@@ -6,11 +6,13 @@ import { SocialItem } from "@/types";
 import { motion } from 'framer-motion';
 
 interface ContattiProps {
-    contattiData: Contatti,
+    contattiData: Contatti | null,
     lang: string
 }
 
 export default function ContactsView({ contattiData, lang }: ContattiProps) {
+
+    if (!contattiData) return null;
 
     const t = labelsTranslations[lang as keyof typeof labelsTranslations] || labelsTranslations.it;
 
@@ -32,14 +34,14 @@ export default function ContactsView({ contattiData, lang }: ContattiProps) {
                             <div>
                                 <h3 className="text-[10px] uppercase tracking-[0.2em] opacity-30 mb-4 font-mono">{t.contactDetails}</h3>
                                 <div className="space-y-3 text-lg font-light">
-                                    <p className="flex items-center">
+                                    {contattiData.telefono && <p className="flex items-center">
                                         <span className="opacity-20 w-20 text-xs uppercase tracking-wider font-mono">{t.phone}</span>
                                         <a href={`tel:${contattiData.telefono}`} className="hover:text-blue-400 transition-colors font-light">{contattiData.telefono}</a>
-                                    </p>
-                                    <p className="flex items-center">
+                                    </p>}
+                                    {contattiData.email && <p className="flex items-center">
                                         <span className="opacity-20 w-20 text-xs uppercase tracking-wider font-mono">{t.email}</span>
                                         <a href={`mailto:${contattiData.email}`} className="hover:text-blue-400 transition-colors text-base md:text-lg font-light break-all">{contattiData.email}</a>
-                                    </p>
+                                    </p>}
                                 </div>
                             </div>
                         </FadeUp>
@@ -48,7 +50,7 @@ export default function ContactsView({ contattiData, lang }: ContattiProps) {
                             <div>
                                 <h3 className="text-[10px] uppercase tracking-[0.2em] opacity-30 mb-6 font-mono">{t.socialNetworks}</h3>
                                 <div className="flex flex-wrap gap-3">
-                                    {contattiData.social.map((s: SocialItem) => (
+                                    {(contattiData.social || []).map((s: SocialItem) => (
                                         <a
                                             key={s.nome}
                                             href={s.url}
@@ -65,7 +67,7 @@ export default function ContactsView({ contattiData, lang }: ContattiProps) {
                     </div>
                 </div>
 
-                <div className="relative aspect-[3/4] w-full overflow-hidden rounded-md bg-black/20 border border-white/5 shadow-2xl group">
+                {contattiData.fotoUrl && <div className="relative aspect-[3/4] w-full overflow-hidden rounded-md bg-black/20 border border-white/5 shadow-2xl group">
                     <FadeIn delay={0.2}>
                         <Image
                             src={contattiData.fotoUrl}
@@ -75,7 +77,7 @@ export default function ContactsView({ contattiData, lang }: ContattiProps) {
                             className="object-cover transition-all duration-1000 ease-in-out grayscale opacity-90 group-hover:grayscale-0 group-hover:opacity-100 group-hover:scale-102"
                         />
                     </FadeIn>
-                </div>
+                </div>}
             </div>
         </section>
     );

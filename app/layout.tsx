@@ -9,8 +9,8 @@ const playfair = Playfair_Display({ subsets: ['latin'], variable: '--font-serif'
 const inter = Inter({ subsets: ['latin'], variable: '--font-sans' });
 
 export const metadata: Metadata = {
-  title: "Denise Alesi - Artista e Creativa",
-  description: "Esplora l'universo di Denise Alesi.",
+  title: "Denise Alesi — Autrice e artista visiva",
+  description: "Il sito ufficiale di Denise Alesi: scrittura, fotografia, immagini e ricerca artistica.",
 };
 
 export default function RootLayout({

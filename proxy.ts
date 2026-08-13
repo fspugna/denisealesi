@@ -9,8 +9,8 @@ const legacyListRedirects: Record<string, string> = {
   '/chi_sono.php': '/it/about',
   '/chi_sono_old.php': '/it/about',
   '/contatti.php': '/it/contatti',
-  '/galleria.php': '/it/gallerie',
-  '/galleria_old.php': '/it/gallerie',
+  '/galleria.php': '/it/opere',
+  '/galleria_old.php': '/it/opere',
   '/notizie.php': '/it/notizie',
   '/notizie_all.php': '/it/notizie',
   '/recensioni.php': '/it/recensioni',
@@ -22,8 +22,6 @@ const legacyListRedirects: Record<string, string> = {
 }
 
 const legacyDetailTypes: Record<string, {section: string; documentType: string}> = {
-  '/galleria.php': {section: 'gallerie', documentType: 'galleria'},
-  '/galleria_old.php': {section: 'gallerie', documentType: 'galleria'},
   '/notizie.php': {section: 'notizie', documentType: 'notizia'},
   '/recensioni.php': {section: 'recensioni', documentType: 'recensione'},
   '/esposizioni.php': {section: 'esposizioni', documentType: 'esposizione'},

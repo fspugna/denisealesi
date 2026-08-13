@@ -2,9 +2,28 @@ import {defineArrayMember, defineField, defineType} from 'sanity'
 
 export const opera = defineType({
     name: 'opera',
-    title: 'Opera',
+    title: 'Opere',
     type: 'document',
-    fields: [        
+    fields: [
+        defineField({
+            name: 'ordine',
+            title: 'Ordine di visualizzazione',
+            type: 'number',
+            initialValue: 100,
+            validation: (rule) => rule.required().integer().min(0),
+        }),
+        defineField({
+            name: 'mostraInHomepage',
+            title: 'Mostra in homepage',
+            type: 'boolean',
+            initialValue: false,
+        }),
+        defineField({
+            name: 'anno',
+            title: 'Anno',
+            type: 'number',
+            validation: (rule) => rule.integer().min(1900).max(2100),
+        }),
         defineField({
             name: 'immagine',
             title: 'Immagine',
@@ -92,11 +111,13 @@ export const opera = defineType({
         select: {
             title: 'traduzioni.0.titolo', // Prende il titolo del primo elemento dell'array (es. l'italiano)
             media: 'immagine',           // Usa il campo immagine come miniatura
+            anno: 'anno',
         },
         prepare(selection) {
-            const { title, media } = selection;
+            const { title, media, anno } = selection;
             return {
                 title: title || 'Opera senza titolo', // Fallback se il titolo manca
+                subtitle: anno ? String(anno) : undefined,
                 media: media,
             };
         },
