@@ -93,7 +93,7 @@ export default function MainMenu({ lang = 'it' }: { lang?: string }) {
                 <Link href={getLocalizedHref('/')} className="block relative w-full h-full">
                     <Image
                         src="/assets/images/logo.png"
-                        alt="Sandro Frinolli Puzzilli"
+                        alt="Denise Alesi"
                         width={300}
                         height={80}
                         className="object-contain h-full w-auto"

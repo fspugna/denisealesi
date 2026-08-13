@@ -9,8 +9,8 @@ const playfair = Playfair_Display({ subsets: ['latin'], variable: '--font-serif'
 const inter = Inter({ subsets: ['latin'], variable: '--font-sans' });
 
 export const metadata: Metadata = {
-  title: "Sandro Frinolli Puzzilli",
-  description: "Esplora l'universo pittorico di Sandro Frinolli Puzzilli. Tra astrazione lirica e scene sognanti, le sue opere raccontano emozioni visive e riflessioni sul reale.",
+  title: "Denise Alesi - Artista e Creativa",
+  description: "Esplora l'universo di Denise Alesi.",
 };
 
 export default function RootLayout({

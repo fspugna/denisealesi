@@ -27,8 +27,8 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     }
 
     return {
-        title: `${galleria.nome} | Sandro Frinolli Puzzilli`,
-        description: `Esplora la galleria d'arte "${galleria.nome}" di Sandro Frinolli Puzzilli. Scopri la collezione di opere e dipinti dell'artista.`,
+        title: `${galleria.nome} | Denise Alesi`,
+        description: `Esplora la galleria d'arte "${galleria.nome}" di Denise Alesi. Scopri la collezione di opere e dipinti dell'artista.`,
     };
 }
 

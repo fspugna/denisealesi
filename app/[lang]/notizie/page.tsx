@@ -19,15 +19,15 @@ type Props = {
 const metaTranslations = {
     it: {
         title: 'Ultime Notizie ed Eventi',
-        description: 'Resta aggiornato su tutte le novità, le mostre d\'arte ed i riconoscimenti internazionali dell\'artista Sandro Frinolli Puzzilli.',
+        description: 'Resta aggiornato su tutte le novità dell\'artista Denise Alesi.',
     },
     en: {
         title: 'Latest News and Events',
-        description: 'Stay updated on all the latest news, art exhibitions, and international awards of the artist Sandro Frinolli Puzzilli.',
+        description: 'Stay updated on all the latest news of the artist Denise Alesi.',
     },
     es: {
         title: 'Últimas Noticias y Eventos',
-        description: 'Manténgase al día con las últimas noticias, exposiciones de arte y premios internacionales del artista Sandro Frinolli Puzzilli.',
+        description: 'Manténgase al día con las últimas noticias del artista Denise Alesi.',
     },
 } as const;
 
@@ -39,7 +39,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     const translation = metaTranslations[lang as keyof typeof metaTranslations] || metaTranslations.it;
 
     return {
-        title: `${translation.title} | Sandro Frinolli Puzzilli`,
+        title: `${translation.title} | Denise Alesi`,
         description: translation.description,
     };
 }

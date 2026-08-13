@@ -93,8 +93,8 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     );
 
     return {
-        title: `${titoloLocalizzato} | Sandro Frinolli Puzzilli`,
-        description: `Leggi l'articolo "${titoloLocalizzato}" sul sito ufficiale di Sandro Frinolli Puzzilli. Resta aggiornato su mostre, novità ed eventi dell'artista.`,
+        title: `${titoloLocalizzato} | Denise Alesi`,
+        description: `Leggi l'articolo "${titoloLocalizzato}" sul sito ufficiale di Denise Alesi. Resta aggiornato su mostre, novità ed eventi dell'artista.`,
     };
 }
 

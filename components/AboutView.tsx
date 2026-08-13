@@ -41,7 +41,7 @@ export default function AboutView({ aboutData, lang }: AboutProps) {
                             <div className="relative aspect-[4/5] w-full shadow-2xl rounded-lg overflow-hidden border border-white/10 bg-black/20 group">
                                 <Image
                                     src={urlFor(aboutData.foto).url()}
-                                    alt="Sandro Frinolli Puzzilli"
+                                    alt="Denise Alesi"
                                     fill
                                     sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
                                     className="object-cover grayscale opacity-90 group-hover:grayscale-0 group-hover:opacity-100 transition-all duration-1000 ease-out"
@@ -53,7 +53,7 @@ export default function AboutView({ aboutData, lang }: AboutProps) {
                         <div className="space-y-6 flex flex-col justify-center">
                             <FadeUp delay={0.2} className="space-y-6">
                                 <h2 className="text-sm uppercase tracking-[0.4em] opacity-40 italic text-blue-400">{t.artistLabel}</h2>
-                                <h3 className="text-4xl font-serif tracking-wide text-white/95">{aboutData.titolo || "Sandro Frinolli Puzzilli"}</h3>
+                                <h3 className="text-4xl font-serif tracking-wide text-white/95">{aboutData.titolo || "Denise Alesi"}</h3>
                                 <div className="text-white/80 leading-relaxed font-light text-lg space-y-4">
                                     <PortableText value={aboutData?.biografia} />
                                 </div>
