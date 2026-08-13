@@ -19,6 +19,12 @@ const backLabels: Record<string, string> = {
     es: '← Volver a las obras',
 };
 
+const relatedLabels = {
+    it: {title: 'Approfondisci', gallery: 'Apri la galleria fotografica', video: 'Guarda il video', amazon: 'Compra su Amazon'},
+    en: {title: 'Explore', gallery: 'Open the photo gallery', video: 'Watch the video', amazon: 'Buy on Amazon'},
+    es: {title: 'Descubre más', gallery: 'Abrir la galería fotográfica', video: 'Ver el vídeo', amazon: 'Comprar en Amazon'},
+} as const;
+
 export default function OperaDetailView({ opera }: { opera: Opera }) {
     const [isOpen, setIsOpen] = useState(false);
     const params = useParams();
@@ -26,6 +32,7 @@ export default function OperaDetailView({ opera }: { opera: Opera }) {
     const lang = (params?.lang as string) || 'it';
 
     const backLabel = backLabels[lang] || backLabels.it;
+    const related = relatedLabels[lang as keyof typeof relatedLabels] || relatedLabels.it;
 
     const imageUrl = opera.immagine ? urlFor(opera.immagine).url() : '';
     const audioUrl = opera.audio?.asset?.url;
@@ -103,6 +110,32 @@ export default function OperaDetailView({ opera }: { opera: Opera }) {
                             <audio controls src={audioUrl} className="w-full">
                                 Il tuo browser non supporta l&apos;elemento audio.
                             </audio>
+                        </div>
+                    )}
+
+                    {opera.amazonUrl && (
+                        <a
+                            href={opera.amazonUrl}
+                            target="_blank"
+                            rel="noopener noreferrer sponsored"
+                            className="mt-3 inline-flex w-fit items-center gap-4 bg-[#20251f] px-6 py-4 text-[10px] uppercase tracking-[0.22em] text-[#eee8dc] transition-colors hover:bg-[#343b32]"
+                        >
+                            <span>{related.amazon}</span>
+                            <span aria-hidden="true">↗</span>
+                        </a>
+                    )}
+
+                    {(opera.galleriaCollegata || opera.videoCollegato) && (
+                        <div className="mt-6 border-t border-black/15 pt-7">
+                            <p className="mb-4 text-[9px] uppercase tracking-[0.28em] text-black/45">{related.title}</p>
+                            <div className="flex flex-col gap-3">
+                                {opera.galleriaCollegata && <Link href={`/${lang}/gallerie/${opera.galleriaCollegata._id}`} className="group flex items-center justify-between border-b border-black/15 py-3 font-serif text-lg">
+                                    <span>{related.gallery}: <em>{opera.galleriaCollegata.titolo}</em></span><span className="transition-transform group-hover:translate-x-1">→</span>
+                                </Link>}
+                                {opera.videoCollegato && <Link href={`/${lang}/video/${opera.videoCollegato._id}`} className="group flex items-center justify-between border-b border-black/15 py-3 font-serif text-lg">
+                                    <span>{related.video}: <em>{opera.videoCollegato.titolo}</em></span><span className="transition-transform group-hover:translate-x-1">→</span>
+                                </Link>}
+                            </div>
                         </div>
                     )}
                 </div>

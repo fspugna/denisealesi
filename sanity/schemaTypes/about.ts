@@ -2,7 +2,7 @@ import {defineArrayMember, defineField, defineType} from 'sanity'
 
 export const about = defineType({
     name: 'about',
-    title: 'Chi è',
+    title: 'Biografia',
     type: 'document',
     fields: [
         defineField({
@@ -36,11 +36,17 @@ export const about = defineType({
                 return new Set(languages).size === languages.length || 'Ogni lingua può essere inserita una sola volta.'
             }),
         }),
-        defineField({ name: 'foto', title: 'Foto Artista', type: 'image' }),
-        defineField({ name: 'sfondo', title: 'Sfondo sezione', type: 'image' }),
+        defineField({
+            name: 'foto',
+            title: 'Foto biografia',
+            type: 'image',
+            options: {hotspot: true},
+            description: 'Usa lo strumento hotspot per indicare il volto o il punto che non deve essere tagliato.',
+        }),
+        defineField({ name: 'sfondo', title: 'Sfondo biografia', type: 'image' }),
     ],
     preview: {
         select: {title: 'traduzioni.0.titolo'},
-        prepare: ({title}) => ({title: title || 'Chi è'}),
+        prepare: ({title}) => ({title: title || 'Biografia'}),
     },
 })

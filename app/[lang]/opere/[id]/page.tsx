@@ -8,10 +8,18 @@ type Props = {params: Promise<{id: string; lang: string}>}
 
 async function getOpera(id: string, lang: string): Promise<Opera | null> {
   return client.fetch(`*[_type == "opera" && _id == $id][0]{
-    _id, immagine, anno,
+    _id, immagine, anno, amazonUrl,
     "titolo": coalesce(traduzioni[language == $lang][0].titolo, traduzioni[language == "it"][0].titolo, traduzioni[0].titolo),
     "descrizione": coalesce(traduzioni[language == $lang][0].descrizione, traduzioni[language == "it"][0].descrizione, traduzioni[0].descrizione),
-    "audio": coalesce(traduzioni[language == $lang][0].audio, traduzioni[language == "it"][0].audio, audio){titolo, asset->{url}}
+    "audio": coalesce(traduzioni[language == $lang][0].audio, traduzioni[language == "it"][0].audio, audio){titolo, asset->{url}},
+    "galleriaCollegata": galleriaCollegata->{
+      _id,
+      "titolo": coalesce(traduzioni[language == $lang][0].titolo, traduzioni[language == "it"][0].titolo, traduzioni[0].titolo)
+    },
+    "videoCollegato": videoCollegato->{
+      _id,
+      "titolo": coalesce(traduzioni[language == $lang][0].titolo, traduzioni[language == "it"][0].titolo, traduzioni[0].titolo)
+    }
   }`, {id, lang})
 }
 

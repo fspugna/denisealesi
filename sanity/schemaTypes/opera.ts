@@ -13,12 +13,6 @@ export const opera = defineType({
             validation: (rule) => rule.required().integer().min(0),
         }),
         defineField({
-            name: 'mostraInHomepage',
-            title: 'Mostra in homepage',
-            type: 'boolean',
-            initialValue: false,
-        }),
-        defineField({
             name: 'anno',
             title: 'Anno',
             type: 'number',
@@ -32,6 +26,37 @@ export const opera = defineType({
             fields: [
                 defineField({ name: 'alt', type: 'string', title: 'Testo alternativo' }),
             ],
+        }),
+        defineField({
+            name: 'galleriaCollegata',
+            title: 'Galleria fotografica collegata',
+            description: 'Opzionale. Collega una galleria fotografica pertinente a questa opera.',
+            type: 'reference',
+            to: [{type: 'galleriaFotografica'}],
+        }),
+        defineField({
+            name: 'videoCollegato',
+            title: 'Video collegato',
+            description: 'Opzionale. Collega un video pertinente a questa opera.',
+            type: 'reference',
+            to: [{type: 'video'}],
+        }),
+        defineField({
+            name: 'amazonUrl',
+            title: 'Link di acquisto Amazon',
+            description: 'Opzionale. Inserisci il link alla pagina del prodotto su Amazon.',
+            type: 'url',
+            validation: (rule) => rule.uri({scheme: ['https']}).custom((value) => {
+                if (!value) return true
+                try {
+                    const hostname = new URL(value).hostname.toLowerCase()
+                    return hostname === 'amzn.to' || hostname === 'amzn.eu' || hostname === 'amazon.com' || hostname.startsWith('www.amazon.') || hostname.startsWith('amazon.')
+                        ? true
+                        : 'Inserisci un link Amazon valido.'
+                } catch {
+                    return 'Inserisci un URL valido.'
+                }
+            }),
         }),
         defineField({
             name: 'audio',

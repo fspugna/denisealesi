@@ -25,6 +25,13 @@ export type PortableContentBlock = PortableTextBlock | SanityImage;
 export interface Header {
     ritratto?: SanityImage & {alt?: string};
     citazione?: PortableTextBlock[];
+    operaInEvidenza?: {
+        immagine?: SanityImage & {alt?: string};
+        didascalia?: string;
+        titolo?: string;
+        sottotitolo?: string;
+        testo?: PortableTextBlock[];
+    };
 }
 
 export interface About {
@@ -46,23 +53,7 @@ export interface Contatti {
     social?: SocialItem[];
 }
 
-export interface Esposizione {
-    _id: string;
-    titolo: string;
-    data: string;
-    immagini?: SanityImage[];
-    contenuto: PortableContentBlock[];
-}
-
 export interface Notizia {
-    _id: string;
-    titolo: string;
-    data: string;
-    immagini?: SanityImage[];
-    contenuto: PortableContentBlock[];
-}
-
-export interface Recensione {
     _id: string;
     titolo: string;
     data: string;
@@ -86,8 +77,22 @@ export interface Opera {
     descrizione: string;
     audio?: SanityAudioFile;
     ordine?: number;
-    mostraInHomepage?: boolean;
     anno?: number;
+    galleriaCollegata?: { _id: string; titolo: string };
+    videoCollegato?: { _id: string; titolo: string };
+    amazonUrl?: string;
+}
+
+export interface Fotografia extends SanityImage {
+    didascalia?: string;
+}
+
+export interface GalleriaFotografica {
+    _id: string;
+    titolo: string;
+    descrizione?: string;
+    data: string;
+    fotografie: Fotografia[];
 }
 
 export interface VideoTranslation {
@@ -119,13 +124,8 @@ export const labelsTranslations = {
         videos: 'Video',
         viewAllVideos: 'Vedi tutti i video',
         imageFallbackAlt: 'Immagine del contenuto',
-        exhibitions: 'Esposizioni',
-        viewAllExhibitions: 'Vedi tutte le esposizioni',
         latestNews: 'Ultime Notizie',
         viewAllNews: 'Vedi tutte le notizie',
-        reviews: 'Recensioni',
-        readFullReview: 'Leggi lo scritto completo',
-        viewAllReviews: 'Vedi tutte le recensioni',
         contacts: 'Contatti',
         contactDetails: 'Recapiti',
         phone: 'Tel:',
@@ -142,13 +142,8 @@ export const labelsTranslations = {
         videos: 'Videos',
         viewAllVideos: 'See all videos',
         imageFallbackAlt: 'Content image',
-        exhibitions: 'Exhibitions',
-        viewAllExhibitions: 'See all exhibitions',
         latestNews: 'Latest News',
         viewAllNews: 'See all news',
-        reviews: 'Reviews',
-        readFullReview: 'Read the full text',
-        viewAllReviews: 'See all reviews',
         contacts: 'Contacts',
         contactDetails: 'Contact Details',
         phone: 'Phone:',
@@ -165,13 +160,8 @@ export const labelsTranslations = {
         videos: 'Videos',
         viewAllVideos: 'Ver todos los videos',
         imageFallbackAlt: 'Imagen del contenido',
-        exhibitions: 'Exposiciones',
-        viewAllExhibitions: 'Ver todas las exposiciones',
         latestNews: 'Ultimas Noticias',
         viewAllNews: 'Ver todas las noticias',
-        reviews: 'Resenas',
-        readFullReview: 'Leer el texto completo',
-        viewAllReviews: 'Ver todas las resenas',
         contacts: 'Contactos',
         contactDetails: 'Datos de contacto',
         phone: 'Tel:',

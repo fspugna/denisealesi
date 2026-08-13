@@ -1,67 +1,78 @@
-'use client';
+'use client'
 
-import { About, labelsTranslations } from "@/types";
-import { FadeIn, FadeUp } from "./Animate";
-import Image from "next/image";
-import { urlFor } from "@/sanity/lib/image";
-import { PortableText } from "next-sanity";
+import Image from 'next/image'
+import {PortableText} from 'next-sanity'
+import {urlFor} from '@/sanity/lib/image'
+import {About, labelsTranslations} from '@/types'
+import {FadeIn, FadeUp} from './Animate'
 
 interface AboutProps {
-    aboutData: About;
-    lang: string;
+  aboutData: About
+  lang: string
 }
 
-export default function AboutView({ aboutData, lang }: AboutProps) {
+const contextCopy = {
+  it: 'Scrittura, fotografia e ricerca artistica',
+  en: 'Writing, photography and artistic research',
+  es: 'Escritura, fotografía e investigación artística',
+} as const
 
-    const t = labelsTranslations[lang as keyof typeof labelsTranslations] || labelsTranslations.it;
+export default function AboutView({aboutData, lang}: AboutProps) {
+  const language = lang === 'en' || lang === 'es' ? lang : 'it'
+  const t = labelsTranslations[language]
 
-    return (
-        <section className="pb-16">
-            {aboutData && (
-                <section id="chi-è" className="relative py-28 border-white/5 overflow-hidden min-h-[600px] flex items-center">
-                    {aboutData?.sfondo && (
-                        <>
-                            <div
-                                className="absolute inset-0 z-0 bg-cover bg-center bg-no-repeat"
-                                style={{
-                                    backgroundImage: `url(${urlFor(aboutData.sfondo).url()})`,
-                                    backgroundAttachment: 'fixed',
-                                    maskImage: 'linear-gradient(to bottom, transparent, black 15%, black 85%, transparent)',
-                                    WebkitMaskImage: 'linear-gradient(to bottom, transparent, black 15%, black 85%, transparent)'
-                                }}
-                            />
-                            <div className="absolute inset-0 bg-[#1c1d26]/85 backdrop-blur-xs z-0 pointer-events-none" />
-                        </>
-                    )}
+  return <section id="biografia" className="relative overflow-hidden px-6 pb-24 pt-32 md:px-8 md:pb-36 md:pt-40">
+    {aboutData.sfondo && <>
+      <div
+        className="absolute inset-0 z-0 bg-cover bg-center bg-no-repeat opacity-20"
+        style={{
+          backgroundImage: `url(${urlFor(aboutData.sfondo).url()})`,
+          backgroundAttachment: 'fixed',
+          maskImage: 'linear-gradient(to bottom, black, transparent 70%)',
+          WebkitMaskImage: 'linear-gradient(to bottom, black, transparent 70%)',
+        }}
+      />
+      <div className="pointer-events-none absolute inset-0 z-0 bg-[#1c1d26]/80" />
+    </>}
 
-                    {/* Aggiunto px-6 md:px-8 e regolato il gap mobile */}
-                    <div className="relative z-10 max-w-6xl mx-auto px-6 md:px-8 grid md:grid-cols-2 gap-12 md:gap-16 items-center w-full">
-                        {/* Foto dell'artista */}
-                        <FadeIn>
-                            <div className="relative aspect-[4/5] w-full shadow-2xl rounded-lg overflow-hidden border border-white/10 bg-black/20 group">
-                                <Image
-                                    src={urlFor(aboutData.foto).url()}
-                                    alt="Denise Alesi"
-                                    fill
-                                    sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
-                                    className="object-cover grayscale opacity-90 group-hover:grayscale-0 group-hover:opacity-100 transition-all duration-1000 ease-out"
-                                />
-                            </div>
-                        </FadeIn>
+    <div className="relative z-10 mx-auto max-w-7xl">
+      <FadeUp className="mb-12 border-b border-white/15 pb-10 md:mb-16 md:flex md:items-end md:justify-between">
+        <div>
+          <p className="mb-5 text-xs uppercase tracking-[0.42em] text-blue-300/70">{t.artistLabel}</p>
+          <h1 className="font-serif text-5xl leading-none tracking-tight text-white md:text-7xl">
+            {aboutData.titolo || 'Biografia'}
+          </h1>
+        </div>
+        <p className="mt-6 max-w-xs text-sm leading-6 text-white/45 md:mt-0 md:text-right">
+          {contextCopy[language]}
+        </p>
+      </FadeUp>
 
-                        {/* Testo Biografia */}
-                        <div className="space-y-6 flex flex-col justify-center">
-                            <FadeUp delay={0.2} className="space-y-6">
-                                <h2 className="text-sm uppercase tracking-[0.4em] opacity-40 italic text-blue-400">{t.artistLabel}</h2>
-                                <h3 className="text-4xl font-serif tracking-wide text-white/95">{aboutData.titolo || "Denise Alesi"}</h3>
-                                <div className="text-white/80 leading-relaxed font-light text-lg space-y-4">
-                                    <PortableText value={aboutData?.biografia} />
-                                </div>
-                            </FadeUp>
-                        </div>
-                    </div>
-                </section>
-            )}
-        </section>
-    )
+      <div className="grid items-start gap-12 md:grid-cols-12 md:gap-16 lg:gap-24">
+        {aboutData.foto && <FadeIn className="md:sticky md:top-28 md:col-span-5">
+          <figure>
+            <div className="relative aspect-[4/5] overflow-hidden bg-black/20">
+              <Image
+                src={urlFor(aboutData.foto).width(1000).height(1250).fit('crop').url()}
+                alt="Ritratto di Denise Alesi"
+                fill
+                priority
+                sizes="(max-width: 767px) 100vw, 42vw"
+                className="object-cover object-top grayscale-[15%]"
+              />
+            </div>
+            <figcaption className="mt-4 flex items-center gap-4 text-[10px] uppercase tracking-[0.3em] text-white/40">
+              <span className="h-px w-10 bg-white/25" /> Denise Alesi
+            </figcaption>
+          </figure>
+        </FadeIn>}
+
+        <FadeUp delay={0.15} className={aboutData.foto ? 'md:col-span-7' : 'md:col-span-8 md:col-start-3'}>
+          <div className="space-y-6 text-base font-light leading-[1.8] text-white/75 md:text-lg [&>p:first-child]:font-serif [&>p:first-child]:text-2xl [&>p:first-child]:font-normal [&>p:first-child]:leading-[1.45] [&>p:first-child]:text-white/95 md:[&>p:first-child]:text-3xl">
+            <PortableText value={aboutData.biografia} />
+          </div>
+        </FadeUp>
+      </div>
+    </div>
+  </section>
 }

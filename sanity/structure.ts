@@ -8,8 +8,8 @@ export const structure: StructureResolver = (S) =>
     .items([
       S.listItem()
         .id('about')
-        .title('Chi è')
-        .child(S.document().schemaType('about').documentId('about').title('Chi è')),
+        .title('Biografia')
+        .child(S.document().schemaType('about').documentId('about').title('Biografia')),
       S.listItem()
         .id('header')
         .title('Header Homepage')

@@ -7,9 +7,9 @@ import {useEffect, useState} from 'react'
 const supportedLanguages = ['it', 'en', 'es'] as const
 
 const menuLabels = {
-  it: {index: 'Indice', close: 'Chiudi', home: 'Home', about: 'Chi è', works: 'Opere', videos: 'Video', exhibitions: 'Esposizioni', news: 'Pensieri', reviews: 'Recensioni', contacts: 'Contatti'},
-  en: {index: 'Index', close: 'Close', home: 'Home', about: 'About', works: 'Works', videos: 'Videos', exhibitions: 'Exhibitions', news: 'Thoughts', reviews: 'Reviews', contacts: 'Contacts'},
-  es: {index: 'Índice', close: 'Cerrar', home: 'Inicio', about: 'Quién es', works: 'Obras', videos: 'Vídeos', exhibitions: 'Exposiciones', news: 'Pensamientos', reviews: 'Reseñas', contacts: 'Contacto'},
+  it: {index: 'Indice', close: 'Chiudi', home: 'Home', biography: 'Biografia', works: 'Opere', galleries: 'Gallerie fotografiche', videos: 'Video', news: 'Pensieri', contacts: 'Contatti'},
+  en: {index: 'Index', close: 'Close', home: 'Home', biography: 'Biography', works: 'Works', galleries: 'Photo galleries', videos: 'Videos', news: 'Thoughts', contacts: 'Contacts'},
+  es: {index: 'Índice', close: 'Cerrar', home: 'Inicio', biography: 'Biografía', works: 'Obras', galleries: 'Galerías fotográficas', videos: 'Vídeos', news: 'Pensamientos', contacts: 'Contacto'},
 } as const
 
 export default function MainMenu({lang = 'it'}: {lang?: string}) {
@@ -27,9 +27,9 @@ export default function MainMenu({lang = 'it'}: {lang?: string}) {
   }, [isOpen])
 
   const links = [
-    [labels.home, '/'], [labels.about, '/about'], [labels.works, '/opere'],
-    [labels.news, '/notizie'], [labels.exhibitions, '/esposizioni'],
-    [labels.videos, '/video'], [labels.reviews, '/recensioni'], [labels.contacts, '/contatti'],
+    [labels.home, '/'], [labels.biography, '/biografia'], [labels.works, '/opere'],
+    [labels.galleries, '/gallerie'], [labels.news, '/notizie'],
+    [labels.videos, '/video'], [labels.contacts, '/contatti'],
   ] as const
 
   return (

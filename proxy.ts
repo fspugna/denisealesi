@@ -6,25 +6,23 @@ const locales = ['it', 'en', 'es']
 const legacyListRedirects: Record<string, string> = {
   '/index.php': '/it',
   '/index_old.php': '/it',
-  '/chi_sono.php': '/it/about',
-  '/chi_sono_old.php': '/it/about',
+  '/chi_sono.php': '/it/biografia',
+  '/chi_sono_old.php': '/it/biografia',
   '/contatti.php': '/it/contatti',
   '/galleria.php': '/it/opere',
   '/galleria_old.php': '/it/opere',
   '/notizie.php': '/it/notizie',
   '/notizie_all.php': '/it/notizie',
-  '/recensioni.php': '/it/recensioni',
-  '/recensioni_all.php': '/it/recensioni',
-  '/esposizioni.php': '/it/esposizioni',
-  '/esposizioni_all.php': '/it/esposizioni',
+  '/recensioni.php': '/it/notizie',
+  '/recensioni_all.php': '/it/notizie',
+  '/esposizioni.php': '/it/gallerie',
+  '/esposizioni_all.php': '/it/gallerie',
   '/video.php': '/it/video',
   '/video_all.php': '/it/video',
 }
 
 const legacyDetailTypes: Record<string, {section: string; documentType: string}> = {
   '/notizie.php': {section: 'notizie', documentType: 'notizia'},
-  '/recensioni.php': {section: 'recensioni', documentType: 'recensione'},
-  '/esposizioni.php': {section: 'esposizioni', documentType: 'esposizione'},
 }
 
 function permanentRedirect(request: NextRequest, pathname: string) {
@@ -36,6 +34,9 @@ function permanentRedirect(request: NextRequest, pathname: string) {
 
 export function proxy(request: NextRequest) {
   const {pathname} = request.nextUrl
+
+  const oldBiographyRoute = pathname.match(/^\/(it|en|es)\/about\/?$/)
+  if (oldBiographyRoute) return permanentRedirect(request, `/${oldBiographyRoute[1]}/biografia`)
 
   const legacyDestination = legacyListRedirects[pathname.toLowerCase()]
   if (legacyDestination) {
