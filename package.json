@@ -1,0 +1,46 @@
+{
+  "name": "sandrofrinolli-next",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "eslint",
+    "migration:analyze": "node migration/scripts/migrate-legacy.mjs analyze",
+    "migration:run": "node migration/scripts/migrate-legacy.mjs migrate",
+    "migration:videos:analyze": "node migration/scripts/migrate-legacy.mjs videos-analyze",
+    "migration:videos:run": "node migration/scripts/migrate-legacy.mjs videos-migrate",
+    "migration:about:analyze": "node migration/scripts/consolidate-about.mjs",
+    "migration:about:run": "node migration/scripts/consolidate-about.mjs --execute"
+  },
+  "dependencies": {
+    "@portabletext/react": "^6.2.0",
+    "@sanity/client": "^7.23.0",
+    "@sanity/image-url": "^2.1.1",
+    "@sanity/locale-it-it": "^1.1.35",
+    "@sanity/vision": "^5.31.1",
+    "framer-motion": "^12.42.0",
+    "next": "16.2.9",
+    "next-sanity": "^13.1.1",
+    "react": "19.2.4",
+    "react-dom": "19.2.4",
+    "sanity": "^5.31.1",
+    "styled-components": "^6.4.2",
+    "yet-another-react-lightbox": "^3.32.0"
+  },
+  "devDependencies": {
+    "@tailwindcss/postcss": "^4",
+    "@tailwindcss/typography": "^0.5.20",
+    "@types/node": "^20",
+    "@types/react": "^19",
+    "@types/react-dom": "^19",
+    "autoprefixer": "^10.5.0",
+    "eslint": "^9",
+    "eslint-config-next": "16.2.9",
+    "jsdom": "^29.1.1",
+    "postcss": "^8.5.15",
+    "tailwindcss": "^4.3.1",
+    "typescript": "^5"
+  }
+}
