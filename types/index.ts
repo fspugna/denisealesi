@@ -15,13 +15,6 @@ export interface SanityImage {
 }
 
 // 2. Interfaccia unica per le componenti che renderizzano immagini
-export interface PortableImageProps {
-    value: SanityImage;
-    className?: string;
-}
-
-export type PortableContentBlock = PortableTextBlock | SanityImage;
-
 export interface Header {
     ritratto?: SanityImage & {alt?: string};
     citazione?: PortableTextBlock[];
@@ -42,6 +35,7 @@ export interface About {
 }
 
 export interface SocialItem {
+    _key?: string;
     nome: string;
     url: string;
 }
@@ -50,15 +44,8 @@ export interface Contatti {
     telefono?: string;
     email?: string;
     fotoUrl?: string;
+    fotoAlt?: string;
     social?: SocialItem[];
-}
-
-export interface Notizia {
-    _id: string;
-    titolo: string;
-    data: string;
-    immagini?: SanityImage[];
-    contenuto: PortableContentBlock[];
 }
 
 export interface SanityAudioFile {
@@ -91,7 +78,7 @@ export interface GalleriaFotografica {
     _id: string;
     titolo: string;
     descrizione?: string;
-    data: string;
+    data?: string;
     fotografie: Fotografia[];
 }
 
@@ -100,11 +87,6 @@ export interface VideoTranslation {
     titolo?: string;
 }
 
-export interface LocalizedContentTranslation {
-    language: string;
-    titolo?: string;
-    contenuto?: PortableContentBlock[];
-}
 
 export interface Video {
     _id: string;
@@ -124,8 +106,6 @@ export const labelsTranslations = {
         videos: 'Video',
         viewAllVideos: 'Vedi tutti i video',
         imageFallbackAlt: 'Immagine del contenuto',
-        latestNews: 'Ultime Notizie',
-        viewAllNews: 'Vedi tutte le notizie',
         contacts: 'Contatti',
         contactDetails: 'Recapiti',
         phone: 'Tel:',
@@ -142,8 +122,6 @@ export const labelsTranslations = {
         videos: 'Videos',
         viewAllVideos: 'See all videos',
         imageFallbackAlt: 'Content image',
-        latestNews: 'Latest News',
-        viewAllNews: 'See all news',
         contacts: 'Contacts',
         contactDetails: 'Contact Details',
         phone: 'Phone:',
@@ -160,8 +138,6 @@ export const labelsTranslations = {
         videos: 'Videos',
         viewAllVideos: 'Ver todos los videos',
         imageFallbackAlt: 'Imagen del contenido',
-        latestNews: 'Ultimas Noticias',
-        viewAllNews: 'Ver todas las noticias',
         contacts: 'Contactos',
         contactDetails: 'Datos de contacto',
         phone: 'Tel:',

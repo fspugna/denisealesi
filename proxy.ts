@@ -11,18 +11,10 @@ const legacyListRedirects: Record<string, string> = {
   '/contatti.php': '/it/contatti',
   '/galleria.php': '/it/opere',
   '/galleria_old.php': '/it/opere',
-  '/notizie.php': '/it/notizie',
-  '/notizie_all.php': '/it/notizie',
-  '/recensioni.php': '/it/notizie',
-  '/recensioni_all.php': '/it/notizie',
   '/esposizioni.php': '/it/gallerie',
   '/esposizioni_all.php': '/it/gallerie',
   '/video.php': '/it/video',
   '/video_all.php': '/it/video',
-}
-
-const legacyDetailTypes: Record<string, {section: string; documentType: string}> = {
-  '/notizie.php': {section: 'notizie', documentType: 'notizia'},
 }
 
 function permanentRedirect(request: NextRequest, pathname: string) {
@@ -40,16 +32,6 @@ export function proxy(request: NextRequest) {
 
   const legacyDestination = legacyListRedirects[pathname.toLowerCase()]
   if (legacyDestination) {
-    const legacyId = request.nextUrl.searchParams.get('id')
-    const detail = legacyDetailTypes[pathname.toLowerCase()]
-
-    if (detail && legacyId && /^\d+$/.test(legacyId)) {
-      return permanentRedirect(
-        request,
-        `/it/${detail.section}/legacy-${detail.documentType}-${legacyId}`,
-      )
-    }
-
     return permanentRedirect(request, legacyDestination)
   }
 
@@ -73,10 +55,6 @@ export const config = {
     '/contatti.php',
     '/galleria.php',
     '/galleria_old.php',
-    '/notizie.php',
-    '/notizie_all.php',
-    '/recensioni.php',
-    '/recensioni_all.php',
     '/esposizioni.php',
     '/esposizioni_all.php',
     '/video.php',

@@ -9,7 +9,7 @@ export const galleriaFotografica = defineType({
       name: 'data',
       title: 'Data',
       type: 'date',
-      validation: (rule) => rule.required(),
+      description: 'Facoltativa: compilala solo quando la data della galleria è nota.',
     }),
     defineField({
       name: 'traduzioni',
@@ -43,6 +43,27 @@ export const galleriaFotografica = defineType({
         ],
       })],
       validation: (rule) => rule.required().min(1).error('Carica almeno una fotografia.'),
+    }),
+    defineField({
+      name: 'legacyId',
+      title: 'ID sito precedente',
+      type: 'string',
+      readOnly: true,
+      hidden: ({value}) => value === undefined,
+    }),
+    defineField({
+      name: 'legacyUrl',
+      title: 'URL sito precedente',
+      type: 'url',
+      readOnly: true,
+      hidden: ({value}) => value === undefined,
+    }),
+    defineField({
+      name: 'migratedAt',
+      title: 'Data migrazione',
+      type: 'datetime',
+      readOnly: true,
+      hidden: ({value}) => value === undefined,
     }),
   ],
   preview: {

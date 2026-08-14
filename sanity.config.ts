@@ -15,9 +15,9 @@ export default defineConfig({
             enabled: false,
         },
         newDocumentOptions: (previous) => previous.filter(
-            (item) => !['about', 'header'].includes(item.templateId),
+            (item) => !['about', 'header', 'contatti'].includes(item.templateId),
         ),
-        actions: (previous, context) => ['about', 'header'].includes(context.schemaType)
+        actions: (previous, context) => ['about', 'header', 'contatti'].includes(context.schemaType)
             ? previous.filter((action) => action.action !== 'delete' && action.action !== 'duplicate')
             : previous,
     },

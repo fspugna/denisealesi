@@ -26,8 +26,14 @@ function getLanguage(pathname: string) {
   return language === 'en' || language === 'es' ? language : 'it'
 }
 
+function ensureGoogleTag() {
+  window.dataLayer = window.dataLayer || []
+  window.gtag = window.gtag || ((...args: unknown[]) => window.dataLayer.push(args))
+  return window.gtag
+}
+
 function updateGoogleConsent(choice: ConsentChoice) {
-  window.gtag?.('consent', 'update', {
+  ensureGoogleTag()('consent', 'update', {
     analytics_storage: choice,
     ad_storage: 'denied',
     ad_user_data: 'denied',
@@ -44,6 +50,16 @@ export function AnalyticsConsent() {
   const text = copy[getLanguage(pathname)]
 
   useEffect(() => {
+    const gtag = ensureGoogleTag()
+    gtag('consent', 'default', {
+      analytics_storage: 'denied',
+      ad_storage: 'denied',
+      ad_user_data: 'denied',
+      ad_personalization: 'denied',
+      wait_for_update: 500,
+    })
+    gtag('set', 'ads_data_redaction', true)
+
     const saved = window.localStorage.getItem(storageKey)
     const initialChoice = saved === 'granted' || saved === 'denied' ? saved : null
     queueMicrotask(() => {

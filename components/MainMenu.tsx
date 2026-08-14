@@ -7,9 +7,9 @@ import {useEffect, useState} from 'react'
 const supportedLanguages = ['it', 'en', 'es'] as const
 
 const menuLabels = {
-  it: {index: 'Indice', close: 'Chiudi', home: 'Home', biography: 'Biografia', works: 'Opere', galleries: 'Gallerie fotografiche', videos: 'Video', news: 'Pensieri', contacts: 'Contatti'},
-  en: {index: 'Index', close: 'Close', home: 'Home', biography: 'Biography', works: 'Works', galleries: 'Photo galleries', videos: 'Videos', news: 'Thoughts', contacts: 'Contacts'},
-  es: {index: 'Índice', close: 'Cerrar', home: 'Inicio', biography: 'Biografía', works: 'Obras', galleries: 'Galerías fotográficas', videos: 'Vídeos', news: 'Pensamientos', contacts: 'Contacto'},
+  it: {index: 'Indice', close: 'Chiudi', home: 'Home', biography: 'Biografia', works: 'Opere', galleries: 'Gallerie fotografiche', videos: 'Video', contacts: 'Contatti'},
+  en: {index: 'Index', close: 'Close', home: 'Home', biography: 'Biography', works: 'Works', galleries: 'Photo galleries', videos: 'Videos', contacts: 'Contacts'},
+  es: {index: 'Índice', close: 'Cerrar', home: 'Inicio', biography: 'Biografía', works: 'Obras', galleries: 'Galerías fotográficas', videos: 'Vídeos', contacts: 'Contacto'},
 } as const
 
 export default function MainMenu({lang = 'it'}: {lang?: string}) {
@@ -28,8 +28,7 @@ export default function MainMenu({lang = 'it'}: {lang?: string}) {
 
   const links = [
     [labels.home, '/'], [labels.biography, '/biografia'], [labels.works, '/opere'],
-    [labels.galleries, '/gallerie'], [labels.news, '/notizie'],
-    [labels.videos, '/video'], [labels.contacts, '/contatti'],
+    [labels.galleries, '/gallerie'], [labels.videos, '/video'], [labels.contacts, '/contatti'],
   ] as const
 
   return (

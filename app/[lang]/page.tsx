@@ -1,15 +1,18 @@
 import {FadeIn, FadeUp} from '@/components/Animate'
+import ContactsView from '@/components/ContactsView'
+import {withContactFallback} from '@/lib/contacts'
 import {client} from '@/sanity/lib/client'
 import {urlFor} from '@/sanity/lib/image'
-import type {About, Header, Opera} from '@/types'
+import type {Contatti, Header, Opera} from '@/types'
 import {PortableText} from '@portabletext/react'
 import Image from 'next/image'
 import Link from 'next/link'
+import {defineQuery} from 'next-sanity'
 
 type HomePageData = {
   header: Header | null
-  about: About | null
   opere: Opera[]
+  contatti: Contatti | null
 }
 
 const copy = {
@@ -18,8 +21,7 @@ const copy = {
   es: {role: 'Autora · artista visual', works: 'Obras', allWorks: 'Todas las obras', biography: 'Biografía', read: 'Leer la biografía'},
 } as const
 
-async function getHomeData(lang: string): Promise<HomePageData> {
-  return client.fetch(`{
+const HOME_QUERY = defineQuery(`{
     "header": *[_id == "header"][0]{
       ritratto,
       "citazione": coalesce(traduzioni[language == $lang][0].citazione, traduzioni[language == "it"][0].citazione),
@@ -31,17 +33,22 @@ async function getHomeData(lang: string): Promise<HomePageData> {
         "testo": coalesce(traduzioni[language == $lang][0].testo, traduzioni[language == "it"][0].testo)
       }
     },
-    "about": *[_id == "about"][0]{
-      "titolo": coalesce(traduzioni[language == $lang][0].titolo, traduzioni[language == "it"][0].titolo),
-      "biografia": coalesce(traduzioni[language == $lang][0].biografia, traduzioni[language == "it"][0].biografia),
-      foto
-    },
     "opere": *[_type == "opera"] | order(_createdAt desc)[0...4]{
       _id, immagine, anno, ordine,
       "titolo": coalesce(traduzioni[language == $lang][0].titolo, traduzioni[language == "it"][0].titolo, traduzioni[0].titolo),
       "descrizione": coalesce(traduzioni[language == $lang][0].descrizione, traduzioni[language == "it"][0].descrizione, traduzioni[0].descrizione)
+    },
+    "contatti": *[_id == "contatti"][0]{
+      telefono,
+      email,
+      "fotoUrl": foto.asset->url,
+      "fotoAlt": foto.alt,
+      social[]{_key, nome, url}
     }
-  }`, {lang})
+  }`)
+
+async function getHomeData(lang: string): Promise<HomePageData> {
+  return client.fetch<HomePageData>(HOME_QUERY, {lang})
 }
 
 export default async function Home({params}: {params: Promise<{lang: string}>}) {
@@ -49,6 +56,7 @@ export default async function Home({params}: {params: Promise<{lang: string}>}) 
   const data = await getHomeData(lang)
   const text = copy[lang as keyof typeof copy] || copy.it
   const portrait = data.header?.ritratto
+  const contacts = withContactFallback(data.contatti)
 
   return (
     <div className="overflow-hidden bg-[#eee8dc] text-[#20231f]">
@@ -59,12 +67,12 @@ export default async function Home({params}: {params: Promise<{lang: string}>}) 
           <p className="absolute bottom-7 left-6 text-[9px] uppercase tracking-[0.35em] text-white/65 md:left-10">Denise Alesi · Roma</p>
         </div>
 
-        <div className="relative flex min-h-[72vh] flex-col justify-center px-7 py-28 sm:px-12 lg:min-h-screen lg:px-[10vw]">
-          <span className="mb-8 text-[10px] uppercase tracking-[0.34em] text-[#766e60]">{text.role}</span>
+        <div className="relative flex min-h-[72vh] flex-col justify-center px-7 py-20 sm:px-12 lg:min-h-screen lg:px-[10vw] lg:py-16">
+          <span className="mb-6 text-[10px] uppercase tracking-[0.34em] text-[#766e60]">{text.role}</span>
           <FadeUp>
-            <h1 className="font-serif text-[clamp(3.5rem,7vw,7.8rem)] leading-[0.82] tracking-[-0.05em]">Denise<br/><em className="font-normal">Alesi</em></h1>
+            <h1 className="font-serif text-[clamp(3.5rem,6vw,6.8rem)] leading-[0.82] tracking-[-0.05em]">Denise<br/><em className="font-normal">Alesi</em></h1>
           </FadeUp>
-          <div className="my-8 h-px w-16 bg-[#9e835c]" />
+          <div className="my-6 h-px w-16 bg-[#9e835c]" />
           <FadeUp delay={0.15}>
             <div className="max-w-2xl font-serif text-[clamp(1rem,1.35vw,1.25rem)] leading-[1.65] text-[#4e4b43] [&_p+p]:mt-5 [&_p:last-child]:text-sm [&_p:last-child]:text-[#766e60]">
               {data.header?.citazione?.length ? <PortableText value={data.header.citazione} /> : <>
@@ -72,6 +80,17 @@ export default async function Home({params}: {params: Promise<{lang: string}>}) 
                 <p>(tratto da <em>Immagini e parole</em> di Denise Alesi)</p>
               </>}
             </div>
+          </FadeUp>
+          <FadeUp delay={0.3} className="mt-7">
+            <Link
+              href={`/${lang}/biografia`}
+              className="group inline-flex items-center gap-5 text-[10px] uppercase tracking-[0.25em] text-[#625b50] transition-colors hover:text-[#20231f]"
+              aria-label={text.read}
+            >
+              <span className="h-px w-10 bg-[#9e835c] transition-all duration-500 group-hover:w-16" />
+              <span>{text.read}</span>
+              <span className="flex size-9 items-center justify-center rounded-full border border-[#9e835c]/60 text-sm transition-all duration-300 group-hover:border-[#9e835c] group-hover:bg-[#9e835c] group-hover:text-[#eee8dc]" aria-hidden="true">→</span>
+            </Link>
           </FadeUp>
           <span className="absolute bottom-8 right-8 hidden text-[9px] uppercase tracking-[0.3em] text-[#82796a] lg:block [writing-mode:vertical-rl]">Scorri per entrare</span>
         </div>
@@ -118,23 +137,10 @@ export default async function Home({params}: {params: Promise<{lang: string}>}) 
         </div>
       </section>
 
-      {data.about && <section className="grid border-t border-[#292c27]/15 bg-[#ddd5c7] lg:grid-cols-[0.72fr_1.28fr]">
-        <div className="border-b border-[#292c27]/15 px-7 py-12 lg:border-b-0 lg:border-r lg:px-12 lg:py-24">
-          <span className="text-[10px] uppercase tracking-[0.32em] text-[#766e60]">01 — {text.biography}</span>
-        </div>
-        <FadeUp className="px-7 py-16 sm:px-12 lg:px-[9vw] lg:py-24">
-          <h2 className="mb-10 max-w-2xl font-serif text-4xl leading-tight md:text-6xl">{data.about.titolo}</h2>
-          <div className="prose prose-lg max-w-2xl font-serif leading-relaxed text-[#4e4b43] prose-p:mb-5">
-            <PortableText value={data.about.biografia || []} />
-          </div>
-          <Link href={`/${lang}/biografia`} className="mt-10 inline-block border-b border-[#20231f] pb-1 text-[10px] uppercase tracking-[0.25em]">{text.read}</Link>
-        </FadeUp>
-      </section>}
-
       <section className="border-t border-black/15 bg-[#eee8dc] px-6 py-24 text-[#20231f] md:px-12 lg:py-32">
         <div className="mx-auto max-w-7xl">
           <div className="mb-16 flex items-end justify-between border-b border-black/20 pb-6">
-            <div><span className="text-[9px] uppercase tracking-[0.3em] text-black/40">02</span><h2 className="mt-3 font-serif text-4xl tracking-[-0.03em] md:text-6xl">{text.works}</h2></div>
+            <div><span className="text-[9px] uppercase tracking-[0.3em] text-black/40">01</span><h2 className="mt-3 font-serif text-4xl tracking-[-0.03em] md:text-6xl">{text.works}</h2></div>
             <Link href={`/${lang}/opere`} className="hidden text-[10px] uppercase tracking-[0.24em] text-black/55 transition-colors hover:text-black sm:block">{text.allWorks} →</Link>
           </div>
           {data.opere.length ? <div className="grid gap-px bg-black/15 sm:grid-cols-2 xl:grid-cols-4">
@@ -148,6 +154,7 @@ export default async function Home({params}: {params: Promise<{lang: string}>}) 
           <Link href={`/${lang}/opere`} className="mt-12 inline-block text-[10px] uppercase tracking-[0.24em] text-black/55 sm:hidden">{text.allWorks} →</Link>
         </div>
       </section>
+      <ContactsView contattiData={contacts} lang={lang} />
     </div>
   )
 }

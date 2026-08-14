@@ -1,84 +1,66 @@
-"use client";
-import Image from "next/image";
-import { FadeIn, FadeUp } from "./Animate";
-import { Contatti, labelsTranslations } from "@/types";
-import { SocialItem } from "@/types";
-import { motion } from 'framer-motion';
+'use client'
 
-interface ContattiProps {
-    contattiData: Contatti | null,
-    lang: string
-}
+import Image from 'next/image'
+import type {Contatti} from '@/types'
+import {FadeIn, FadeUp} from './Animate'
 
-export default function ContactsView({ contattiData, lang }: ContattiProps) {
+const copy = {
+  it: {eyebrow: 'Contatti', title: 'Restiamo in contatto.', intro: 'Per informazioni sulle opere, i libri e i progetti artistici, puoi scrivere direttamente a Denise.', email: 'Scrivi una email', phone: 'Telefono', social: 'Segui Denise'},
+  en: {eyebrow: 'Contacts', title: 'Let’s keep in touch.', intro: 'For information about works, books and artistic projects, you can write directly to Denise.', email: 'Send an email', phone: 'Phone', social: 'Follow Denise'},
+  es: {eyebrow: 'Contacto', title: 'Sigamos en contacto.', intro: 'Para información sobre obras, libros y proyectos artísticos, puedes escribir directamente a Denise.', email: 'Enviar un correo', phone: 'Teléfono', social: 'Sigue a Denise'},
+} as const
 
-    if (!contattiData) return null;
+export default function ContactsView({contattiData, lang}: {contattiData: Contatti | null; lang: string}) {
+  if (!contattiData) return null
+  const language = lang === 'en' || lang === 'es' ? lang : 'it'
+  const text = copy[language]
 
-    const t = labelsTranslations[lang as keyof typeof labelsTranslations] || labelsTranslations.it;
+  return <section id="contatti" className="border-t border-white/10 bg-[#20251f] px-6 py-24 text-[#eee8dc] sm:px-10 lg:py-36">
+    <div className="mx-auto max-w-7xl">
+      <div className="mb-14 flex items-center gap-5 text-[#c5a46d]">
+        <span className="text-[9px] uppercase tracking-[0.34em]">{text.eyebrow}</span>
+        <span className="h-px flex-1 bg-current opacity-30" />
+        <span className="font-serif text-sm italic opacity-70">02</span>
+      </div>
 
-    return (
-        <section id="contatti" className="py-4 py-md-28 px-6 bg-[#1a1b26]/90 backdrop-blur-md text-white">
-            <div className="max-w-5xl mx-auto grid md:grid-cols-2 gap-16 items-center">
-                <div className="space-y-12">
-                    <motion.h1
-                        initial={{ opacity: 0, y: -15 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        transition={{ duration: 0.6 }}
-                        className="text-4xl md:text-5xl font-serif mb-16 text-white"
-                    >
-                        {t.contacts}
-                    </motion.h1>
+      <div className={`grid items-start gap-14 ${contattiData.fotoUrl ? 'lg:grid-cols-[1.15fr_0.7fr] lg:gap-[10vw]' : 'lg:grid-cols-[1.1fr_0.9fr] lg:gap-[12vw]'}`}>
+        <FadeUp>
+          <h2 className="max-w-3xl font-serif text-5xl leading-[0.95] tracking-[-0.04em] sm:text-6xl lg:text-7xl">{text.title}</h2>
+          <p className="mt-8 max-w-xl text-base font-light leading-7 text-white/60 md:text-lg">{text.intro}</p>
 
-                    <div className="space-y-8">
-                        <FadeUp delay={0.15}>
-                            <div>
-                                <h3 className="text-[10px] uppercase tracking-[0.2em] opacity-30 mb-4 font-mono">{t.contactDetails}</h3>
-                                <div className="space-y-3 text-lg font-light">
-                                    {contattiData.telefono && <p className="flex items-center">
-                                        <span className="opacity-20 w-20 text-xs uppercase tracking-wider font-mono">{t.phone}</span>
-                                        <a href={`tel:${contattiData.telefono}`} className="hover:text-blue-400 transition-colors font-light">{contattiData.telefono}</a>
-                                    </p>}
-                                    {contattiData.email && <p className="flex items-center">
-                                        <span className="opacity-20 w-20 text-xs uppercase tracking-wider font-mono">{t.email}</span>
-                                        <a href={`mailto:${contattiData.email}`} className="hover:text-blue-400 transition-colors text-base md:text-lg font-light break-all">{contattiData.email}</a>
-                                    </p>}
-                                </div>
-                            </div>
-                        </FadeUp>
+          {contattiData.email && <a href={`mailto:${contattiData.email}`} className="group mt-12 block border-b border-white/20 pb-5 transition-colors hover:border-[#c5a46d]">
+            <span className="mb-3 block text-[9px] uppercase tracking-[0.3em] text-[#c5a46d]">{text.email}</span>
+            <span className="flex items-center justify-between gap-5 font-serif text-[clamp(1.35rem,3.5vw,3rem)] leading-tight">
+              <span className="break-all">{contattiData.email}</span>
+              <span className="shrink-0 text-2xl transition-transform duration-300 group-hover:translate-x-2">→</span>
+            </span>
+          </a>}
 
-                        <FadeUp delay={0.3}>
-                            <div>
-                                <h3 className="text-[10px] uppercase tracking-[0.2em] opacity-30 mb-6 font-mono">{t.socialNetworks}</h3>
-                                <div className="flex flex-wrap gap-3">
-                                    {(contattiData.social || []).map((s: SocialItem) => (
-                                        <a
-                                            key={s.nome}
-                                            href={s.url}
-                                            target="_blank"
-                                            rel="noopener noreferrer"
-                                            className="px-5 py-2.5 border border-white/5 rounded text-[10px] uppercase tracking-widest bg-white/[0.02] hover:bg-white hover:text-[#1a1b26] hover:border-white transition-all duration-400"
-                                        >
-                                            {s.nome}
-                                        </a>
-                                    ))}
-                                </div>
-                            </div>
-                        </FadeUp>
-                    </div>
-                </div>
+          {contattiData.telefono && <div className="mt-8">
+            <span className="mb-2 block text-[9px] uppercase tracking-[0.3em] text-white/35">{text.phone}</span>
+            <a href={`tel:${contattiData.telefono}`} className="font-serif text-2xl transition-colors hover:text-[#c5a46d]">{contattiData.telefono}</a>
+          </div>}
+        </FadeUp>
 
-                {contattiData.fotoUrl && <div className="relative aspect-[3/4] w-full overflow-hidden rounded-md bg-black/20 border border-white/5 shadow-2xl group">
-                    <FadeIn delay={0.2}>
-                        <Image
-                            src={contattiData.fotoUrl}
-                            alt="Denise Alesi"
-                            fill
-                            sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
-                            className="object-cover transition-all duration-1000 ease-in-out grayscale opacity-90 group-hover:grayscale-0 group-hover:opacity-100 group-hover:scale-102"
-                        />
-                    </FadeIn>
-                </div>}
+        <FadeIn delay={0.15}>
+          {contattiData.fotoUrl ? <figure>
+            <div className="relative aspect-[4/5] overflow-hidden bg-black/15">
+              <Image src={contattiData.fotoUrl} alt={contattiData.fotoAlt || 'Denise Alesi'} fill sizes="(max-width: 1024px) 100vw, 35vw" className="object-cover grayscale-[20%]" />
             </div>
-        </section>
-    );
+          </figure> : <blockquote className="border-l border-[#c5a46d]/50 pl-7 font-serif text-2xl italic leading-relaxed text-white/55">
+            “Si racconta con la parola, si racconta con le ombre, si racconta con la luce.”
+          </blockquote>}
+
+          {!!contattiData.social?.length && <div className={contattiData.fotoUrl ? 'mt-8' : 'mt-12'}>
+            <p className="mb-5 text-[9px] uppercase tracking-[0.3em] text-white/35">{text.social}</p>
+            <div className="flex flex-wrap gap-x-6 gap-y-3">
+              {contattiData.social.map((social) => <a key={social._key || social.url} href={social.url} target="_blank" rel="noopener noreferrer" className="border-b border-white/20 pb-1 text-xs uppercase tracking-[0.2em] transition-colors hover:border-[#c5a46d] hover:text-[#c5a46d]">
+                {social.nome}
+              </a>)}
+            </div>
+          </div>}
+        </FadeIn>
+      </div>
+    </div>
+  </section>
 }
