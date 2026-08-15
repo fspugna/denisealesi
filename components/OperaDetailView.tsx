@@ -34,13 +34,19 @@ export default function OperaDetailView({ opera }: { opera: Opera }) {
     const backLabel = backLabels[lang] || backLabels.it;
     const related = relatedLabels[lang as keyof typeof relatedLabels] || relatedLabels.it;
 
-    const imageUrl = opera.immagine ? urlFor(opera.immagine).url() : '';
+    // La versione nel riquadro viene ritagliata dal CDN di Sanity, così crop e
+    // hotspot scelti nello Studio determinano l'inquadratura del formato 3:4.
+    const imageUrl = opera.immagine
+        ? urlFor(opera.immagine).width(1200).height(1600).fit('crop').url()
+        : '';
+    // Nel lightbox conserviamo invece il file completo, senza ritaglio.
+    const fullImageUrl = opera.immagine ? urlFor(opera.immagine).url() : '';
     const audioUrl = opera.audio?.asset?.url;
     const audioTitolo = opera.audio?.titolo || "Ascolta il commento dell'opera";
 
-    const slides = imageUrl ? [
+    const slides = fullImageUrl ? [
         {
-            src: imageUrl,
+            src: fullImageUrl,
             title: opera.titolo,
             description: opera.descrizione || "",
         }
