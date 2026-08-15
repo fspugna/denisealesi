@@ -40,6 +40,8 @@ export const video = defineType({
         }),
         defineField({name: 'inEvidenza', title: 'In evidenza', type: 'boolean', initialValue: false}),
         defineField({name: 'legacyId', title: 'ID archivio storico', type: 'number', readOnly: true, hidden: ({value}) => value === undefined}),
+        defineField({name: 'legacyUrl', title: 'URL archivio storico', type: 'url', readOnly: true, hidden: ({value}) => value === undefined}),
+        defineField({name: 'migratedAt', title: 'Data migrazione', type: 'datetime', readOnly: true, hidden: ({value}) => value === undefined}),
     ],
     preview: {
         select: {

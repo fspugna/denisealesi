@@ -1,74 +1,58 @@
-import AltriVideo from '@/components/AltriVideo';
-import { FadeUp } from '@/components/Animate';
-import { Footer } from '@/components/Footer';
-import { Header } from '@/components/Header';
-import {getLocalizedVideoTitle, getVideoEmbedUrl} from '@/lib/video';
-import { client } from '@/sanity/lib/client';
-import { Video, VideoTranslation } from '@/types';
+import AltriVideo from '@/components/AltriVideo'
+import {getVideoEmbedUrl} from '@/lib/video'
+import {client} from '@/sanity/lib/client'
+import type {Video} from '@/types'
+import type {Metadata} from 'next'
+import Link from 'next/link'
+import {notFound} from 'next/navigation'
+import {defineQuery} from 'next-sanity'
 
-type VideoDocument = Omit<Video, 'titolo'> & {
-    traduzioni?: VideoTranslation[] | null;
-    titolo?: string | null;
-};
+type Props = {params: Promise<{id: string; lang: string}>}
 
-export default async function VideoDetailPage({ params }: { params: Promise<{ id: string; lang: string }> }) {
-    const { id, lang } = await params;
-    
-    const videoDocument: VideoDocument | null = await client.fetch(`
-        *[_type == "video" && _id == $id][0]{
-            _id,
-            titolo,
-            traduzioni[]{
-                language,
-                titolo
-            },
-            data,
-            url
-        }
-    `, { id });
+const VIDEO_QUERY = defineQuery(`
+  *[_type == "video" && _id == $id][0]{
+    _id,
+    data,
+    url,
+    "titolo": coalesce(
+      traduzioni[language == $lang][0].titolo,
+      traduzioni[language == "it"][0].titolo,
+      traduzioni[0].titolo,
+      titolo
+    )
+  }
+`)
 
-    if (!videoDocument) return <div>Video non trovato</div>;
+async function getVideo(id: string, lang: string) {
+  return client.fetch<Video | null>(VIDEO_QUERY, {id, lang})
+}
 
-    const video: Video = {
-        ...videoDocument,
-        titolo: getLocalizedVideoTitle(videoDocument.traduzioni, lang, videoDocument.titolo)
-    };
+export async function generateMetadata({params}: Props): Promise<Metadata> {
+  const {id, lang} = await params
+  const video = await getVideo(id, lang)
+  return video ? {title: `${video.titolo} | Denise Alesi`} : {title: 'Video non trovato'}
+}
 
-    const embedUrl = getVideoEmbedUrl(video.url);
+export default async function VideoDetailPage({params}: Props) {
+  const {id, lang} = await params
+  const video = await getVideo(id, lang)
+  if (!video) notFound()
+  const embedUrl = getVideoEmbedUrl(video.url)
+  const archiveLabel = lang === 'en' ? 'All videos' : lang === 'es' ? 'Todos los vídeos' : 'Tutti i video'
 
-    return (
-        <main className="bg-[#1c1d26] min-h-screen text-white">
-            <Header />
-            <section className="max-w-5xl mx-auto px-6 py-16">
-                
-                {/* 1. Il titolo si eleva morbidamente all'apertura */}
-                <FadeUp>
-                    <h1 className="text-3xl md:text-4xl font-serif mb-8">{video.titolo}</h1>
-                </FadeUp>
-                
-                {/* 2. L'iframe del video subentra subito dopo con un leggero delay */}
-                <FadeUp delay={0.25}>
-                    {embedUrl ? <div className="aspect-video w-full rounded-2xl overflow-hidden shadow-2xl">
-                        <iframe
-                            className="w-full h-full"
-                            src={embedUrl}
-                            title={video.titolo}
-                            allowFullScreen
-                        ></iframe>
-                    </div> : <a href={video.url} target="_blank" rel="noreferrer" className="inline-flex rounded-full border border-white/30 px-6 py-3 text-sm hover:bg-white/10">Apri il video originale</a>}
+  return <main className="min-h-screen bg-[#20251f] px-6 pb-28 pt-36 text-[#eee8dc] md:px-12 md:pt-44">
+    <div className="mx-auto max-w-7xl">
+      <Link href={`/${lang}/video`} className="mb-12 inline-flex items-center gap-4 text-[9px] uppercase tracking-[0.28em] text-white/45 transition-colors hover:text-[#c5a46d]">← {archiveLabel}</Link>
+      <header className="mb-12 grid gap-8 border-b border-white/15 pb-10 md:grid-cols-[1fr_auto] md:items-end">
+        <h1 className="max-w-5xl font-serif text-4xl leading-[1.05] tracking-[-0.035em] sm:text-6xl lg:text-7xl">{video.titolo}</h1>
+        {video.data && <time dateTime={video.data} className="text-[10px] uppercase tracking-[0.25em] text-[#c5a46d]">{new Intl.DateTimeFormat(lang, {day: 'numeric', month: 'long', year: 'numeric', timeZone: 'UTC'}).format(new Date(`${video.data}T12:00:00Z`))}</time>}
+      </header>
 
-                    {video.data && (
-                        <p className="mt-8 text-white/60">
-                            Pubblicato il: {new Date(video.data).toLocaleDateString()}
-                        </p>
-                    )}
-                </FadeUp>                                
-                
-                {/* 4. La sezione dei video correlati emerge quando l'utente la raggiunge */}
-                <FadeUp delay={0.45} className="mt-12">
-                    <AltriVideo currentId={id} lang={lang} />
-                </FadeUp>
-            </section>                        
-        </main>
-    );
+      {embedUrl ? <div className="aspect-video w-full overflow-hidden bg-black shadow-[0_35px_100px_rgba(0,0,0,0.35)]">
+        <iframe className="h-full w-full" src={embedUrl} title={video.titolo} allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowFullScreen />
+      </div> : <a href={video.url} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-4 border-b border-[#c5a46d] pb-2 text-sm uppercase tracking-[0.2em]">Apri il video originale →</a>}
+
+      <AltriVideo currentId={id} lang={lang} />
+    </div>
+  </main>
 }

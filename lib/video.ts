@@ -1,25 +1,3 @@
-import { VideoTranslation } from '@/types'
-
-export function getLocalizedVideoTitle(
-    translations: VideoTranslation[] | null | undefined,
-    lang: string,
-    fallbackTitle?: string | null
-) {
-    const safeTranslations = Array.isArray(translations) ? translations : []
-
-    const localizedTitle = safeTranslations.find(
-        (translation) => translation.language === lang && translation.titolo?.trim()
-    )?.titolo
-
-    if (localizedTitle) {
-        return localizedTitle
-    }
-
-    return safeTranslations.find((translation) => translation.titolo?.trim())?.titolo
-        || fallbackTitle?.trim()
-        || 'Video senza titolo'
-}
-
 export function getYouTubeVideoId(url: string) {
     try {
         const parsed = new URL(url)
@@ -35,7 +13,7 @@ export function getYouTubeVideoId(url: string) {
 
 export function getYouTubeThumbnail(url: string) {
     const id = getYouTubeVideoId(url)
-    return id ? `https://img.youtube.com/vi/${id}/mqdefault.jpg` : null
+    return id ? `https://img.youtube.com/vi/${id}/hqdefault.jpg` : null
 }
 
 export function getVideoEmbedUrl(url: string) {

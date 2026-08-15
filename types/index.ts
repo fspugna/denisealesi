@@ -82,12 +82,6 @@ export interface GalleriaFotografica {
     fotografie: Fotografia[];
 }
 
-export interface VideoTranslation {
-    language: string;
-    titolo?: string;
-}
-
-
 export interface Video {
     _id: string;
     titolo: string;
