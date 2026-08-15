@@ -1,4 +1,5 @@
 import {FadeIn, FadeUp} from '@/components/Animate'
+import AmazonBadge from '@/components/AmazonBadge'
 import ContactsView from '@/components/ContactsView'
 import {withContactFallback} from '@/lib/contacts'
 import {client} from '@/sanity/lib/client'
@@ -14,6 +15,8 @@ type HomePageData = {
   opere: Opera[]
   contatti: Contatti | null
 }
+
+const amazonBadgeUrl = 'https://www.amazon.it/s?k=denise+Alesi&__mk_it_IT=%C3%85M%C3%85%C5%BD%C3%95%C3%91&ref=nb_sb_noss_2'
 
 const copy = {
   it: {role: 'Autrice · artista visiva', works: 'Opere', allWorks: 'Tutte le opere', biography: 'Biografia', read: 'Leggi la biografia'},
@@ -101,7 +104,6 @@ export default async function Home({params}: {params: Promise<{lang: string}>}) 
           <div className="mb-16 flex items-center gap-5 text-[#c5a46d] lg:mb-24">
             <span className="text-[9px] uppercase tracking-[0.32em]">Opera e parola</span>
             <span className="h-px flex-1 bg-current opacity-35" />
-            <span className="font-serif text-sm italic opacity-70">I</span>
           </div>
 
           <div className="grid items-center gap-16 lg:grid-cols-[minmax(0,0.82fr)_minmax(26rem,0.68fr)] lg:gap-[9vw]">
@@ -139,8 +141,10 @@ export default async function Home({params}: {params: Promise<{lang: string}>}) 
 
       <section className="border-t border-black/15 bg-[#eee8dc] px-6 py-24 text-[#20231f] md:px-12 lg:py-32">
         <div className="mx-auto max-w-7xl">
-          <div className="mb-16 flex items-end justify-between border-b border-black/20 pb-6">
-            <div><span className="text-[9px] uppercase tracking-[0.3em] text-black/40">01</span><h2 className="mt-3 font-serif text-4xl tracking-[-0.03em] md:text-6xl">{text.works}</h2></div>
+          <div className="mb-16 flex flex-col gap-8 border-b border-black/20 pb-6 sm:flex-row sm:items-end sm:justify-between">
+            <div>
+              <h2 className="font-serif text-4xl tracking-[-0.03em] md:text-6xl">{text.works}</h2>
+            </div>
             <Link href={`/${lang}/opere`} className="hidden text-[10px] uppercase tracking-[0.24em] text-black/55 transition-colors hover:text-black sm:block">{text.allWorks} →</Link>
           </div>
           {data.opere.length ? <div className="grid gap-px bg-black/15 sm:grid-cols-2 xl:grid-cols-4">
@@ -152,6 +156,9 @@ export default async function Home({params}: {params: Promise<{lang: string}>}) 
             </FadeIn>)}
           </div> : <p className="font-serif text-2xl italic text-black/45">Le opere abiteranno presto questo spazio.</p>}
           <Link href={`/${lang}/opere`} className="mt-12 inline-block text-[10px] uppercase tracking-[0.24em] text-black/55 sm:hidden">{text.allWorks} →</Link>
+          <div className="mt-14 flex justify-center border-t border-black/15 pt-10">
+            <AmazonBadge href={amazonBadgeUrl} lang={lang} />
+          </div>
         </div>
       </section>
       <ContactsView contattiData={contacts} lang={lang} />

@@ -20,7 +20,6 @@ export default function ContactsView({contattiData, lang}: {contattiData: Contat
       <div className="mb-14 flex items-center gap-5 text-[#c5a46d]">
         <span className="text-[9px] uppercase tracking-[0.34em]">{text.eyebrow}</span>
         <span className="h-px flex-1 bg-current opacity-30" />
-        <span className="font-serif text-sm italic opacity-70">02</span>
       </div>
 
       <div className={`grid items-start gap-14 ${contattiData.fotoUrl ? 'lg:grid-cols-[1.15fr_0.7fr] lg:gap-[10vw]' : 'lg:grid-cols-[1.1fr_0.9fr] lg:gap-[12vw]'}`}>
