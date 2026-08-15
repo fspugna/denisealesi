@@ -4,6 +4,7 @@ import Image from 'next/image'
 import {PortableText} from 'next-sanity'
 import {urlFor} from '@/sanity/lib/image'
 import {About, labelsTranslations} from '@/types'
+import type {PortableTextBlock, PortableTextSpan} from '@portabletext/types'
 import {FadeIn, FadeUp} from './Animate'
 
 interface AboutProps {
@@ -17,9 +18,38 @@ const contextCopy = {
   es: 'Escritura, fotografía e investigación artística',
 } as const
 
+function emphasizeAuthorName(blocks: PortableTextBlock[]) {
+  return blocks.map((block, blockIndex) => {
+    if (blockIndex !== 0 || block._type !== 'block') return block
+
+    let nameFound = false
+    const children = block.children.flatMap((child) => {
+      if (nameFound || child._type !== 'span') return [child]
+
+      const span = child as PortableTextSpan
+      const name = 'Denise Alesi'
+      const nameStart = span.text.indexOf(name)
+      if (nameStart === -1) return [child]
+
+      nameFound = true
+      const before = span.text.slice(0, nameStart)
+      const after = span.text.slice(nameStart + name.length)
+
+      return [
+        ...(before ? [{...span, _key: `${span._key}-before`, text: before}] : []),
+        {...span, _key: `${span._key}-name`, text: name, marks: [...span.marks, 'strong']},
+        ...(after ? [{...span, _key: `${span._key}-after`, text: after}] : []),
+      ]
+    })
+
+    return {...block, children}
+  })
+}
+
 export default function AboutView({aboutData, lang}: AboutProps) {
   const language = lang === 'en' || lang === 'es' ? lang : 'it'
   const t = labelsTranslations[language]
+  const biography = emphasizeAuthorName(aboutData.biografia)
 
   return <section id="biografia" className="relative overflow-hidden px-6 pb-24 pt-32 md:px-8 md:pb-36 md:pt-40">
     {aboutData.sfondo && <>
@@ -68,8 +98,8 @@ export default function AboutView({aboutData, lang}: AboutProps) {
         </FadeIn>}
 
         <FadeUp delay={0.15} className={aboutData.foto ? 'md:col-span-7' : 'md:col-span-8 md:col-start-3'}>
-          <div className="space-y-6 text-base font-light leading-[1.8] text-white/75 md:text-lg [&>p:first-child]:font-serif [&>p:first-child]:text-2xl [&>p:first-child]:font-normal [&>p:first-child]:leading-[1.45] [&>p:first-child]:text-white/95 md:[&>p:first-child]:text-3xl">
-            <PortableText value={aboutData.biografia} />
+          <div className="space-y-6 text-base font-light leading-[1.8] text-white/75 md:text-lg [&_strong]:font-semibold [&_strong]:text-white/95">
+            <PortableText value={biography} />
           </div>
         </FadeUp>
       </div>
