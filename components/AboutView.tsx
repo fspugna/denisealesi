@@ -37,7 +37,7 @@ function emphasizeAuthorName(blocks: PortableTextBlock[]) {
 
       return [
         ...(before ? [{...span, _key: `${span._key}-before`, text: before}] : []),
-        {...span, _key: `${span._key}-name`, text: name, marks: [...span.marks, 'strong']},
+        {...span, _key: `${span._key}-name`, text: name, marks: [...(span.marks ?? []), 'strong']},
         ...(after ? [{...span, _key: `${span._key}-after`, text: after}] : []),
       ]
     })
