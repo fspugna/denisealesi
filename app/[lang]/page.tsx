@@ -19,22 +19,15 @@ type HomePageData = {
 const amazonBadgeUrl = 'https://www.amazon.it/s?k=denise+Alesi&__mk_it_IT=%C3%85M%C3%85%C5%BD%C3%95%C3%91&ref=nb_sb_noss_2'
 
 const copy = {
-  it: {role: 'Autrice · artista visiva', works: 'Opere', allWorks: 'Tutte le opere', biography: 'Biografia', read: 'Leggi la biografia'},
-  en: {role: 'Author · visual artist', works: 'Works', allWorks: 'All works', biography: 'Biography', read: 'Read the biography'},
-  es: {role: 'Autora · artista visual', works: 'Obras', allWorks: 'Todas las obras', biography: 'Biografía', read: 'Leer la biografía'},
+  it: {role: 'Autrice · artista visiva', works: 'Opere', allWorks: 'Tutte le opere'},
+  en: {role: 'Author · visual artist', works: 'Works', allWorks: 'All works'},
+  es: {role: 'Autora · artista visual', works: 'Obras', allWorks: 'Todas las obras'},
 } as const
 
 const HOME_QUERY = defineQuery(`{
     "header": *[_id == "header"][0]{
       ritratto,
-      "citazione": coalesce(traduzioni[language == $lang][0].citazione, traduzioni[language == "it"][0].citazione),
-      "operaInEvidenza": operaInEvidenza{
-        immagine,
-        "didascalia": coalesce(traduzioni[language == $lang][0].didascalia, traduzioni[language == "it"][0].didascalia),
-        "titolo": coalesce(traduzioni[language == $lang][0].titolo, traduzioni[language == "it"][0].titolo),
-        "sottotitolo": coalesce(traduzioni[language == $lang][0].sottotitolo, traduzioni[language == "it"][0].sottotitolo),
-        "testo": coalesce(traduzioni[language == $lang][0].testo, traduzioni[language == "it"][0].testo)
-      }
+      "citazione": coalesce(traduzioni[language == $lang][0].citazione, traduzioni[language == "it"][0].citazione)
     },
     "opere": *[_type == "opera"] | order(_createdAt desc)[0...4]{
       _id, immagine, anno, ordine,
@@ -71,7 +64,7 @@ export default async function Home({params}: {params: Promise<{lang: string}>}) 
           </div>
 
           {portrait ? <figure className="relative z-10 mx-auto w-full max-w-[850px] lg:w-auto">
-            <div className="relative aspect-[850/1277] w-full overflow-hidden bg-[#1d211d] shadow-[0_30px_80px_rgba(0,0,0,0.38)] ring-1 ring-white/10 lg:h-[72vh] lg:max-h-[47rem] lg:w-auto">
+            <div className="relative aspect-[850/1277] w-full overflow-hidden bg-[#1d211d] shadow-[0_30px_80px_rgba(0,0,0,0.38)] lg:h-[72vh] lg:max-h-[47rem] lg:w-auto">
               <Image
                 src={urlFor(portrait).ignoreImageParams().width(1400).quality(90).url()}
                 alt={portrait.alt || 'Ritratto di Denise Alesi'}
@@ -81,11 +74,6 @@ export default async function Home({params}: {params: Promise<{lang: string}>}) 
                 className="object-contain grayscale-[20%]"
               />
             </div>
-            <figcaption className="mt-5 flex items-center gap-4 text-[9px] uppercase tracking-[0.32em] text-white/55">
-              <span className="h-px w-10 bg-[#c5a46d]/70" aria-hidden="true" />
-              <span>Denise Alesi</span>
-              <span className="text-white/25">Roma</span>
-            </figcaption>
           </figure> : null}
 
           <span className="absolute bottom-8 right-7 hidden font-serif text-5xl italic text-white/[0.05] lg:block" aria-hidden="true">01</span>
@@ -94,7 +82,7 @@ export default async function Home({params}: {params: Promise<{lang: string}>}) 
         <div className="relative flex min-h-[72vh] flex-col justify-center px-7 py-20 sm:px-12 lg:min-h-screen lg:px-[10vw] lg:py-16">
           <span className="mb-6 text-[10px] uppercase tracking-[0.34em] text-[#766e60]">{text.role}</span>
           <FadeUp>
-            <h1 className="font-serif text-[clamp(3.5rem,6vw,6.8rem)] leading-[0.82] tracking-[-0.05em]">Denise<br/><em className="font-normal">Alesi</em></h1>
+            <h1 className="font-serif text-[clamp(3.5rem,6vw,6.8rem)] leading-[0.82] tracking-[-0.05em]">Denise<br/><span>Alesi</span></h1>
           </FadeUp>
           <div className="my-6 h-px w-16 bg-[#9e835c]" />
           <FadeUp delay={0.15}>
@@ -105,58 +93,7 @@ export default async function Home({params}: {params: Promise<{lang: string}>}) 
               </>}
             </div>
           </FadeUp>
-          <FadeUp delay={0.3} className="mt-7">
-            <Link
-              href={`/${lang}/biografia`}
-              className="group inline-flex items-center gap-5 text-[10px] uppercase tracking-[0.25em] text-[#625b50] transition-colors hover:text-[#20231f]"
-              aria-label={text.read}
-            >
-              <span className="h-px w-10 bg-[#9e835c] transition-all duration-500 group-hover:w-16" />
-              <span>{text.read}</span>
-              <span className="flex size-9 items-center justify-center rounded-full border border-[#9e835c]/60 text-sm transition-all duration-300 group-hover:border-[#9e835c] group-hover:bg-[#9e835c] group-hover:text-[#eee8dc]" aria-hidden="true">→</span>
-            </Link>
-          </FadeUp>
           <span className="absolute bottom-8 right-8 hidden text-[9px] uppercase tracking-[0.3em] text-[#82796a] lg:block [writing-mode:vertical-rl]">Scorri per entrare</span>
-        </div>
-      </section>
-
-      <section className="bg-[#20251f] px-6 py-28 text-[#eee8dc] sm:px-10 lg:py-40">
-        <div className="mx-auto max-w-7xl">
-          <div className="mb-16 flex items-center gap-5 text-[#c5a46d] lg:mb-24">
-            <span className="text-[9px] uppercase tracking-[0.32em]">Opera e parola</span>
-            <span className="h-px flex-1 bg-current opacity-35" />
-          </div>
-
-          <div className="grid items-center gap-16 lg:grid-cols-[minmax(0,0.82fr)_minmax(26rem,0.68fr)] lg:gap-[9vw]">
-            <FadeIn>
-              <figure className="mx-auto w-full max-w-[42rem] lg:mx-0">
-                <div className="relative aspect-[1244/829] overflow-hidden bg-[#151815] shadow-[0_35px_90px_rgba(0,0,0,0.35)]">
-                  {data.header?.operaInEvidenza?.immagine ? <Image
-                    src={urlFor(data.header.operaInEvidenza.immagine).width(1244).height(829).fit('crop').url()}
-                    alt={data.header.operaInEvidenza.immagine.alt || 'Thàvma, autoritratto di Denise Alesi'}
-                    fill
-                    sizes="(max-width: 1024px) 90vw, 42vw"
-                    className="object-cover transition-transform duration-1000 hover:scale-[1.015]"
-                  /> : <div className="flex h-full items-center justify-center px-8 text-center font-serif text-lg italic text-white/35">Carica “Thàvma” nello spazio Opera in evidenza dello Studio</div>}
-                </div>
-                <figcaption className="mt-5 max-w-md text-[9px] leading-relaxed tracking-[0.12em] text-white/45">{data.header?.operaInEvidenza?.didascalia || '“Thàvma” (autoritratto), dal libro Rivelazioni di Denise Alesi'}</figcaption>
-              </figure>
-            </FadeIn>
-
-            <FadeUp>
-              <div className="mb-10">
-                <p className="mb-5 text-[9px] uppercase tracking-[0.32em] text-[#c5a46d]">{data.header?.operaInEvidenza?.sottotitolo || 'Dialogo XIV'}</p>
-                <h2 className="max-w-xl font-serif text-5xl leading-[0.95] tracking-[-0.035em] sm:text-6xl xl:text-7xl">{data.header?.operaInEvidenza?.titolo || 'Castelli di carta'}</h2>
-              </div>
-              <span className="mb-10 block h-px w-16 bg-[#c5a46d]/60" />
-              <div className="max-w-lg whitespace-pre-line font-serif text-lg leading-[1.45] text-white/75 [&_p]:m-0 [&_p:last-child]:mt-8 [&_p:last-child]:text-sm [&_p:last-child]:text-white/45 [&_em]:italic">
-                {data.header?.operaInEvidenza?.testo?.length ? <PortableText value={data.header.operaInEvidenza.testo} /> : <>
-                  <p>Ho visto menzogne viaggiare<br/>nei decenni velati, di soffuse follie.<br/>Ho visto pupille dilatarsi<br/>incontrando la verità,<br/>uscire incredule<br/>da orbite defraudate.<br/>Ho udito cuori urlare<br/>a destini passati<br/>in cerca di giustizia.<br/>Ho visto una vita davanti a me<br/>e non l’ho riconosciuta</p>
-                  <p>(Tratto da <em>Rivelazioni</em> di Denise Alesi)</p>
-                </>}
-              </div>
-            </FadeUp>
-          </div>
         </div>
       </section>
 

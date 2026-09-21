@@ -7,9 +7,9 @@ import {useEffect, useState} from 'react'
 const supportedLanguages = ['it', 'en', 'es'] as const
 
 const menuLabels = {
-  it: {index: 'Indice', close: 'Chiudi', home: 'Home', biography: 'Biografia', works: 'Opere', galleries: 'Gallerie fotografiche', videos: 'Video', contacts: 'Contatti'},
-  en: {index: 'Index', close: 'Close', home: 'Home', biography: 'Biography', works: 'Works', galleries: 'Photo galleries', videos: 'Videos', contacts: 'Contacts'},
-  es: {index: 'Índice', close: 'Cerrar', home: 'Inicio', biography: 'Biografía', works: 'Obras', galleries: 'Galerías fotográficas', videos: 'Vídeos', contacts: 'Contacto'},
+  it: {index: 'Indice', close: 'Chiudi', home: 'Home', biography: 'Biografia', works: 'Opere', galleries: 'Gallerie', videos: 'Video', contacts: 'Contatti'},
+  en: {index: 'Index', close: 'Close', home: 'Home', biography: 'Biography', works: 'Works', galleries: 'Galleries', videos: 'Videos', contacts: 'Contacts'},
+  es: {index: 'Índice', close: 'Cerrar', home: 'Inicio', biography: 'Biografía', works: 'Obras', galleries: 'Galerías', videos: 'Vídeos', contacts: 'Contacto'},
 } as const
 
 export default function MainMenu({lang = 'it'}: {lang?: string}) {

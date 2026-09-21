@@ -47,11 +47,11 @@ export default function ContactsView({contattiData, lang}: {contattiData: Contat
               <Image src={contattiData.fotoUrl} alt={contattiData.fotoAlt || 'Denise Alesi'} fill sizes="(max-width: 1024px) 100vw, 35vw" className="object-cover grayscale-[20%]" />
             </div>
           </figure> : <blockquote className="border-l border-[#c5a46d]/50 pl-7 font-serif text-2xl italic leading-relaxed text-white/55">
-            “Si racconta con la parola, si racconta con le ombre, si racconta con la luce.”
+            “Le parole sono luoghi in cui tornare”.
           </blockquote>}
 
           {!!contattiData.social?.length && <div className={contattiData.fotoUrl ? 'mt-8' : 'mt-12'}>
-            <p className="mb-5 text-[9px] uppercase tracking-[0.3em] text-white/35">{text.social}</p>
+            <p className="mb-5 text-xs uppercase tracking-[0.28em] text-white/50">{text.social}</p>
             <div className="flex flex-wrap gap-x-6 gap-y-3">
               {contattiData.social.map((social) => <a key={social._key || social.url} href={social.url} target="_blank" rel="noopener noreferrer" className="border-b border-white/20 pb-1 text-xs uppercase tracking-[0.2em] transition-colors hover:border-[#c5a46d] hover:text-[#c5a46d]">
                 {social.nome}
