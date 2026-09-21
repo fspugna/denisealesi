@@ -64,10 +64,31 @@ export default async function Home({params}: {params: Promise<{lang: string}>}) 
   return (
     <div className="overflow-hidden bg-[#eee8dc] text-[#20231f]">
       <section className="grid min-h-screen lg:grid-cols-2">
-        <div className="relative min-h-[58vh] overflow-hidden bg-[#343a34] lg:min-h-screen">
-          {portrait ? <Image src={urlFor(portrait).width(1400).height(1800).fit('crop').url()} alt={portrait.alt || 'Ritratto di Denise Alesi'} fill priority sizes="(max-width: 1024px) 100vw, 50vw" className="object-cover object-center grayscale-[20%]" /> : null}
-          <div className="absolute inset-0 bg-gradient-to-t from-black/35 via-transparent to-black/10" />
-          <p className="absolute bottom-7 left-6 text-[9px] uppercase tracking-[0.35em] text-white/65 md:left-10">Denise Alesi · Roma</p>
+        <div className="relative flex overflow-hidden bg-[#292e29] px-4 pb-8 pt-24 sm:px-8 sm:pb-10 sm:pt-28 lg:min-h-screen lg:items-center lg:px-[clamp(3rem,6vw,7rem)] lg:pb-12 lg:pt-28">
+          <div className="pointer-events-none absolute inset-0 opacity-35" aria-hidden="true">
+            <span className="absolute inset-y-0 left-[12%] w-px bg-gradient-to-b from-transparent via-white/10 to-transparent" />
+            <span className="absolute inset-y-0 right-[12%] w-px bg-gradient-to-b from-transparent via-white/10 to-transparent" />
+          </div>
+
+          {portrait ? <figure className="relative z-10 mx-auto w-full max-w-[850px] lg:w-auto">
+            <div className="relative aspect-[850/1277] w-full overflow-hidden bg-[#1d211d] shadow-[0_30px_80px_rgba(0,0,0,0.38)] ring-1 ring-white/10 lg:h-[72vh] lg:max-h-[47rem] lg:w-auto">
+              <Image
+                src={urlFor(portrait).ignoreImageParams().width(1400).quality(90).url()}
+                alt={portrait.alt || 'Ritratto di Denise Alesi'}
+                fill
+                priority
+                sizes="(max-width: 1023px) calc(100vw - 2rem), 34vw"
+                className="object-contain grayscale-[20%]"
+              />
+            </div>
+            <figcaption className="mt-5 flex items-center gap-4 text-[9px] uppercase tracking-[0.32em] text-white/55">
+              <span className="h-px w-10 bg-[#c5a46d]/70" aria-hidden="true" />
+              <span>Denise Alesi</span>
+              <span className="text-white/25">Roma</span>
+            </figcaption>
+          </figure> : null}
+
+          <span className="absolute bottom-8 right-7 hidden font-serif text-5xl italic text-white/[0.05] lg:block" aria-hidden="true">01</span>
         </div>
 
         <div className="relative flex min-h-[72vh] flex-col justify-center px-7 py-20 sm:px-12 lg:min-h-screen lg:px-[10vw] lg:py-16">

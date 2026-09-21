@@ -13,8 +13,9 @@ const menuLabels = {
 } as const
 
 export default function MainMenu({lang = 'it'}: {lang?: string}) {
-  const [isOpen, setIsOpen] = useState(false)
+  const [openPath, setOpenPath] = useState<string | null>(null)
   const pathname = usePathname()
+  const isOpen = openPath === pathname
   const segments = pathname.split('/').filter(Boolean)
   const currentLang = supportedLanguages.includes(segments[0] as typeof supportedLanguages[number]) ? segments[0] : lang
   const labels = menuLabels[currentLang as keyof typeof menuLabels] || menuLabels.it
@@ -38,12 +39,8 @@ export default function MainMenu({lang = 'it'}: {lang?: string}) {
   }, [isOpen])
 
   useEffect(() => {
-    setIsOpen(false)
-  }, [pathname])
-
-  useEffect(() => {
     const closeOnEscape = (event: KeyboardEvent) => {
-      if (event.key === 'Escape') setIsOpen(false)
+      if (event.key === 'Escape') setOpenPath(null)
     }
 
     window.addEventListener('keydown', closeOnEscape)
@@ -99,7 +96,7 @@ export default function MainMenu({lang = 'it'}: {lang?: string}) {
         <Link href={href('/')} className="font-serif text-xl tracking-[0.08em] md:text-2xl" aria-label="Denise Alesi, home">
           Denise Alesi
         </Link>
-        <button type="button" onClick={() => setIsOpen(!isOpen)} className="group flex items-center gap-3 text-[10px] uppercase tracking-[0.28em]" aria-expanded={isOpen} aria-controls="mobile-menu">
+        <button type="button" onClick={() => setOpenPath(isOpen ? null : pathname)} className="group flex items-center gap-3 text-[10px] uppercase tracking-[0.28em]" aria-expanded={isOpen} aria-controls="mobile-menu">
           <span>{isOpen ? labels.close : labels.index}</span>
           <span className="relative block h-3 w-7">
             <span className={`absolute left-0 top-0 h-px w-7 bg-current transition-transform ${isOpen ? 'translate-y-[5px] rotate-45' : ''}`} />
@@ -117,7 +114,7 @@ export default function MainMenu({lang = 'it'}: {lang?: string}) {
             <ol className="space-y-1">
               {links.map(([label, path], index) => (
                 <li key={path} className="border-b border-white/10">
-                  <Link href={href(path)} onClick={() => setIsOpen(false)} className="group flex items-baseline gap-5 py-3 font-serif text-3xl transition-colors hover:text-[#c5a46d] md:text-5xl">
+                  <Link href={href(path)} onClick={() => setOpenPath(null)} className="group flex items-baseline gap-5 py-3 font-serif text-3xl transition-colors hover:text-[#c5a46d] md:text-5xl">
                     <span className="font-sans text-[9px] tracking-widest text-white/35">{String(index + 1).padStart(2, '0')}</span>
                     {label}
                   </Link>
@@ -126,7 +123,7 @@ export default function MainMenu({lang = 'it'}: {lang?: string}) {
             </ol>
           </nav>
           <div className="mt-10 flex gap-5 text-[10px] uppercase tracking-[0.25em] text-white/50">
-            {supportedLanguages.map((language) => <Link key={language} onClick={() => setIsOpen(false)} href={`/${language}${currentPath === '/' ? '' : currentPath}`} className={currentLang === language ? 'text-[#c5a46d]' : 'hover:text-white'}>{language}</Link>)}
+            {supportedLanguages.map((language) => <Link key={language} onClick={() => setOpenPath(null)} href={`/${language}${currentPath === '/' ? '' : currentPath}`} className={currentLang === language ? 'text-[#c5a46d]' : 'hover:text-white'}>{language}</Link>)}
           </div>
         </div>
       </div>
