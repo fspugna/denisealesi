@@ -2,10 +2,10 @@ import type { Metadata } from "next";
 import 'yet-another-react-lightbox/styles.css';
 import "./globals.css";
 
-import { Inter, Playfair_Display } from 'next/font/google';
+import { EB_Garamond, Inter } from 'next/font/google';
 import { AnalyticsConsent } from '@/components/AnalyticsConsent';
 
-const playfair = Playfair_Display({ subsets: ['latin'], variable: '--font-serif' });
+const garamond = EB_Garamond({ subsets: ['latin'], variable: '--font-serif', display: 'swap' });
 const inter = Inter({ subsets: ['latin'], variable: '--font-sans' });
 
 export const metadata: Metadata = {
@@ -19,7 +19,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="it" className={`${playfair.variable} ${inter.variable}`}>
+    <html lang="it" className={`${garamond.variable} ${inter.variable}`}>
       <body className="min-h-full flex flex-col">
         {children}
         <AnalyticsConsent />
