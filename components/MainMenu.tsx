@@ -22,22 +22,84 @@ export default function MainMenu({lang = 'it'}: {lang?: string}) {
   const href = (path: string) => `/${currentLang}${path === '/' ? '' : path}`
 
   useEffect(() => {
-    document.body.style.overflow = isOpen ? 'hidden' : ''
-    return () => { document.body.style.overflow = '' }
+    const desktopQuery = window.matchMedia('(min-width: 1024px)')
+
+    const updateBodyScroll = () => {
+      document.body.style.overflow = isOpen && !desktopQuery.matches ? 'hidden' : ''
+    }
+
+    updateBodyScroll()
+    desktopQuery.addEventListener('change', updateBodyScroll)
+
+    return () => {
+      desktopQuery.removeEventListener('change', updateBodyScroll)
+      document.body.style.overflow = ''
+    }
   }, [isOpen])
+
+  useEffect(() => {
+    setIsOpen(false)
+  }, [pathname])
+
+  useEffect(() => {
+    const closeOnEscape = (event: KeyboardEvent) => {
+      if (event.key === 'Escape') setIsOpen(false)
+    }
+
+    window.addEventListener('keydown', closeOnEscape)
+    return () => window.removeEventListener('keydown', closeOnEscape)
+  }, [])
 
   const links = [
     [labels.home, '/'], [labels.biography, '/biografia'], [labels.works, '/opere'],
     [labels.galleries, '/gallerie'], [labels.videos, '/video'], [labels.contacts, '/contatti'],
   ] as const
 
+  const isActive = (path: string) => path === '/' ? currentPath === '/' : currentPath === path || currentPath.startsWith(`${path}/`)
+
   return (
     <>
-      <div className="fixed inset-x-0 top-0 z-50 flex items-center justify-between px-5 py-5 text-[#f4efe5] mix-blend-difference md:px-9 md:py-7">
+      <header className="fixed inset-x-0 top-0 z-50 hidden min-h-20 items-center border-b border-white/10 bg-[#1d211d]/95 px-7 text-[#f4efe5] shadow-[0_8px_30px_rgba(0,0,0,0.12)] backdrop-blur-md lg:flex xl:px-10">
         <Link href={href('/')} className="font-serif text-xl tracking-[0.08em] md:text-2xl" aria-label="Denise Alesi, home">
           Denise Alesi
         </Link>
-        <button type="button" onClick={() => setIsOpen(!isOpen)} className="group flex items-center gap-3 text-[10px] uppercase tracking-[0.28em]" aria-expanded={isOpen}>
+
+        <nav className="ml-auto" aria-label="Navigazione principale">
+          <ul className="flex items-center gap-4 xl:gap-7">
+            {links.map(([label, path]) => (
+              <li key={path}>
+                <Link
+                  href={href(path)}
+                  aria-current={isActive(path) ? 'page' : undefined}
+                  className={`relative block py-8 text-[9px] uppercase tracking-[0.18em] transition-colors xl:text-[10px] xl:tracking-[0.22em] ${isActive(path) ? 'text-[#c5a46d]' : 'text-white/75 hover:text-white'}`}
+                >
+                  {label}
+                  <span className={`absolute inset-x-0 bottom-5 h-px origin-left bg-[#c5a46d] transition-transform ${isActive(path) ? 'scale-x-100' : 'scale-x-0'}`} />
+                </Link>
+              </li>
+            ))}
+          </ul>
+        </nav>
+
+        <div className="ml-6 flex items-center gap-3 border-l border-white/15 pl-6 text-[9px] uppercase tracking-[0.22em] xl:ml-8 xl:gap-4 xl:pl-8" aria-label="Selezione lingua">
+          {supportedLanguages.map((language) => (
+            <Link
+              key={language}
+              href={`/${language}${currentPath === '/' ? '' : currentPath}`}
+              aria-current={currentLang === language ? 'true' : undefined}
+              className={currentLang === language ? 'text-[#c5a46d]' : 'text-white/45 transition-colors hover:text-white'}
+            >
+              {language}
+            </Link>
+          ))}
+        </div>
+      </header>
+
+      <div className="fixed inset-x-0 top-0 z-50 flex items-center justify-between px-5 py-5 text-[#f4efe5] mix-blend-difference md:px-9 md:py-7 lg:hidden">
+        <Link href={href('/')} className="font-serif text-xl tracking-[0.08em] md:text-2xl" aria-label="Denise Alesi, home">
+          Denise Alesi
+        </Link>
+        <button type="button" onClick={() => setIsOpen(!isOpen)} className="group flex items-center gap-3 text-[10px] uppercase tracking-[0.28em]" aria-expanded={isOpen} aria-controls="mobile-menu">
           <span>{isOpen ? labels.close : labels.index}</span>
           <span className="relative block h-3 w-7">
             <span className={`absolute left-0 top-0 h-px w-7 bg-current transition-transform ${isOpen ? 'translate-y-[5px] rotate-45' : ''}`} />
@@ -46,7 +108,7 @@ export default function MainMenu({lang = 'it'}: {lang?: string}) {
         </button>
       </div>
 
-      <div className={`fixed inset-0 z-40 grid bg-[#1d211d] text-[#f1eadc] transition-[opacity,visibility] duration-500 md:grid-cols-[1fr_2fr] ${isOpen ? 'visible opacity-100' : 'invisible opacity-0'}`}>
+      <div id="mobile-menu" className={`fixed inset-0 z-40 grid bg-[#1d211d] text-[#f1eadc] transition-[opacity,visibility] duration-500 md:grid-cols-[1fr_2fr] lg:hidden ${isOpen ? 'visible opacity-100' : 'invisible opacity-0'}`}>
         <div className="hidden border-r border-white/10 p-10 md:flex md:flex-col md:justify-end">
           <p className="max-w-xs font-serif text-2xl italic leading-relaxed text-white/65">Le parole sono luoghi in cui tornare.</p>
         </div>
