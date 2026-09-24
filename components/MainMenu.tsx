@@ -7,9 +7,9 @@ import {useEffect, useState} from 'react'
 const supportedLanguages = ['it', 'en', 'es'] as const
 
 const menuLabels = {
-  it: {index: 'Indice', close: 'Chiudi', home: 'Home', biography: 'Biografia', works: 'Opere', galleries: 'Gallerie', videos: 'Video', contacts: 'Contatti'},
-  en: {index: 'Index', close: 'Close', home: 'Home', biography: 'Biography', works: 'Works', galleries: 'Galleries', videos: 'Videos', contacts: 'Contacts'},
-  es: {index: 'Índice', close: 'Cerrar', home: 'Inicio', biography: 'Biografía', works: 'Obras', galleries: 'Galerías', videos: 'Vídeos', contacts: 'Contacto'},
+  it: {index: 'Indice', close: 'Chiudi', home: 'Home', biography: 'Biografia', literary: 'Opere letterarie', visual: 'Opere visive', galleries: 'Gallerie', contacts: 'Contatti'},
+  en: {index: 'Index', close: 'Close', home: 'Home', biography: 'Biography', literary: 'Literary works', visual: 'Visual works', galleries: 'Galleries', contacts: 'Contacts'},
+  es: {index: 'Índice', close: 'Cerrar', home: 'Inicio', biography: 'Biografía', literary: 'Obras literarias', visual: 'Obras visuales', galleries: 'Galerías', contacts: 'Contacto'},
 } as const
 
 export default function MainMenu({lang = 'it'}: {lang?: string}) {
@@ -48,8 +48,8 @@ export default function MainMenu({lang = 'it'}: {lang?: string}) {
   }, [])
 
   const links = [
-    [labels.home, '/'], [labels.biography, '/biografia'], [labels.works, '/opere'],
-    [labels.galleries, '/gallerie'], [labels.videos, '/video'], [labels.contacts, '/contatti'],
+    [labels.home, '/'], [labels.biography, '/biografia'], [labels.literary, '/opere-letterarie'],
+    [labels.visual, '/opere-visive'], [labels.galleries, '/gallerie'], [labels.contacts, '/contatti'],
   ] as const
 
   const isActive = (path: string) => path === '/' ? currentPath === '/' : currentPath === path || currentPath.startsWith(`${path}/`)
@@ -57,11 +57,7 @@ export default function MainMenu({lang = 'it'}: {lang?: string}) {
   return (
     <>
       <header className="fixed inset-x-0 top-0 z-50 hidden min-h-20 items-center border-b border-white/10 bg-[#1d211d]/95 px-7 text-[#f4efe5] shadow-[0_8px_30px_rgba(0,0,0,0.12)] backdrop-blur-md lg:flex xl:px-10">
-        <Link href={href('/')} className="font-serif text-xl tracking-[0.08em] md:text-2xl" aria-label="Denise Alesi, home">
-          Denise Alesi
-        </Link>
-
-        <nav className="ml-auto" aria-label="Navigazione principale">
+        <nav className="mx-auto" aria-label="Navigazione principale">
           <ul className="flex items-center gap-4 xl:gap-7">
             {links.map(([label, path]) => (
               <li key={path}>
@@ -78,7 +74,7 @@ export default function MainMenu({lang = 'it'}: {lang?: string}) {
           </ul>
         </nav>
 
-        <div className="ml-6 flex items-center gap-3 border-l border-white/15 pl-6 text-[9px] uppercase tracking-[0.22em] xl:ml-8 xl:gap-4 xl:pl-8" aria-label="Selezione lingua">
+        <div className="absolute right-7 flex items-center gap-3 border-l border-white/15 pl-6 text-[9px] uppercase tracking-[0.22em] xl:right-10 xl:gap-4 xl:pl-8" aria-label="Selezione lingua">
           {supportedLanguages.map((language) => (
             <Link
               key={language}

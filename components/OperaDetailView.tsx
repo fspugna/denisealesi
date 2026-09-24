@@ -12,12 +12,11 @@ import "yet-another-react-lightbox/plugins/captions.css";
 import "yet-another-react-lightbox/styles.css";
 import { Opera } from '@/types';
 
-// Mappa dinamica per l'etichetta del pulsante di ritorno in base alla lingua
-const backLabels: Record<string, string> = {
-    it: '← Torna alle opere',
-    en: '← Back to works',
-    es: '← Volver a las obras',
-};
+const backLabels = {
+    it: {letteraria: '← Torna alle opere letterarie', visiva: '← Torna alle opere visive'},
+    en: {letteraria: '← Back to literary works', visiva: '← Back to visual works'},
+    es: {letteraria: '← Volver a las obras literarias', visiva: '← Volver a las obras visuales'},
+} as const;
 
 const relatedLabels = {
     it: {title: 'Approfondisci', gallery: 'Apri la galleria fotografica', video: 'Guarda il video', amazon: 'Compra su Amazon'},
@@ -31,7 +30,10 @@ export default function OperaDetailView({ opera }: { opera: Opera }) {
 
     const lang = (params?.lang as string) || 'it';
 
-    const backLabel = backLabels[lang] || backLabels.it;
+    const language = lang === 'en' || lang === 'es' ? lang : 'it';
+    const category = opera.categoria === 'visiva' ? 'visiva' : 'letteraria';
+    const backLabel = backLabels[language][category];
+    const backHref = category === 'visiva' ? `/${language}/opere-visive` : `/${language}/opere-letterarie`;
     const related = relatedLabels[lang as keyof typeof relatedLabels] || relatedLabels.it;
 
     // La versione nel riquadro viene ritagliata dal CDN di Sanity, così crop e
@@ -68,7 +70,7 @@ export default function OperaDetailView({ opera }: { opera: Opera }) {
         <div className="flex flex-col">
                 <div className="pt-1 mb-8 md:mb-10">
                     <Link
-                        href={`/${lang}/opere`}
+                        href={backHref}
                         className="inline-flex items-center text-[10px] uppercase tracking-[0.24em] text-black/45 hover:text-black transition-colors duration-200"
                     >
                         {backLabel}

@@ -12,16 +12,17 @@ import {defineQuery} from 'next-sanity'
 
 type HomePageData = {
   header: Header | null
-  opere: Opera[]
+  letterarie: Opera[]
+  visive: Opera[]
   contatti: Contatti | null
 }
 
 const amazonBadgeUrl = 'https://www.amazon.it/s?k=denise+Alesi&__mk_it_IT=%C3%85M%C3%85%C5%BD%C3%95%C3%91&ref=nb_sb_noss_2'
 
 const copy = {
-  it: {role: 'Autrice · artista visiva', works: 'Opere', allWorks: 'Tutte le opere'},
-  en: {role: 'Author · visual artist', works: 'Works', allWorks: 'All works'},
-  es: {role: 'Autora · artista visual', works: 'Obras', allWorks: 'Todas las obras'},
+  it: {role: 'Autrice · artista visiva', literary: 'Opere letterarie', allLiterary: 'Tutte le opere letterarie', visual: 'Opere visive', allVisual: 'Tutte le opere visive'},
+  en: {role: 'Author · visual artist', literary: 'Literary works', allLiterary: 'All literary works', visual: 'Visual works', allVisual: 'All visual works'},
+  es: {role: 'Autora · artista visual', literary: 'Obras literarias', allLiterary: 'Todas las obras literarias', visual: 'Obras visuales', allVisual: 'Todas las obras visuales'},
 } as const
 
 const HOME_QUERY = defineQuery(`{
@@ -29,8 +30,13 @@ const HOME_QUERY = defineQuery(`{
       ritratto,
       "citazione": coalesce(traduzioni[language == $lang][0].citazione, traduzioni[language == "it"][0].citazione)
     },
-    "opere": *[_type == "opera"] | order(_createdAt desc)[0...4]{
-      _id, immagine, anno, ordine,
+    "letterarie": *[_type == "opera" && categoria == "letteraria"] | order(ordine asc, _createdAt desc)[0...3]{
+      _id, categoria, immagine, anno, ordine,
+      "titolo": coalesce(traduzioni[language == $lang][0].titolo, traduzioni[language == "it"][0].titolo, traduzioni[0].titolo),
+      "descrizione": coalesce(traduzioni[language == $lang][0].descrizione, traduzioni[language == "it"][0].descrizione, traduzioni[0].descrizione)
+    },
+    "visive": *[_type == "opera" && categoria == "visiva"] | order(ordine asc, _createdAt desc)[0...3]{
+      _id, categoria, immagine, anno, ordine,
       "titolo": coalesce(traduzioni[language == $lang][0].titolo, traduzioni[language == "it"][0].titolo, traduzioni[0].titolo),
       "descrizione": coalesce(traduzioni[language == $lang][0].descrizione, traduzioni[language == "it"][0].descrizione, traduzioni[0].descrizione)
     },
@@ -45,6 +51,37 @@ const HOME_QUERY = defineQuery(`{
 
 async function getHomeData(lang: string): Promise<HomePageData> {
   return client.fetch<HomePageData>(HOME_QUERY, {lang})
+}
+
+function HomeWorksSection({title, linkLabel, href, opere, lang, alternate = false}: {title: string; linkLabel: string; href: string; opere: Opera[]; lang: string; alternate?: boolean}) {
+  return (
+    <section className={`border-t border-black/15 px-6 py-24 text-[#20231f] md:px-12 lg:py-32 ${alternate ? 'bg-[#e5ddd0]' : 'bg-[#eee8dc]'}`}>
+      <div className="mx-auto max-w-7xl">
+        <div className="mb-16 flex flex-col gap-8 border-b border-black/20 pb-6 sm:flex-row sm:items-end sm:justify-between">
+          <h2 className="font-serif text-4xl tracking-[-0.03em] md:text-6xl">{title}</h2>
+          <Link href={`/${lang}/${href}`} className="hidden text-[10px] uppercase tracking-[0.24em] text-black/55 transition-colors hover:text-black sm:block">{linkLabel} →</Link>
+        </div>
+        {opere.length ? (
+          <div className="grid gap-px bg-black/15 sm:grid-cols-2 lg:grid-cols-3">
+            {opere.map((opera, index) => (
+              <FadeIn key={opera._id} delay={index * 0.12} className={alternate ? 'bg-[#e5ddd0]' : 'bg-[#eee8dc]'}>
+                <Link href={`/${lang}/opere/${opera._id}`} className="group block p-4 pb-7">
+                  <div className="relative mb-5 aspect-[4/5] overflow-hidden bg-black/5">
+                    {opera.immagine ? <Image src={urlFor(opera.immagine).width(750).height(938).fit('crop').url()} alt={opera.titolo || 'Opera'} fill sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw" className="object-cover transition duration-700 group-hover:scale-[1.025]" /> : null}
+                  </div>
+                  <div className="flex items-baseline justify-between gap-4">
+                    <h3 className="font-serif text-xl leading-tight text-[#20231f]">{opera.titolo}</h3>
+                    {opera.anno ? <span className="text-[9px] tracking-widest text-black/40">{opera.anno}</span> : null}
+                  </div>
+                </Link>
+              </FadeIn>
+            ))}
+          </div>
+        ) : <p className="font-serif text-2xl italic text-black/45">Le opere abiteranno presto questo spazio.</p>}
+        <Link href={`/${lang}/${href}`} className="mt-12 inline-block text-[10px] uppercase tracking-[0.24em] text-black/55 sm:hidden">{linkLabel} →</Link>
+      </div>
+    </section>
+  )
 }
 
 export default async function Home({params}: {params: Promise<{lang: string}>}) {
@@ -97,26 +134,11 @@ export default async function Home({params}: {params: Promise<{lang: string}>}) 
         </div>
       </section>
 
-      <section className="border-t border-black/15 bg-[#eee8dc] px-6 py-24 text-[#20231f] md:px-12 lg:py-32">
-        <div className="mx-auto max-w-7xl">
-          <div className="mb-16 flex flex-col gap-8 border-b border-black/20 pb-6 sm:flex-row sm:items-end sm:justify-between">
-            <div>
-              <h2 className="font-serif text-4xl tracking-[-0.03em] md:text-6xl">{text.works}</h2>
-            </div>
-            <Link href={`/${lang}/opere`} className="hidden text-[10px] uppercase tracking-[0.24em] text-black/55 transition-colors hover:text-black sm:block">{text.allWorks} →</Link>
-          </div>
-          {data.opere.length ? <div className="grid gap-px bg-black/15 sm:grid-cols-2 xl:grid-cols-4">
-            {data.opere.map((opera, index) => <FadeIn key={opera._id} delay={index * 0.12} className="bg-[#eee8dc]">
-              <Link href={`/${lang}/opere/${opera._id}`} className="group block p-4 pb-7">
-                <div className="relative mb-5 aspect-[4/5] overflow-hidden bg-black/5">{opera.immagine && <Image src={urlFor(opera.immagine).width(750).height(938).fit('crop').url()} alt={opera.titolo || 'Opera'} fill sizes="(max-width: 640px) 100vw, (max-width: 1280px) 50vw, 25vw" className="object-cover transition duration-700 group-hover:scale-[1.025]" />}</div>
-                <div className="flex items-baseline justify-between gap-4"><h3 className="font-serif text-xl leading-tight text-[#20231f]">{opera.titolo}</h3>{opera.anno && <span className="text-[9px] tracking-widest text-black/40">{opera.anno}</span>}</div>
-              </Link>
-            </FadeIn>)}
-          </div> : <p className="font-serif text-2xl italic text-black/45">Le opere abiteranno presto questo spazio.</p>}
-          <Link href={`/${lang}/opere`} className="mt-12 inline-block text-[10px] uppercase tracking-[0.24em] text-black/55 sm:hidden">{text.allWorks} →</Link>
-          <div className="mt-14 flex justify-center border-t border-black/15 pt-10">
-            <AmazonBadge href={amazonBadgeUrl} lang={lang} />
-          </div>
+      <HomeWorksSection title={text.literary} linkLabel={text.allLiterary} href="opere-letterarie" opere={data.letterarie} lang={lang} />
+      <HomeWorksSection title={text.visual} linkLabel={text.allVisual} href="opere-visive" opere={data.visive} lang={lang} alternate />
+      <section className="border-t border-black/15 bg-[#eee8dc] px-6 py-12">
+        <div className="mx-auto flex max-w-7xl justify-center">
+          <AmazonBadge href={amazonBadgeUrl} lang={lang} />
         </div>
       </section>
       <ContactsView contattiData={contacts} lang={lang} />

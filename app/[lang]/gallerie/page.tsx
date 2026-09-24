@@ -5,9 +5,9 @@ import Image from 'next/image'
 import Link from 'next/link'
 
 const labels = {
-  it: {title: 'Gallerie fotografiche', intro: 'Immagini, luoghi e frammenti raccolti attraverso lo sguardo.', empty: 'Nessuna galleria pubblicata.'},
-  en: {title: 'Photo galleries', intro: 'Images, places and fragments gathered through the gaze.', empty: 'No galleries published yet.'},
-  es: {title: 'Galerías fotográficas', intro: 'Imágenes, lugares y fragmentos reunidos a través de la mirada.', empty: 'Todavía no hay galerías publicadas.'},
+  it: {title: 'Gallerie', intro: 'Immagini, luoghi e frammenti raccolti attraverso lo sguardo.', empty: 'Nessuna galleria pubblicata.'},
+  en: {title: 'Galleries', intro: 'Images, places and fragments gathered through the gaze.', empty: 'No galleries published yet.'},
+  es: {title: 'Galerías', intro: 'Imágenes, lugares y fragmentos reunidos a través de la mirada.', empty: 'Todavía no hay galerías publicadas.'},
 } as const
 
 export default async function GalleriePage({params}: {params: Promise<{lang: string}>}) {

@@ -1,3 +1,4 @@
+import {BookIcon, ImageIcon} from '@sanity/icons'
 import type {StructureResolver} from 'sanity/structure'
 
 const singletonTypes = new Set(['about', 'header', 'contatti'])
@@ -19,7 +20,25 @@ export const structure: StructureResolver = (S) =>
         .title('Contatti')
         .child(S.document().schemaType('contatti').documentId('contatti').title('Contatti')),
       S.divider(),
+      S.listItem()
+        .id('opere-letterarie')
+        .title('Opere letterarie')
+        .icon(BookIcon)
+        .child(
+          S.documentTypeList('opera')
+            .title('Opere letterarie')
+            .filter('_type == "opera" && categoria == "letteraria"'),
+        ),
+      S.listItem()
+        .id('opere-visive')
+        .title('Opere visive')
+        .icon(ImageIcon)
+        .child(
+          S.documentTypeList('opera')
+            .title('Opere visive')
+            .filter('_type == "opera" && categoria == "visiva"'),
+        ),
       ...S.documentTypeListItems().filter(
-        (item) => !singletonTypes.has(item.getId() ?? ''),
+        (item) => !singletonTypes.has(item.getId() ?? '') && item.getId() !== 'opera',
       ),
     ])

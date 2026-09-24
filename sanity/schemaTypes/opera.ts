@@ -1,10 +1,27 @@
 import {defineArrayMember, defineField, defineType} from 'sanity'
+import {BookIcon} from '@sanity/icons'
 
 export const opera = defineType({
     name: 'opera',
     title: 'Opere',
     type: 'document',
+    icon: BookIcon,
     fields: [
+        defineField({
+            name: 'categoria',
+            title: 'Percorso',
+            description: 'Determina in quale raccolta del sito compare l’opera.',
+            type: 'string',
+            options: {
+                list: [
+                    {title: 'Opera letteraria', value: 'letteraria'},
+                    {title: 'Opera visiva', value: 'visiva'},
+                ],
+                layout: 'radio',
+            },
+            initialValue: 'letteraria',
+            validation: (rule) => rule.required(),
+        }),
         defineField({
             name: 'ordine',
             title: 'Ordine di visualizzazione',
@@ -137,12 +154,14 @@ export const opera = defineType({
             title: 'traduzioni.0.titolo', // Prende il titolo del primo elemento dell'array (es. l'italiano)
             media: 'immagine',           // Usa il campo immagine come miniatura
             anno: 'anno',
+            categoria: 'categoria',
         },
         prepare(selection) {
-            const { title, media, anno } = selection;
+            const { title, media, anno, categoria } = selection;
+            const percorso = categoria === 'visiva' ? 'Opera visiva' : 'Opera letteraria'
             return {
                 title: title || 'Opera senza titolo', // Fallback se il titolo manca
-                subtitle: anno ? String(anno) : undefined,
+                subtitle: [percorso, anno].filter(Boolean).join(' · '),
                 media: media,
             };
         },

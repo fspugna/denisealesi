@@ -62,6 +62,7 @@ export interface Opera {
     titolo: string;
     immagine: SanityImage;
     descrizione: string;
+    categoria: 'letteraria' | 'visiva';
     audio?: SanityAudioFile;
     ordine?: number;
     anno?: number;
@@ -88,6 +89,8 @@ export interface Video {
     data?: string;
     url: string;
 }
+
+export type PercorsoOpera = Opera['categoria'];
 
 export const labelsTranslations = {
     it: {
