@@ -12,7 +12,9 @@
     "migration:videos:analyze": "node migration/scripts/migrate-legacy.mjs videos-analyze",
     "migration:videos:run": "node migration/scripts/migrate-legacy.mjs videos-migrate",
     "migration:about:analyze": "node migration/scripts/consolidate-about.mjs",
-    "migration:about:run": "node migration/scripts/consolidate-about.mjs --execute"
+    "migration:about:run": "node migration/scripts/consolidate-about.mjs --execute",
+    "migration:client-update:analyze": "node migration/scripts/apply-client-update.mjs",
+    "migration:client-update:run": "node migration/scripts/apply-client-update.mjs --execute"
   },
   "dependencies": {
     "@portabletext/react": "^6.2.0",

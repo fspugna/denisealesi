@@ -22,7 +22,7 @@ const copy = {
 } as const
 
 const VISUAL_WORKS_QUERY = defineQuery(/* groq */ `{
-  "opere": *[_type == "opera" && categoria == "visiva"] | order(ordine asc, anno desc, _id asc){
+  "opere": *[_type == "opera" && categoria == "visiva" && (!defined(stato) || stato == "pubblicata")] | order(ordine asc, anno desc, _id asc){
     _id,
     categoria,
     immagine,

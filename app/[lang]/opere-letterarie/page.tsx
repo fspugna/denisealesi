@@ -1,3 +1,4 @@
+import AmazonBadge from '@/components/AmazonBadge'
 import OperaGrid from '@/components/OperaGrid'
 import {client} from '@/sanity/lib/client'
 import type {Opera} from '@/types'
@@ -10,8 +11,10 @@ const copy = {
   es: {title: 'Obras literarias', eyebrow: 'Escritura', intro: 'Libros, poesía y proyectos narrativos nacidos de la observación de la experiencia.', empty: 'Todavía no hay obras literarias publicadas.'},
 } as const
 
+const amazonBadgeUrl = 'https://www.amazon.it/s?k=denise+Alesi&__mk_it_IT=%C3%85M%C3%85%C5%BD%C3%95%C3%91&ref=nb_sb_noss_2'
+
 const LITERARY_WORKS_QUERY = defineQuery(/* groq */ `
-  *[_type == "opera" && categoria == "letteraria"] | order(ordine asc, anno desc, _id asc){
+  *[_type == "opera" && categoria == "letteraria" && (!defined(stato) || stato == "pubblicata")] | order(ordine asc, anno desc, _id asc){
     _id,
     categoria,
     immagine,
@@ -52,6 +55,9 @@ export default async function OpereLetterariePage({params}: {params: Promise<{la
       </header>
       <div className="mx-auto max-w-7xl">
         {opere.length ? <OperaGrid opere={opere} lang={language} /> : <p className="font-serif text-2xl italic text-black/45">{text.empty}</p>}
+        <div className="mt-20 flex justify-center border-t border-black/15 pt-10">
+          <AmazonBadge href={amazonBadgeUrl} lang={language} />
+        </div>
       </div>
     </main>
   )

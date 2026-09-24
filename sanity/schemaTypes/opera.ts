@@ -23,6 +23,21 @@ export const opera = defineType({
             validation: (rule) => rule.required(),
         }),
         defineField({
+            name: 'stato',
+            title: 'Visibilità sul sito',
+            description: 'Le opere nascoste restano conservate nello Studio ma non compaiono nel sito pubblico.',
+            type: 'string',
+            options: {
+                list: [
+                    {title: 'Pubblicata', value: 'pubblicata'},
+                    {title: 'Nascosta', value: 'nascosta'},
+                ],
+                layout: 'radio',
+            },
+            initialValue: 'pubblicata',
+            validation: (rule) => rule.required(),
+        }),
+        defineField({
             name: 'ordine',
             title: 'Ordine di visualizzazione',
             type: 'number',
@@ -155,13 +170,14 @@ export const opera = defineType({
             media: 'immagine',           // Usa il campo immagine come miniatura
             anno: 'anno',
             categoria: 'categoria',
+            stato: 'stato',
         },
         prepare(selection) {
-            const { title, media, anno, categoria } = selection;
+            const { title, media, anno, categoria, stato } = selection;
             const percorso = categoria === 'visiva' ? 'Opera visiva' : 'Opera letteraria'
             return {
                 title: title || 'Opera senza titolo', // Fallback se il titolo manca
-                subtitle: [percorso, anno].filter(Boolean).join(' · '),
+                subtitle: [percorso, stato === 'nascosta' ? 'Nascosta' : null, anno].filter(Boolean).join(' · '),
                 media: media,
             };
         },

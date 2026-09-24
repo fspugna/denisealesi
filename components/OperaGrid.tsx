@@ -5,7 +5,7 @@ import Link from 'next/link'
 
 export default function OperaGrid({opere, lang}: {opere: Opera[]; lang: string}) {
   return (
-    <div className="grid gap-x-8 gap-y-20 sm:grid-cols-2 lg:grid-cols-3">
+    <div className="grid gap-x-8 gap-y-20 sm:grid-cols-2 lg:grid-cols-4">
       {opere.map((opera, index) => (
         <Link key={opera._id} href={`/${lang}/opere/${opera._id}`} className="group flex h-full flex-col">
           <div className="relative mb-6 aspect-[4/5] overflow-hidden bg-[#d8d0c2]">
@@ -15,7 +15,7 @@ export default function OperaGrid({opere, lang}: {opere: Opera[]; lang: string})
                 alt={opera.titolo || 'Opera'}
                 fill
                 loading={index === 0 ? 'eager' : 'lazy'}
-                sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
+                sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
                 className="object-cover transition duration-700 group-hover:scale-[1.025]"
               />
             ) : null}

@@ -63,6 +63,7 @@ export interface Opera {
     immagine: SanityImage;
     descrizione: string;
     categoria: 'letteraria' | 'visiva';
+    stato?: 'pubblicata' | 'nascosta';
     audio?: SanityAudioFile;
     ordine?: number;
     anno?: number;
@@ -86,6 +87,7 @@ export interface GalleriaFotografica {
 export interface Video {
     _id: string;
     titolo: string;
+    descrizione?: string;
     data?: string;
     url: string;
 }

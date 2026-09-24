@@ -7,7 +7,7 @@ import {notFound} from 'next/navigation'
 type Props = {params: Promise<{id: string; lang: string}>}
 
 async function getOpera(id: string, lang: string): Promise<Opera | null> {
-  return client.fetch(`*[_type == "opera" && _id == $id][0]{
+  return client.fetch(`*[_type == "opera" && _id == $id && (!defined(stato) || stato == "pubblicata")][0]{
     _id, categoria, immagine, anno, amazonUrl,
     "titolo": coalesce(traduzioni[language == $lang][0].titolo, traduzioni[language == "it"][0].titolo, traduzioni[0].titolo),
     "descrizione": coalesce(traduzioni[language == $lang][0].descrizione, traduzioni[language == "it"][0].descrizione, traduzioni[0].descrizione),

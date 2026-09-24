@@ -25,7 +25,14 @@ export const video = defineType({
                         },
                         validation: (rule) => rule.required(),
                     }),
-                    defineField({name: 'titolo', type: 'string', title: 'Titolo', validation: (rule) => rule.required()})
+                    defineField({name: 'titolo', type: 'string', title: 'Titolo', validation: (rule) => rule.required()}),
+                    defineField({
+                        name: 'descrizione',
+                        type: 'text',
+                        title: 'Descrizione',
+                        description: 'Testo mostrato accanto al video nella relativa pagina.',
+                        rows: 8,
+                    }),
                 ]
             })],
             validation: (rule) => rule.required().min(1),

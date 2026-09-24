@@ -74,18 +74,6 @@ export default function MainMenu({lang = 'it'}: {lang?: string}) {
           </ul>
         </nav>
 
-        <div className="absolute right-7 flex items-center gap-3 border-l border-white/15 pl-6 text-[9px] uppercase tracking-[0.22em] xl:right-10 xl:gap-4 xl:pl-8" aria-label="Selezione lingua">
-          {supportedLanguages.map((language) => (
-            <Link
-              key={language}
-              href={`/${language}${currentPath === '/' ? '' : currentPath}`}
-              aria-current={currentLang === language ? 'true' : undefined}
-              className={currentLang === language ? 'text-[#c5a46d]' : 'text-white/45 transition-colors hover:text-white'}
-            >
-              {language}
-            </Link>
-          ))}
-        </div>
       </header>
 
       <div className="fixed inset-x-0 top-0 z-50 flex items-center justify-between px-5 py-5 text-[#f4efe5] mix-blend-difference md:px-9 md:py-7 lg:hidden">
@@ -118,9 +106,6 @@ export default function MainMenu({lang = 'it'}: {lang?: string}) {
               ))}
             </ol>
           </nav>
-          <div className="mt-10 flex gap-5 text-[10px] uppercase tracking-[0.25em] text-white/50">
-            {supportedLanguages.map((language) => <Link key={language} onClick={() => setOpenPath(null)} href={`/${language}${currentPath === '/' ? '' : currentPath}`} className={currentLang === language ? 'text-[#c5a46d]' : 'hover:text-white'}>{language}</Link>)}
-          </div>
         </div>
       </div>
     </>
