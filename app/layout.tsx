@@ -11,6 +11,16 @@ const inter = Inter({ subsets: ['latin'], variable: '--font-sans' });
 export const metadata: Metadata = {
   title: "Denise Alesi — Autrice e artista visiva",
   description: "Il sito ufficiale di Denise Alesi: scrittura, fotografia, immagini e ricerca artistica.",
+  robots: {
+    index: false,
+    follow: true,
+    nocache: true,
+    googleBot: {
+      index: false,
+      follow: true,
+      noimageindex: true,
+    },
+  },
 };
 
 export default function RootLayout({
