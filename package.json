@@ -14,13 +14,18 @@
     "migration:about:analyze": "node migration/scripts/consolidate-about.mjs",
     "migration:about:run": "node migration/scripts/consolidate-about.mjs --execute",
     "migration:client-update:analyze": "node migration/scripts/apply-client-update.mjs",
-    "migration:client-update:run": "node migration/scripts/apply-client-update.mjs --execute"
+    "migration:client-update:run": "node migration/scripts/apply-client-update.mjs --execute",
+    "migration:galleries-order:analyze": "node migration/scripts/order-galleries.mjs",
+    "migration:galleries-order:run": "node migration/scripts/order-galleries.mjs --execute",
+    "migration:rich-text:analyze": "node migration/scripts/migrate-rich-text-and-contacts.mjs",
+    "migration:rich-text:run": "node migration/scripts/migrate-rich-text-and-contacts.mjs --execute"
   },
   "dependencies": {
     "@portabletext/react": "^6.2.0",
     "@sanity/client": "^7.23.0",
     "@sanity/image-url": "^2.1.1",
     "@sanity/locale-it-it": "^1.1.35",
+    "@sanity/orderable-document-list": "^2.0.24",
     "@sanity/vision": "^5.31.1",
     "framer-motion": "^12.42.0",
     "next": "16.2.9",

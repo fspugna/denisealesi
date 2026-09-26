@@ -7,9 +7,9 @@ import {useEffect, useState} from 'react'
 const supportedLanguages = ['it', 'en', 'es'] as const
 
 const menuLabels = {
-  it: {index: 'Indice', close: 'Chiudi', home: 'Home', biography: 'Biografia', literary: 'Opere letterarie', visual: 'Opere visive', galleries: 'Gallerie', contacts: 'Contatti'},
-  en: {index: 'Index', close: 'Close', home: 'Home', biography: 'Biography', literary: 'Literary works', visual: 'Visual works', galleries: 'Galleries', contacts: 'Contacts'},
-  es: {index: 'Índice', close: 'Cerrar', home: 'Inicio', biography: 'Biografía', literary: 'Obras literarias', visual: 'Obras visuales', galleries: 'Galerías', contacts: 'Contacto'},
+  it: {index: 'Indice', close: 'Chiudi', home: 'Home', biography: 'Biografia', literary: 'Opere letterarie', visual: 'Opere visive', galleries: 'Gallerie', videos: 'Video', contacts: 'Contatti'},
+  en: {index: 'Index', close: 'Close', home: 'Home', biography: 'Biography', literary: 'Literary works', visual: 'Visual works', galleries: 'Galleries', videos: 'Videos', contacts: 'Contacts'},
+  es: {index: 'Índice', close: 'Cerrar', home: 'Inicio', biography: 'Biografía', literary: 'Obras literarias', visual: 'Obras visuales', galleries: 'Galerías', videos: 'Vídeos', contacts: 'Contacto'},
 } as const
 
 export default function MainMenu({lang = 'it'}: {lang?: string}) {
@@ -49,7 +49,7 @@ export default function MainMenu({lang = 'it'}: {lang?: string}) {
 
   const links = [
     [labels.home, '/'], [labels.biography, '/biografia'], [labels.literary, '/opere-letterarie'],
-    [labels.visual, '/opere-visive'], [labels.galleries, '/gallerie'], [labels.contacts, '/contatti'],
+    [labels.visual, '/opere-visive'], [labels.videos, '/video'], [labels.galleries, '/gallerie'], [labels.contacts, '/contatti'],
   ] as const
 
   const isActive = (path: string) => path === '/' ? currentPath === '/' : currentPath === path || currentPath.startsWith(`${path}/`)

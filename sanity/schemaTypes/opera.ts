@@ -1,5 +1,6 @@
 import {defineArrayMember, defineField, defineType} from 'sanity'
 import {BookIcon} from '@sanity/icons'
+import {richTextBlock} from './shared/richText'
 
 export const opera = defineType({
     name: 'opera',
@@ -135,7 +136,21 @@ export const opera = defineType({
                         validation: (rule) => rule.required(),
                     }),
                     defineField({name: 'titolo', type: 'string', title: 'Titolo'}),
-                    defineField({name: 'descrizione', type: 'text', title: 'Descrizione'}),
+                    defineField({
+                        name: 'descrizioneRichText',
+                        type: 'array',
+                        title: 'Descrizione',
+                        description: 'Puoi incollare testo e usare titoli, elenchi, grassetto, corsivo, sottolineato e link.',
+                        of: [richTextBlock],
+                    }),
+                    defineField({
+                        name: 'descrizione',
+                        type: 'text',
+                        title: 'Descrizione precedente',
+                        deprecated: {reason: 'Il contenuto è stato trasferito nella descrizione formattata.'},
+                        readOnly: true,
+                        hidden: true,
+                    }),
                     defineField({
                         name: 'audio',
                         title: 'Traccia audio / Commento sonoro',

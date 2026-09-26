@@ -24,11 +24,6 @@ const LITERARY_WORKS_QUERY = defineQuery(/* groq */ `
       traduzioni[language == $lang][0].titolo,
       traduzioni[language == "it"][0].titolo,
       traduzioni[0].titolo
-    ),
-    "descrizione": coalesce(
-      traduzioni[language == $lang][0].descrizione,
-      traduzioni[language == "it"][0].descrizione,
-      traduzioni[0].descrizione
     )
   }
 `)

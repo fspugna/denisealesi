@@ -10,6 +10,17 @@ const copy = {
   es: {eyebrow: 'Contacto', title: 'Sigamos en contacto.', intro: 'Para información sobre obras, libros y proyectos artísticos, puedes escribir directamente a Denise.', email: 'Enviar un correo', phone: 'Teléfono', social: 'Sigue a Denise'},
 } as const
 
+function SocialIcon({name, url}: {name: string; url: string}) {
+  const platform = `${name} ${url}`.toLowerCase()
+  const iconClass = 'size-5 shrink-0'
+
+  if (platform.includes('instagram')) return <svg aria-hidden="true" viewBox="0 0 24 24" className={iconClass} fill="none" stroke="currentColor" strokeWidth="1.7"><rect x="3" y="3" width="18" height="18" rx="5" /><circle cx="12" cy="12" r="4.2" /><circle cx="17.4" cy="6.7" r="1" fill="currentColor" stroke="none" /></svg>
+  if (platform.includes('youtube')) return <svg aria-hidden="true" viewBox="0 0 24 24" className={iconClass} fill="none" stroke="currentColor" strokeWidth="1.7"><path d="M21 12c0 3-.35 5.1-.9 5.7-.7.8-4.2 1.1-8.1 1.1s-7.4-.3-8.1-1.1C3.35 17.1 3 15 3 12s.35-5.1.9-5.7C4.6 5.5 8.1 5.2 12 5.2s7.4.3 8.1 1.1C20.65 6.9 21 9 21 12Z" /><path d="m10 9 5 3-5 3Z" fill="currentColor" stroke="none" /></svg>
+  if (platform.includes('facebook')) return <svg aria-hidden="true" viewBox="0 0 24 24" className={iconClass} fill="currentColor"><path d="M13.7 21v-8h2.7l.4-3.1h-3.1V8c0-.9.3-1.5 1.6-1.5H17V3.7c-.8-.1-1.6-.2-2.4-.2-2.4 0-4.1 1.5-4.1 4.2v2.2H8V13h2.5v8h3.2Z" /></svg>
+
+  return <span aria-hidden="true" className="flex size-5 items-center justify-center rounded-full border border-current text-[10px]">↗</span>
+}
+
 export default function ContactsView({contattiData, lang}: {contattiData: Contatti | null; lang: string}) {
   if (!contattiData) return null
   const language = lang === 'en' || lang === 'es' ? lang : 'it'
@@ -53,8 +64,9 @@ export default function ContactsView({contattiData, lang}: {contattiData: Contat
           {!!contattiData.social?.length && <div className={contattiData.fotoUrl ? 'mt-8' : 'mt-12'}>
             <p className="mb-5 text-xs uppercase tracking-[0.28em] text-white/50">{text.social}</p>
             <div className="flex flex-wrap gap-x-6 gap-y-3">
-              {contattiData.social.map((social) => <a key={social._key || social.url} href={social.url} target="_blank" rel="noopener noreferrer" className="border-b border-white/20 pb-1 text-xs uppercase tracking-[0.2em] transition-colors hover:border-[#c5a46d] hover:text-[#c5a46d]">
-                {social.nome}
+              {contattiData.social.map((social) => <a key={social._key || social.url} href={social.url} target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 border-b border-white/20 pb-2 text-xs uppercase tracking-[0.2em] transition-colors hover:border-[#c5a46d] hover:text-[#c5a46d]">
+                <SocialIcon name={social.nome} url={social.url} />
+                <span>{social.nome}</span>
               </a>)}
             </div>
           </div>}

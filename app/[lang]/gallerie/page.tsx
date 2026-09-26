@@ -3,6 +3,7 @@ import {urlFor} from '@/sanity/lib/image'
 import type {GalleriaFotografica} from '@/types'
 import Image from 'next/image'
 import Link from 'next/link'
+import {defineQuery} from 'next-sanity'
 
 const labels = {
   it: {title: 'Gallerie', intro: 'Immagini, luoghi e frammenti raccolti attraverso lo sguardo.', empty: 'Nessuna galleria pubblicata.'},
@@ -10,14 +11,21 @@ const labels = {
   es: {title: 'Galerías', intro: 'Imágenes, lugares y fragmentos reunidos a través de la mirada.', empty: 'Todavía no hay galerías publicadas.'},
 } as const
 
+const GALLERIES_QUERY = defineQuery(/* groq */ `
+  *[_type == "galleriaFotografica"]
+    | order(defined(orderRank) desc, orderRank asc, data asc, _createdAt asc){
+      _id,
+      orderRank,
+      data,
+      "titolo": coalesce(traduzioni[language == $lang][0].titolo, traduzioni[language == "it"][0].titolo, traduzioni[0].titolo),
+      "fotografie": fotografie[0...1]
+    }
+`)
+
 export default async function GalleriePage({params}: {params: Promise<{lang: string}>}) {
   const {lang} = await params
   const text = labels[lang as keyof typeof labels] || labels.it
-  const gallerie: GalleriaFotografica[] = await client.fetch(`*[_type == "galleriaFotografica"] | order(data desc, _createdAt desc){
-    _id, data, "titolo": coalesce(traduzioni[language == $lang][0].titolo, traduzioni[language == "it"][0].titolo, traduzioni[0].titolo),
-    "descrizione": coalesce(traduzioni[language == $lang][0].descrizione, traduzioni[language == "it"][0].descrizione, traduzioni[0].descrizione),
-    "fotografie": fotografie[0...1]
-  }`, {lang})
+  const gallerie = await client.fetch<GalleriaFotografica[]>(GALLERIES_QUERY, {lang})
 
   return <div className="min-h-screen bg-[#eee8dc] px-6 pb-28 pt-36 text-[#20231f] md:px-12 md:pt-44">
     <header className="mx-auto mb-20 grid max-w-7xl gap-8 border-b border-black/20 pb-12 md:grid-cols-2 md:items-end">

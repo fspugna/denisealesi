@@ -11,6 +11,8 @@ import Zoom from "yet-another-react-lightbox/plugins/zoom";
 import "yet-another-react-lightbox/plugins/captions.css";
 import "yet-another-react-lightbox/styles.css";
 import { Opera } from '@/types';
+import {toPlainText} from '@portabletext/react';
+import RichText from './RichText';
 
 const backLabels = {
     it: {letteraria: '← Torna alle opere letterarie', visiva: '← Torna alle opere visive'},
@@ -50,7 +52,7 @@ export default function OperaDetailView({ opera }: { opera: Opera }) {
         {
             src: fullImageUrl,
             title: opera.titolo,
-            description: opera.descrizione || "",
+            description: opera.descrizioneTesto || (opera.descrizione ? toPlainText(opera.descrizione) : ""),
         }
     ] : [];
 
@@ -102,11 +104,9 @@ export default function OperaDetailView({ opera }: { opera: Opera }) {
                     <div>
                         {opera.anno && <p className="mb-5 text-[9px] uppercase tracking-[0.28em] text-black/45">{opera.anno}</p>}
                         <h1 className="mb-6 font-serif text-4xl leading-tight md:text-6xl">{opera.titolo}</h1>
-                        {opera.descrizione && (
-                            <p className="max-w-xl font-serif text-lg leading-relaxed text-[#625d53] whitespace-pre-line">
-                                {opera.descrizione}
-                            </p>
-                        )}
+                        {opera.descrizione?.length ? <RichText value={opera.descrizione} className="max-w-xl font-serif text-lg text-[#625d53]" /> : opera.descrizioneTesto ? (
+                            <p className="max-w-xl whitespace-pre-line font-serif text-lg leading-relaxed text-[#625d53]">{opera.descrizioneTesto}</p>
+                        ) : null}
                     </div>
 
                     {/* Player Audio */}

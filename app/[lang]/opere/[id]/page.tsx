@@ -1,6 +1,7 @@
 import OperaDetailView from '@/components/OperaDetailView'
 import {client} from '@/sanity/lib/client'
 import type {Opera} from '@/types'
+import {toPlainText} from '@portabletext/react'
 import type {Metadata} from 'next'
 import {notFound} from 'next/navigation'
 
@@ -10,7 +11,8 @@ async function getOpera(id: string, lang: string): Promise<Opera | null> {
   return client.fetch(`*[_type == "opera" && _id == $id && (!defined(stato) || stato == "pubblicata")][0]{
     _id, categoria, immagine, anno, amazonUrl,
     "titolo": coalesce(traduzioni[language == $lang][0].titolo, traduzioni[language == "it"][0].titolo, traduzioni[0].titolo),
-    "descrizione": coalesce(traduzioni[language == $lang][0].descrizione, traduzioni[language == "it"][0].descrizione, traduzioni[0].descrizione),
+    "descrizione": coalesce(traduzioni[language == $lang][0].descrizioneRichText, traduzioni[language == "it"][0].descrizioneRichText, traduzioni[0].descrizioneRichText),
+    "descrizioneTesto": coalesce(traduzioni[language == $lang][0].descrizione, traduzioni[language == "it"][0].descrizione, traduzioni[0].descrizione),
     "audio": coalesce(traduzioni[language == $lang][0].audio, traduzioni[language == "it"][0].audio, audio){titolo, asset->{url}},
     "galleriaCollegata": galleriaCollegata->{
       _id,
@@ -26,7 +28,7 @@ async function getOpera(id: string, lang: string): Promise<Opera | null> {
 export async function generateMetadata({params}: Props): Promise<Metadata> {
   const {id, lang} = await params
   const opera = await getOpera(id, lang)
-  return opera ? {title: `${opera.titolo} | Denise Alesi`, description: opera.descrizione} : {title: 'Opera non trovata'}
+  return opera ? {title: `${opera.titolo} | Denise Alesi`, description: opera.descrizioneTesto || (opera.descrizione ? toPlainText(opera.descrizione) : undefined)} : {title: 'Opera non trovata'}
 }
 
 export default async function OperaPage({params}: Props) {

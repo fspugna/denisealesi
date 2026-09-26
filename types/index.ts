@@ -61,7 +61,8 @@ export interface Opera {
     _id: string;
     titolo: string;
     immagine: SanityImage;
-    descrizione: string;
+    descrizione?: PortableTextBlock[];
+    descrizioneTesto?: string;
     categoria: 'letteraria' | 'visiva';
     stato?: 'pubblicata' | 'nascosta';
     audio?: SanityAudioFile;
@@ -78,8 +79,10 @@ export interface Fotografia extends SanityImage {
 
 export interface GalleriaFotografica {
     _id: string;
+    orderRank?: string;
     titolo: string;
-    descrizione?: string;
+    descrizione?: PortableTextBlock[];
+    descrizioneTesto?: string;
     data?: string;
     fotografie: Fotografia[];
 }
@@ -87,7 +90,8 @@ export interface GalleriaFotografica {
 export interface Video {
     _id: string;
     titolo: string;
-    descrizione?: string;
+    descrizione?: PortableTextBlock[];
+    descrizioneTesto?: string;
     data?: string;
     url: string;
 }

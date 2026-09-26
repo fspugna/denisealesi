@@ -28,14 +28,13 @@ const VISUAL_WORKS_QUERY = defineQuery(/* groq */ `{
     immagine,
     anno,
     ordine,
-    "titolo": coalesce(traduzioni[language == $lang][0].titolo, traduzioni[language == "it"][0].titolo, traduzioni[0].titolo),
-    "descrizione": coalesce(traduzioni[language == $lang][0].descrizione, traduzioni[language == "it"][0].descrizione, traduzioni[0].descrizione)
+    "titolo": coalesce(traduzioni[language == $lang][0].titolo, traduzioni[language == "it"][0].titolo, traduzioni[0].titolo)
   },
-  "gallerie": *[_type == "galleriaFotografica"] | order(data desc, _createdAt desc)[0...2]{
+  "gallerie": *[_type == "galleriaFotografica"] | order(defined(orderRank) desc, orderRank asc, data asc, _createdAt asc)[0...2]{
     _id,
+    orderRank,
     data,
     "titolo": coalesce(traduzioni[language == $lang][0].titolo, traduzioni[language == "it"][0].titolo, traduzioni[0].titolo),
-    "descrizione": coalesce(traduzioni[language == $lang][0].descrizione, traduzioni[language == "it"][0].descrizione, traduzioni[0].descrizione),
     "fotografie": fotografie[0...1]
   },
   "video": *[_type == "video"] | order(inEvidenza desc, data desc, _createdAt desc)[0...2]{

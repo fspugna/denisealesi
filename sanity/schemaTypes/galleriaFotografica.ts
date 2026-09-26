@@ -1,10 +1,14 @@
 import {defineArrayMember, defineField, defineType} from 'sanity'
+import {orderRankField, orderRankOrdering} from '@sanity/orderable-document-list'
+import {richTextBlock} from './shared/richText'
 
 export const galleriaFotografica = defineType({
   name: 'galleriaFotografica',
   title: 'Gallerie fotografiche',
   type: 'document',
+  orderings: [orderRankOrdering],
   fields: [
+    orderRankField({type: 'galleriaFotografica'}),
     defineField({
       name: 'data',
       title: 'Data',
@@ -20,7 +24,21 @@ export const galleriaFotografica = defineType({
         fields: [
           defineField({name: 'language', title: 'Lingua', type: 'string', options: {list: [{title: 'Italiano', value: 'it'}, {title: 'English', value: 'en'}, {title: 'Español', value: 'es'}]}, validation: (rule) => rule.required()}),
           defineField({name: 'titolo', title: 'Titolo', type: 'string', validation: (rule) => rule.required()}),
-          defineField({name: 'descrizione', title: 'Descrizione', type: 'text', rows: 4}),
+          defineField({
+            name: 'descrizioneRichText',
+            title: 'Descrizione',
+            type: 'array',
+            description: 'Puoi incollare testo e usare titoli, elenchi, grassetto, corsivo, sottolineato e link.',
+            of: [richTextBlock],
+          }),
+          defineField({
+            name: 'descrizione',
+            title: 'Descrizione precedente',
+            type: 'text',
+            deprecated: {reason: 'Il contenuto è stato trasferito nella descrizione formattata.'},
+            readOnly: true,
+            hidden: true,
+          }),
         ],
         preview: {select: {title: 'titolo', subtitle: 'language'}},
       })],

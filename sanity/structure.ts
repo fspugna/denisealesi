@@ -1,9 +1,10 @@
 import {BookIcon, ImageIcon} from '@sanity/icons'
+import {orderableDocumentListDeskItem} from '@sanity/orderable-document-list'
 import type {StructureResolver} from 'sanity/structure'
 
 const singletonTypes = new Set(['about', 'header', 'contatti'])
 
-export const structure: StructureResolver = (S) =>
+export const structure: StructureResolver = (S, context) =>
   S.list()
     .title('Contenuti')
     .items([
@@ -38,7 +39,14 @@ export const structure: StructureResolver = (S) =>
             .title('Opere visive')
             .filter('_type == "opera" && categoria == "visiva"'),
         ),
+      orderableDocumentListDeskItem({
+        type: 'galleriaFotografica',
+        title: 'Gallerie fotografiche',
+        icon: ImageIcon,
+        S,
+        context,
+      }),
       ...S.documentTypeListItems().filter(
-        (item) => !singletonTypes.has(item.getId() ?? '') && item.getId() !== 'opera',
+        (item) => !singletonTypes.has(item.getId() ?? '') && !['opera', 'galleriaFotografica'].includes(item.getId() ?? ''),
       ),
     ])

@@ -1,7 +1,9 @@
 import AltriVideo from '@/components/AltriVideo'
+import RichText from '@/components/RichText'
 import {getVideoEmbedUrl} from '@/lib/video'
 import {client} from '@/sanity/lib/client'
 import type {Video} from '@/types'
+import {toPlainText} from '@portabletext/react'
 import type {Metadata} from 'next'
 import Link from 'next/link'
 import {notFound} from 'next/navigation'
@@ -21,6 +23,11 @@ const VIDEO_QUERY = defineQuery(`
       titolo
     ),
     "descrizione": coalesce(
+      traduzioni[language == $lang][0].descrizioneRichText,
+      traduzioni[language == "it"][0].descrizioneRichText,
+      traduzioni[0].descrizioneRichText
+    ),
+    "descrizioneTesto": coalesce(
       traduzioni[language == $lang][0].descrizione,
       traduzioni[language == "it"][0].descrizione,
       traduzioni[0].descrizione
@@ -35,7 +42,7 @@ async function getVideo(id: string, lang: string) {
 export async function generateMetadata({params}: Props): Promise<Metadata> {
   const {id, lang} = await params
   const video = await getVideo(id, lang)
-  return video ? {title: `${video.titolo} | Denise Alesi`} : {title: 'Video non trovato'}
+  return video ? {title: `${video.titolo} | Denise Alesi`, description: video.descrizioneTesto || (video.descrizione ? toPlainText(video.descrizione) : undefined)} : {title: 'Video non trovato'}
 }
 
 export default async function VideoDetailPage({params}: Props) {
@@ -53,11 +60,11 @@ export default async function VideoDetailPage({params}: Props) {
         {video.data && <time dateTime={video.data} className="text-[10px] uppercase tracking-[0.25em] text-[#c5a46d]">{new Intl.DateTimeFormat(lang, {day: 'numeric', month: 'long', year: 'numeric', timeZone: 'UTC'}).format(new Date(`${video.data}T12:00:00Z`))}</time>}
       </header>
 
-      <div className={`grid items-start gap-10 ${video.descrizione ? 'lg:grid-cols-[minmax(0,1.7fr)_minmax(18rem,0.7fr)]' : ''}`}>
+      <div className={`grid items-start gap-10 ${video.descrizione?.length || video.descrizioneTesto ? 'lg:grid-cols-[minmax(0,1.7fr)_minmax(18rem,0.7fr)]' : ''}`}>
         {embedUrl ? <div className="aspect-video w-full overflow-hidden bg-black shadow-[0_35px_100px_rgba(0,0,0,0.35)]">
           <iframe className="h-full w-full" src={embedUrl} title={video.titolo} allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowFullScreen />
         </div> : <a href={video.url} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-4 border-b border-[#c5a46d] pb-2 text-sm uppercase tracking-[0.2em]">Apri il video originale →</a>}
-        {video.descrizione ? <p className="border-t border-white/15 pt-6 font-serif text-xl leading-relaxed text-white/70 lg:pt-8">{video.descrizione}</p> : null}
+        {video.descrizione?.length ? <RichText value={video.descrizione} className="border-t border-white/15 pt-6 font-serif text-xl text-white/70 lg:pt-8" /> : video.descrizioneTesto ? <p className="whitespace-pre-line border-t border-white/15 pt-6 font-serif text-xl leading-relaxed text-white/70 lg:pt-8">{video.descrizioneTesto}</p> : null}
       </div>
 
       <AltriVideo currentId={id} lang={lang} />

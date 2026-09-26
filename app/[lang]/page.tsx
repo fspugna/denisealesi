@@ -29,13 +29,11 @@ const HOME_QUERY = defineQuery(`{
     },
     "letterarie": *[_type == "opera" && categoria == "letteraria" && (!defined(stato) || stato == "pubblicata")] | order(ordine asc, _createdAt desc){
       _id, categoria, immagine, anno, ordine,
-      "titolo": coalesce(traduzioni[language == $lang][0].titolo, traduzioni[language == "it"][0].titolo, traduzioni[0].titolo),
-      "descrizione": coalesce(traduzioni[language == $lang][0].descrizione, traduzioni[language == "it"][0].descrizione, traduzioni[0].descrizione)
+      "titolo": coalesce(traduzioni[language == $lang][0].titolo, traduzioni[language == "it"][0].titolo, traduzioni[0].titolo)
     },
     "visive": *[_type == "opera" && categoria == "visiva" && (!defined(stato) || stato == "pubblicata")] | order(ordine asc, _createdAt desc){
       _id, categoria, immagine, anno, ordine,
-      "titolo": coalesce(traduzioni[language == $lang][0].titolo, traduzioni[language == "it"][0].titolo, traduzioni[0].titolo),
-      "descrizione": coalesce(traduzioni[language == $lang][0].descrizione, traduzioni[language == "it"][0].descrizione, traduzioni[0].descrizione)
+      "titolo": coalesce(traduzioni[language == $lang][0].titolo, traduzioni[language == "it"][0].titolo, traduzioni[0].titolo)
     },
     "contatti": *[_id == "contatti"][0]{
       telefono,

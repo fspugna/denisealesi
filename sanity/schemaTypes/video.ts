@@ -1,4 +1,5 @@
 import {defineArrayMember, defineField, defineType} from 'sanity'
+import {richTextBlock} from './shared/richText'
 
 export const video = defineType({
     name: 'video',
@@ -27,11 +28,19 @@ export const video = defineType({
                     }),
                     defineField({name: 'titolo', type: 'string', title: 'Titolo', validation: (rule) => rule.required()}),
                     defineField({
+                        name: 'descrizioneRichText',
+                        type: 'array',
+                        title: 'Descrizione',
+                        description: 'Testo mostrato accanto al video. Puoi usare titoli, elenchi, grassetto, corsivo, sottolineato e link.',
+                        of: [richTextBlock],
+                    }),
+                    defineField({
                         name: 'descrizione',
                         type: 'text',
-                        title: 'Descrizione',
-                        description: 'Testo mostrato accanto al video nella relativa pagina.',
-                        rows: 8,
+                        title: 'Descrizione precedente',
+                        deprecated: {reason: 'Il contenuto è stato trasferito nella descrizione formattata.'},
+                        readOnly: true,
+                        hidden: true,
                     }),
                 ]
             })],
