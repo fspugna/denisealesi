@@ -56,9 +56,13 @@ export default function MainMenu({lang = 'it'}: {lang?: string}) {
 
   return (
     <>
-      <header className="fixed inset-x-0 top-0 z-50 hidden min-h-20 items-center border-b border-white/10 bg-[#1d211d]/95 px-7 text-[#f4efe5] shadow-[0_8px_30px_rgba(0,0,0,0.12)] backdrop-blur-md lg:flex xl:px-10">
-        <nav className="mx-auto" aria-label="Navigazione principale">
-          <ul className="flex items-center gap-4 xl:gap-7">
+      <header className="fixed inset-x-0 top-0 z-50 hidden min-h-20 items-center gap-8 border-b border-white/10 bg-[#1d211d]/95 px-7 text-[#f4efe5] shadow-[0_8px_30px_rgba(0,0,0,0.12)] backdrop-blur-md lg:flex xl:px-10">
+        <Link href={href('/')} className="shrink-0 font-serif text-xl tracking-[0.08em] xl:text-2xl" aria-label="Denise Alesi, home">
+          Denise Alesi
+        </Link>
+
+        <nav className="ml-auto" aria-label="Navigazione principale">
+          <ul className="flex items-center gap-3 xl:gap-7">
             {links.map(([label, path]) => (
               <li key={path}>
                 <Link

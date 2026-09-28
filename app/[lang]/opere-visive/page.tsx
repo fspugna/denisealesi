@@ -30,7 +30,7 @@ const VISUAL_WORKS_QUERY = defineQuery(/* groq */ `{
     ordine,
     "titolo": coalesce(traduzioni[language == $lang][0].titolo, traduzioni[language == "it"][0].titolo, traduzioni[0].titolo)
   },
-  "gallerie": *[_type == "galleriaFotografica"] | order(defined(orderRank) desc, orderRank asc, data asc, _createdAt asc)[0...2]{
+  "gallerie": *[_type == "galleriaFotografica"] | order(defined(orderRank) desc, orderRank asc, data asc, _createdAt asc){
     _id,
     orderRank,
     data,

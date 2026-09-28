@@ -28,7 +28,7 @@ export default async function BiographyPage({params}: {params: Promise<{lang: st
   const biography = await getBiography(lang)
   if (!biography) notFound()
 
-  return <main className="relative min-h-screen bg-[#1c1d26] text-white selection:bg-blue-500/30">
+  return <main className="relative min-h-screen bg-[#eee8dc] text-[#20231f] selection:bg-[#c5a46d]/35">
     <AboutView aboutData={biography} lang={lang} />
   </main>
 }

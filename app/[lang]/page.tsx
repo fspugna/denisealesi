@@ -62,7 +62,15 @@ function HomeWorksSection({title, linkLabel, href, opere, lang, alternate = fals
               <FadeIn key={opera._id} delay={index * 0.12} className={alternate ? 'bg-[#e5ddd0]' : 'bg-[#eee8dc]'}>
                 <Link href={`/${lang}/opere/${opera._id}`} className="group block p-4 pb-7">
                   <div className="relative mb-5 aspect-[4/5] overflow-hidden bg-black/5">
-                    {opera.immagine ? <Image src={urlFor(opera.immagine).width(750).height(938).fit('crop').url()} alt={opera.titolo || 'Opera'} fill sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw" className="object-cover transition duration-700 group-hover:scale-[1.025]" /> : null}
+                    {opera.immagine ? <Image
+                      src={opera.categoria === 'letteraria'
+                        ? urlFor(opera.immagine).ignoreImageParams().width(900).url()
+                        : urlFor(opera.immagine).width(750).height(938).fit('crop').url()}
+                      alt={opera.titolo || 'Opera'}
+                      fill
+                      sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
+                      className={`${opera.categoria === 'letteraria' ? 'object-contain p-2' : 'object-cover'} transition duration-700 group-hover:scale-[1.025]`}
+                    /> : null}
                   </div>
                   <div className="flex items-baseline justify-between gap-4">
                     <h3 className="font-serif text-xl leading-tight text-[#20231f]">{opera.titolo}</h3>
@@ -109,7 +117,7 @@ export default async function Home({params}: {params: Promise<{lang: string}>}) 
           </figure> : null}
         </div>
 
-        <div className="relative flex min-h-[72vh] flex-col items-center justify-center px-7 py-20 text-center sm:px-12 lg:min-h-screen lg:px-[10vw] lg:py-16">
+        <div className="relative flex min-h-[72vh] flex-col items-center justify-center px-7 py-20 text-center sm:px-12 lg:min-h-screen lg:px-[10vw] lg:pb-16 lg:pt-36">
           <span className="mb-8 text-[10px] uppercase tracking-[0.34em] text-[#766e60]">{text.role}</span>
           <FadeUp delay={0.15}>
             <div className="mx-auto max-w-2xl font-serif text-[clamp(1rem,1.35vw,1.25rem)] leading-[1.65] text-[#4e4b43] [&_p+p]:mt-5 [&_p:last-child]:text-sm [&_p:last-child]:text-[#766e60]">

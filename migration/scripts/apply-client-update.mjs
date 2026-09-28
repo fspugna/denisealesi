@@ -42,7 +42,17 @@ const spanishDescription = [
   'La reflexión número uno explicita inmediatamente el mensaje que se desarrolla en la composición, o sea que nadie puede sustituirse a nuestra persona a la hora de alcanzar los instrumentos que pueden llevar a la adquisición de mecanismos de razonamiento distintivos, planteados para la búsqueda del bien, alejados de tópicos y de un conocimientos exclusivamente hereditario. Cada uno debe poder llegar a alcanzar un día la capacidad de gobernarse a sí mismo, sus debilidades y retorcimientos de pensamiento; sólo de esta manera no será manipulable y se convertirá en un maestro también para los demás, mostrando coherencia entre acción y rectitud de la idea. Las noventa y nueve reflexiones viajan surcando los mares de la aventura de la vida, pidiéndole al lector su participación e implicación, con la esperanza de que pueda convertirse en autor del postulado final y llegar más allá de lo que sólo parece conocido.',
 ].join('\n\n')
 
-const silenceDescription = 'Silenzio è un progetto artistico il quale, attraverso una successione di autoritratti fotografici, racconta un percorso di crescita individuale che trae origine dall’esperienza dell’inferno. L’affiorare di una maggiore consapevolezza conduce al purgatorio, dove ha luogo il processo evolutivo che consente infine di accedere alla conoscenza, dunque al paradiso, metafora della compiutezza del sé.'
+const silenceDescription = 'Silenzio è un progetto artistico il quale, attraverso una successione di autoritratti fotografici, racconta un percorso di crescita individuale che trae origine dall’esperienza dell’inferno. L’affiorare di una maggiore consapevolezza, conduce al purgatorio dove ha luogo il processo evolutivo che consente, infine, di accedere alla conoscenza, dunque al paradiso (metafora della compiutezza del sé).'
+
+function toPortableText(text, key = 'silenzio-description') {
+  return [{
+    _key: key,
+    _type: 'block',
+    style: 'normal',
+    markDefs: [],
+    children: [{_key: `${key}-span`, _type: 'span', marks: [], text}],
+  }]
+}
 
 const works = await client.fetch(`*[_type == "opera"]{
   _id,
@@ -84,9 +94,29 @@ const video = await client.fetch(`*[_type == "video" && url == $url][0]{_id, tra
 
 if (!video) throw new Error('Video Silenzio non trovato.')
 
+const galleries = await client.fetch(`*[_type == "galleriaFotografica"]{
+  _id,
+  traduzioni[]{language, titolo}
+}`)
+const galleryTitleOf = (gallery) => gallery.traduzioni?.find((translation) => translation.language === 'it')?.titolo
+  || gallery.traduzioni?.[0]?.titolo
+const galleriesByTitle = new Map(galleries.map((gallery) => [galleryTitleOf(gallery), gallery]))
+const galleryLinks = [
+  ['Silenzio', 'Silenzio'],
+  ['Il Sogno e la Materia', 'Il Sogno e la Materia'],
+  ['Firenze, tu', 'Firenze, tu'],
+  ['Immagini e parole', 'Immagini e parole'],
+]
+
+for (const [workTitle, galleryTitle] of galleryLinks) {
+  if (!byTitle.has(workTitle)) throw new Error(`Opera non trovata: ${workTitle}`)
+  if (!galleriesByTitle.has(galleryTitle)) throw new Error(`Galleria non trovata: ${galleryTitle}`)
+}
+
 console.log('Aggiornamento opere:', workUpdates.map(([title, stato, ordine]) => ({title, stato, ordine})))
 console.log('Edizione spagnola:', existingSpanishEdition ? 'da aggiornare' : 'da creare')
 console.log('Video Silenzio:', 'da aggiornare con la descrizione')
+console.log('Collegamenti gallerie:', galleryLinks.map(([opera, galleria]) => ({opera, galleria})))
 
 if (!execute) {
   console.log('Analisi completata. Usa --execute per applicare le modifiche.')
@@ -98,13 +128,26 @@ for (const [title, stato, ordine] of workUpdates) {
   await client.patch(work._id).set({stato, ordine}).commit()
 }
 
+for (const [workTitle, galleryTitle] of galleryLinks) {
+  const work = byTitle.get(workTitle)
+  const gallery = galleriesByTitle.get(galleryTitle)
+  const fields = {galleriaCollegata: {_type: 'reference', _ref: gallery._id}}
+
+  if (workTitle === 'Silenzio') {
+    fields.videoCollegato = {_type: 'reference', _ref: video._id}
+  }
+
+  await client.patch(work._id).set(fields).commit()
+}
+
 const coverPath = path.resolve('migration/assets/mas-alla-de-lo-conocido.jpg')
 if (!existsSync(coverPath)) throw new Error(`Copertina non trovata: ${coverPath}`)
 
-const coverAsset = await client.assets.upload('image', createReadStream(coverPath), {
-  filename: 'mas-alla-de-lo-conocido.jpg',
-  contentType: 'image/jpeg',
-})
+const existingCoverRef = existingSpanishEdition?.immagine?.asset?._ref
+const coverAsset = existingCoverRef ? {_id: existingCoverRef} : await client.assets.upload('image', createReadStream(coverPath), {
+    filename: 'mas-alla-de-lo-conocido.jpg',
+    contentType: 'image/jpeg',
+  })
 
 const spanishEdition = {
   categoria: 'letteraria',
@@ -131,13 +174,16 @@ if (existingSpanishEdition) {
 }
 
 const videoTranslations = video.traduzioni?.length ? video.traduzioni.map((translation) => (
-  translation.language === 'it' ? {...translation, descrizione: silenceDescription} : translation
+  translation.language === 'it'
+    ? {...translation, descrizione: silenceDescription, descrizioneRichText: toPortableText(silenceDescription)}
+    : translation
 )) : [{
   _key: 'it',
   _type: 'object',
   language: 'it',
   titolo: '“Silenzio” - Progetto artistico di Denise Alesi',
   descrizione: silenceDescription,
+  descrizioneRichText: toPortableText(silenceDescription),
 }]
 
 await client.patch(video._id).set({traduzioni: videoTranslations}).commit()

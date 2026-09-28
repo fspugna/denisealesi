@@ -62,18 +62,18 @@ export default function AboutView({aboutData, lang}: AboutProps) {
           WebkitMaskImage: 'linear-gradient(to bottom, black, transparent 70%)',
         }}
       />
-      <div className="pointer-events-none absolute inset-0 z-0 bg-[#1c1d26]/80" />
+      <div className="pointer-events-none absolute inset-0 z-0 bg-[#eee8dc]/85" />
     </>}
 
     <div className="relative z-10 mx-auto max-w-7xl">
-      <FadeUp className="mb-12 border-b border-white/15 pb-10 md:mb-16 md:flex md:items-end md:justify-between">
+      <FadeUp className="mb-12 border-b border-black/20 pb-10 md:mb-16 md:flex md:items-end md:justify-between">
         <div>
-          <p className="mb-5 text-xs uppercase tracking-[0.42em] text-blue-300/70">{t.artistLabel}</p>
-          <h1 className="font-serif text-5xl leading-none tracking-tight text-white md:text-7xl">
+          <p className="mb-5 text-xs uppercase tracking-[0.42em] text-[#8a704b]">{t.artistLabel}</p>
+          <h1 className="font-serif text-5xl leading-none tracking-tight text-[#20231f] md:text-7xl">
             {aboutData.titolo || 'Biografia'}
           </h1>
         </div>
-        <p className="mt-6 max-w-xs text-sm leading-6 text-white/45 md:mt-0 md:text-right">
+        <p className="mt-6 max-w-xs text-sm leading-6 text-black/50 md:mt-0 md:text-right">
           {contextCopy[language]}
         </p>
       </FadeUp>
@@ -81,7 +81,7 @@ export default function AboutView({aboutData, lang}: AboutProps) {
       <div className="grid items-start gap-12 md:grid-cols-12 md:gap-16 lg:gap-24">
         {aboutData.foto && <FadeIn className="md:sticky md:top-28 md:col-span-5">
           <figure>
-            <div className="relative aspect-[4/5] overflow-hidden bg-black/20">
+            <div className="relative aspect-[4/5] overflow-hidden bg-black/10">
               <Image
                 src={urlFor(aboutData.foto).width(1000).height(1250).fit('crop').url()}
                 alt="Ritratto di Denise Alesi"
@@ -91,14 +91,14 @@ export default function AboutView({aboutData, lang}: AboutProps) {
                 className="object-cover object-top grayscale-[15%]"
               />
             </div>
-            <figcaption className="mt-4 flex items-center gap-4 text-[10px] uppercase tracking-[0.3em] text-white/40">
-              <span className="h-px w-10 bg-white/25" /> Denise Alesi
+            <figcaption className="mt-4 flex items-center gap-4 text-[10px] uppercase tracking-[0.3em] text-black/45">
+              <span className="h-px w-10 bg-black/25" /> Denise Alesi
             </figcaption>
           </figure>
         </FadeIn>}
 
         <FadeUp delay={0.15} className={aboutData.foto ? 'md:col-span-7' : 'md:col-span-8 md:col-start-3'}>
-          <div className="space-y-6 text-base font-light leading-[1.8] text-white/75 md:text-lg [&_strong]:font-semibold [&_strong]:text-white/95">
+          <div className="space-y-6 text-base font-light leading-[1.8] text-[#4e4b43] md:text-lg [&_strong]:font-semibold [&_strong]:text-[#20231f]">
             <PortableText value={biography} />
           </div>
         </FadeUp>

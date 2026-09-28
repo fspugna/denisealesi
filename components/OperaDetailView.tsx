@@ -21,9 +21,9 @@ const backLabels = {
 } as const;
 
 const relatedLabels = {
-    it: {title: 'Approfondisci', gallery: 'Apri la galleria fotografica', video: 'Guarda il video', amazon: 'Compra su Amazon'},
-    en: {title: 'Explore', gallery: 'Open the photo gallery', video: 'Watch the video', amazon: 'Buy on Amazon'},
-    es: {title: 'Descubre más', gallery: 'Abrir la galería fotográfica', video: 'Ver el vídeo', amazon: 'Comprar en Amazon'},
+    it: {title: 'Approfondisci', gallery: 'Apri la galleria fotografica', video: 'Guarda il video', amazon: 'Disponibile su Amazon'},
+    en: {title: 'Explore', gallery: 'Open the photo gallery', video: 'Watch the video', amazon: 'Available on Amazon'},
+    es: {title: 'Descubre más', gallery: 'Abrir la galería fotográfica', video: 'Ver el vídeo', amazon: 'Disponible en Amazon'},
 } as const;
 
 export default function OperaDetailView({ opera }: { opera: Opera }) {
@@ -38,10 +38,12 @@ export default function OperaDetailView({ opera }: { opera: Opera }) {
     const backHref = category === 'visiva' ? `/${language}/opere-visive` : `/${language}/opere-letterarie`;
     const related = relatedLabels[lang as keyof typeof relatedLabels] || relatedLabels.it;
 
-    // La versione nel riquadro viene ritagliata dal CDN di Sanity, così crop e
-    // hotspot scelti nello Studio determinano l'inquadratura del formato 3:4.
+    // Le copertine vengono mostrate per intero; soltanto le opere visive usano
+    // il ritaglio e l'hotspot impostati nello Studio.
     const imageUrl = opera.immagine
-        ? urlFor(opera.immagine).width(1200).height(1600).fit('crop').url()
+        ? (category === 'letteraria'
+            ? urlFor(opera.immagine).ignoreImageParams().width(1400).url()
+            : urlFor(opera.immagine).width(1200).height(1600).fit('crop').url())
         : '';
     // Nel lightbox conserviamo invece il file completo, senza ritaglio.
     const fullImageUrl = opera.immagine ? urlFor(opera.immagine).url() : '';
@@ -90,7 +92,8 @@ export default function OperaDetailView({ opera }: { opera: Opera }) {
                             src={imageUrl}
                             alt={opera.titolo || "Opera"}
                             fill
-                            className="object-cover transition-transform duration-500 group-hover:scale-102"
+                            sizes="(max-width: 767px) 100vw, 50vw"
+                            className={`${category === 'letteraria' ? 'object-contain p-3' : 'object-cover'} transition-transform duration-500 group-hover:scale-102`}
                             priority
                         />
                     )}
