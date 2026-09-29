@@ -24,10 +24,10 @@ export default async function AltriVideo({currentId, lang}: {currentId: string; 
   const title = lang === 'en' ? 'More videos' : lang === 'es' ? 'Otros vídeos' : 'Altri video'
   const all = lang === 'en' ? 'All videos' : lang === 'es' ? 'Todos los vídeos' : 'Tutti i video'
 
-  return <section className="mt-28 border-t border-white/15 pt-12">
+  return <section className="mt-28 border-t border-black/15 pt-12">
     <div className="mb-10 flex items-end justify-between gap-6">
       <h2 className="font-serif text-3xl">{title}</h2>
-      <Link href={`/${lang}/video`} className="text-[9px] uppercase tracking-[0.25em] text-white/45 transition-colors hover:text-[#c5a46d]">{all} →</Link>
+      <Link href={`/${lang}/video`} className="text-[9px] uppercase tracking-[0.25em] text-black/45 transition-colors hover:text-black">{all} →</Link>
     </div>
     <div className="grid gap-8 md:grid-cols-3">
       {videos.map((video) => {
@@ -36,7 +36,7 @@ export default async function AltriVideo({currentId, lang}: {currentId: string; 
           <div className="relative aspect-video overflow-hidden bg-black/30">
             {thumbnail && <Image src={thumbnail} alt={video.titolo} fill sizes="(max-width: 768px) 100vw, 33vw" className="object-cover opacity-70 transition duration-500 group-hover:scale-[1.025] group-hover:opacity-100" />}
           </div>
-          <h3 className="mt-4 border-t border-white/15 pt-4 font-serif text-xl transition-colors group-hover:text-[#c5a46d]">{video.titolo}</h3>
+          <h3 className="mt-4 border-t border-black/15 pt-4 font-serif text-xl transition-colors group-hover:text-[#8a704b]">{video.titolo}</h3>
         </Link>
       })}
     </div>

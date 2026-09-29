@@ -52,19 +52,19 @@ export default async function VideoDetailPage({params}: Props) {
   const embedUrl = getVideoEmbedUrl(video.url)
   const archiveLabel = lang === 'en' ? 'Back to visual works' : lang === 'es' ? 'Volver a las obras visuales' : 'Torna alle opere visive'
 
-  return <main className="min-h-screen bg-[#20251f] px-6 pb-28 pt-36 text-[#eee8dc] md:px-12 md:pt-44">
+  return <main className="min-h-screen bg-[#eee8dc] px-6 pb-28 pt-36 text-[#20231f] md:px-12 md:pt-44">
     <div className="mx-auto max-w-7xl">
-      <Link href={`/${lang}/opere-visive`} className="mb-12 inline-flex items-center gap-4 text-[9px] uppercase tracking-[0.28em] text-white/45 transition-colors hover:text-[#c5a46d]">← {archiveLabel}</Link>
-      <header className="mb-12 grid gap-8 border-b border-white/15 pb-10 md:grid-cols-[1fr_auto] md:items-end">
+      <Link href={`/${lang}/opere-visive`} className="mb-12 inline-flex items-center gap-4 text-[9px] uppercase tracking-[0.28em] text-black/45 transition-colors hover:text-black">← {archiveLabel}</Link>
+      <header className="mb-12 grid gap-8 border-b border-black/20 pb-10 md:grid-cols-[1fr_auto] md:items-end">
         <h1 className="max-w-5xl font-serif text-4xl leading-[1.05] tracking-[-0.035em] sm:text-6xl lg:text-7xl">{video.titolo}</h1>
-        {video.data && <time dateTime={video.data} className="text-[10px] uppercase tracking-[0.25em] text-[#c5a46d]">{new Intl.DateTimeFormat(lang, {day: 'numeric', month: 'long', year: 'numeric', timeZone: 'UTC'}).format(new Date(`${video.data}T12:00:00Z`))}</time>}
+        {video.data && <time dateTime={video.data} className="text-[10px] uppercase tracking-[0.25em] text-[#8a704b]">{new Intl.DateTimeFormat(lang, {day: 'numeric', month: 'long', year: 'numeric', timeZone: 'UTC'}).format(new Date(`${video.data}T12:00:00Z`))}</time>}
       </header>
 
       <div className={`grid items-start gap-10 ${video.descrizione?.length || video.descrizioneTesto ? 'lg:grid-cols-[minmax(0,1.7fr)_minmax(18rem,0.7fr)]' : ''}`}>
         {embedUrl ? <div className="aspect-video w-full overflow-hidden bg-black shadow-[0_35px_100px_rgba(0,0,0,0.35)]">
           <iframe className="h-full w-full" src={embedUrl} title={video.titolo} allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowFullScreen />
-        </div> : <a href={video.url} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-4 border-b border-[#c5a46d] pb-2 text-sm uppercase tracking-[0.2em]">Apri il video originale →</a>}
-        {video.descrizione?.length ? <RichText value={video.descrizione} className="border-t border-white/15 pt-6 font-serif text-xl text-white/70 lg:pt-8" /> : video.descrizioneTesto ? <p className="whitespace-pre-line border-t border-white/15 pt-6 font-serif text-xl leading-relaxed text-white/70 lg:pt-8">{video.descrizioneTesto}</p> : null}
+        </div> : <a href={video.url} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-4 border-b border-[#8a704b] pb-2 text-sm uppercase tracking-[0.2em]">Apri il video originale →</a>}
+        {video.descrizione?.length ? <RichText value={video.descrizione} className="border-t border-black/15 pt-6 font-serif text-xl text-[#625d53] lg:pt-8" /> : video.descrizioneTesto ? <p className="whitespace-pre-line border-t border-black/15 pt-6 font-serif text-xl leading-relaxed text-[#625d53] lg:pt-8">{video.descrizioneTesto}</p> : null}
       </div>
 
       <AltriVideo currentId={id} lang={lang} />
