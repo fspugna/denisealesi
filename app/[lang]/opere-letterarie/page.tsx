@@ -20,6 +20,7 @@ const LITERARY_WORKS_QUERY = defineQuery(/* groq */ `
     immagine,
     anno,
     ordine,
+    amazonFormato,
     "titolo": coalesce(
       traduzioni[language == $lang][0].titolo,
       traduzioni[language == "it"][0].titolo,

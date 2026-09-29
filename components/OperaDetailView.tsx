@@ -21,9 +21,9 @@ const backLabels = {
 } as const;
 
 const relatedLabels = {
-    it: {title: 'Approfondisci', gallery: 'Apri la galleria fotografica', video: 'Guarda il video', amazon: 'Disponibile su Amazon'},
-    en: {title: 'Explore', gallery: 'Open the photo gallery', video: 'Watch the video', amazon: 'Available on Amazon'},
-    es: {title: 'Descubre más', gallery: 'Abrir la galería fotográfica', video: 'Ver el vídeo', amazon: 'Disponible en Amazon'},
+    it: {title: 'Approfondisci', gallery: 'Apri la galleria fotografica', video: 'Guarda il video', amazon: 'Disponibile su Amazon', amazonEbook: 'E-book disponibile su Amazon'},
+    en: {title: 'Explore', gallery: 'Open the photo gallery', video: 'Watch the video', amazon: 'Available on Amazon', amazonEbook: 'E-book available on Amazon'},
+    es: {title: 'Descubre más', gallery: 'Abrir la galería fotográfica', video: 'Ver el vídeo', amazon: 'Disponible en Amazon', amazonEbook: 'E-book disponible en Amazon'},
 } as const;
 
 export default function OperaDetailView({ opera }: { opera: Opera }) {
@@ -131,7 +131,7 @@ export default function OperaDetailView({ opera }: { opera: Opera }) {
                             rel="noopener noreferrer sponsored"
                             className="mt-3 inline-flex w-fit items-center gap-4 bg-[#20251f] px-6 py-4 text-[10px] uppercase tracking-[0.22em] text-[#eee8dc] transition-colors hover:bg-[#343b32]"
                         >
-                            <span>{related.amazon}</span>
+                            <span>{opera.amazonFormato === 'ebook' ? related.amazonEbook : related.amazon}</span>
                             <span aria-hidden="true">↗</span>
                         </a>
                     )}

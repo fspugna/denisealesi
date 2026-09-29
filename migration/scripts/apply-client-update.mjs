@@ -60,6 +60,8 @@ const works = await client.fetch(`*[_type == "opera"]{
   ordine,
   stato,
   immagine,
+  amazonUrl,
+  amazonFormato,
   traduzioni
 }`)
 
@@ -114,7 +116,11 @@ for (const [workTitle, galleryTitle] of galleryLinks) {
 }
 
 console.log('Aggiornamento opere:', workUpdates.map(([title, stato, ordine]) => ({title, stato, ordine})))
-console.log('Edizione spagnola:', existingSpanishEdition ? 'da aggiornare' : 'da creare')
+console.log('Edizione spagnola:', existingSpanishEdition ? {
+  azione: 'da aggiornare',
+  amazonUrl: existingSpanishEdition.amazonUrl || 'non impostato',
+  amazonFormato: existingSpanishEdition.amazonFormato || 'non impostato',
+} : {azione: 'da creare', amazonUrl: 'non impostato'})
 console.log('Video Silenzio:', 'da aggiornare con la descrizione')
 console.log('Collegamenti gallerie:', galleryLinks.map(([opera, galleria]) => ({opera, galleria})))
 
@@ -153,6 +159,7 @@ const spanishEdition = {
   categoria: 'letteraria',
   stato: 'pubblicata',
   ordine: 30,
+  amazonFormato: 'ebook',
   immagine: {
     _type: 'image',
     asset: {_type: 'reference', _ref: coverAsset._id},

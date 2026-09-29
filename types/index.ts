@@ -71,6 +71,7 @@ export interface Opera {
     galleriaCollegata?: { _id: string; titolo: string };
     videoCollegato?: { _id: string; titolo: string };
     amazonUrl?: string;
+    amazonFormato?: 'ebook' | 'cartaceo';
 }
 
 export interface Fotografia extends SanityImage {

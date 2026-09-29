@@ -92,6 +92,19 @@ export const opera = defineType({
             }),
         }),
         defineField({
+            name: 'amazonFormato',
+            title: 'Formato disponibile su Amazon',
+            description: 'Opzionale. Permette di specificare se il link conduce all’e-book o all’edizione cartacea.',
+            type: 'string',
+            options: {
+                list: [
+                    {title: 'E-book', value: 'ebook'},
+                    {title: 'Edizione cartacea', value: 'cartaceo'},
+                ],
+                layout: 'radio',
+            },
+        }),
+        defineField({
             name: 'audio',
             title: 'Traccia audio non localizzata (deprecata)',
             type: 'file',
