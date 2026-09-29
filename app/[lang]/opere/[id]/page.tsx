@@ -22,7 +22,7 @@ async function getOpera(id: string, lang: string): Promise<Opera | null> {
       _id,
       "titolo": coalesce(traduzioni[language == $lang][0].titolo, traduzioni[language == "it"][0].titolo, traduzioni[0].titolo)
     }
-  }`, {id, lang})
+  }`, {id, lang}, {cache: 'no-store'})
 }
 
 export async function generateMetadata({params}: Props): Promise<Metadata> {
