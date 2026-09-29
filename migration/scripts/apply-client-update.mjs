@@ -159,6 +159,7 @@ const spanishEdition = {
   categoria: 'letteraria',
   stato: 'pubblicata',
   ordine: 30,
+  amazonUrl: 'https://amzn.eu/d/014xsOQX',
   amazonFormato: 'ebook',
   immagine: {
     _type: 'image',
