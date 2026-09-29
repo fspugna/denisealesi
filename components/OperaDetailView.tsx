@@ -37,6 +37,7 @@ export default function OperaDetailView({ opera }: { opera: Opera }) {
     const backLabel = backLabels[language][category];
     const backHref = category === 'visiva' ? `/${language}/opere-visive` : `/${language}/opere-letterarie`;
     const related = relatedLabels[lang as keyof typeof relatedLabels] || relatedLabels.it;
+    const amazonLabel = opera.amazonFormato === 'ebook' ? related.amazonEbook : related.amazon;
 
     // Le copertine vengono mostrate per intero; soltanto le opere visive usano
     // il ritaglio e l'hotspot impostati nello Studio.
@@ -124,17 +125,21 @@ export default function OperaDetailView({ opera }: { opera: Opera }) {
                         </div>
                     )}
 
-                    {opera.amazonUrl && (
+                    {(opera.amazonUrl || opera.amazonFormato === 'ebook') && (opera.amazonUrl ? (
                         <a
                             href={opera.amazonUrl}
                             target="_blank"
                             rel="noopener noreferrer sponsored"
                             className="mt-3 inline-flex w-fit items-center gap-4 bg-[#20251f] px-6 py-4 text-[10px] uppercase tracking-[0.22em] text-[#eee8dc] transition-colors hover:bg-[#343b32]"
                         >
-                            <span>{opera.amazonFormato === 'ebook' ? related.amazonEbook : related.amazon}</span>
+                            <span>{amazonLabel}</span>
                             <span aria-hidden="true">↗</span>
                         </a>
-                    )}
+                    ) : (
+                        <span className="mt-3 inline-flex w-fit bg-[#20251f] px-6 py-4 text-[10px] uppercase tracking-[0.22em] text-[#eee8dc]">
+                            {amazonLabel}
+                        </span>
+                    ))}
 
                     {(opera.galleriaCollegata || opera.videoCollegato) && (
                         <div className="mt-6 border-t border-black/15 pt-7">

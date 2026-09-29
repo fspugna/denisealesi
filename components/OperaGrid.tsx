@@ -4,8 +4,6 @@ import Image from 'next/image'
 import Link from 'next/link'
 
 export default function OperaGrid({opere, lang}: {opere: Opera[]; lang: string}) {
-  const ebookLabel = lang === 'en' ? 'E-book available on Amazon' : lang === 'es' ? 'E-book disponible en Amazon' : 'E-book disponibile su Amazon'
-
   return (
     <div className="grid gap-x-8 gap-y-20 sm:grid-cols-2 lg:grid-cols-4">
       {opere.map((opera, index) => (
@@ -24,11 +22,8 @@ export default function OperaGrid({opere, lang}: {opere: Opera[]; lang: string})
               />
             ) : null}
           </div>
-          <div className="flex min-h-16 items-start justify-between gap-4 border-t border-black/20 pt-4">
-            <div>
-              <h2 className="font-serif text-2xl">{opera.titolo}</h2>
-              {opera.amazonFormato === 'ebook' ? <p className="mt-3 text-[9px] uppercase tracking-[0.22em] text-black/45">{ebookLabel}</p> : null}
-            </div>
+          <div className="flex min-h-16 items-baseline justify-between gap-4 border-t border-black/20 pt-4">
+            <h2 className="font-serif text-2xl">{opera.titolo}</h2>
             {opera.anno ? <span className="shrink-0 text-[9px] tracking-widest text-black/45">{opera.anno}</span> : null}
           </div>
         </Link>

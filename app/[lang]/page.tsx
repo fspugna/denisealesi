@@ -28,7 +28,7 @@ const HOME_QUERY = defineQuery(`{
       "citazione": coalesce(traduzioni[language == $lang][0].citazione, traduzioni[language == "it"][0].citazione)
     },
     "letterarie": *[_type == "opera" && categoria == "letteraria" && (!defined(stato) || stato == "pubblicata")] | order(ordine asc, _createdAt desc){
-      _id, categoria, immagine, anno, ordine, amazonFormato,
+      _id, categoria, immagine, anno, ordine,
       "titolo": coalesce(traduzioni[language == $lang][0].titolo, traduzioni[language == "it"][0].titolo, traduzioni[0].titolo)
     },
     "visive": *[_type == "opera" && categoria == "visiva" && (!defined(stato) || stato == "pubblicata")] | order(ordine asc, _createdAt desc){
@@ -72,13 +72,8 @@ function HomeWorksSection({title, linkLabel, href, opere, lang, alternate = fals
                       className={`${opera.categoria === 'letteraria' ? 'object-contain p-2' : 'object-cover'} transition duration-700 group-hover:scale-[1.025]`}
                     /> : null}
                   </div>
-                  <div className="flex items-start justify-between gap-4">
-                    <div>
-                      <h3 className="font-serif text-xl leading-tight text-[#20231f]">{opera.titolo}</h3>
-                      {opera.amazonFormato === 'ebook' ? <p className="mt-2 text-[9px] uppercase tracking-[0.2em] text-black/45">
-                        {lang === 'en' ? 'E-book available on Amazon' : lang === 'es' ? 'E-book disponible en Amazon' : 'E-book disponibile su Amazon'}
-                      </p> : null}
-                    </div>
+                  <div className="flex items-baseline justify-between gap-4">
+                    <h3 className="font-serif text-xl leading-tight text-[#20231f]">{opera.titolo}</h3>
                     {opera.anno ? <span className="shrink-0 text-[9px] tracking-widest text-black/40">{opera.anno}</span> : null}
                   </div>
                 </Link>
