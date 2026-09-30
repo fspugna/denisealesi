@@ -37,21 +37,18 @@ const client = createClient({
 const spanishDescription = [
   'Más allá de lo conocido es una colección que incluye noventa y nueve reflexiones de la autora Denise Alesi. Éstas proceden siguiendo un recorrido en el que la escritora no se limita a contar percepciones individuales, sino que asume el rol del científico que delante del microscopio observa causa y efecto de los fenómenos en busca de la intuición que permita acceder a la correcta ecuación, necesaria para su traducción. Temas recurrentes en este proceso de búsqueda son los de sufrimiento, condicionamiento del pensamiento, conciencia y realización de la propia misión en la configuración terrena.',
   'El camino que se emprende con la lectura de las reflexiones – aun permitiendo adentrarse en algunas de las cuestiones ancestrales que desestabilizan la armoniosa convivencia entre seres humanos – pretende llamar la atención en la belleza ínsita en el bien y en consecuencia en la renuncia del mal. El estudio de filosofía y sociología por parte de la autora, junto con el interés por la ciencia, el arte y la poesía encuentra múltiples conexiones con las vivencias personales o indirectamente con los acontecimientos que se entretejen y sobre los cuales ella se para a examinar, con los ojos de quien quiere comprender los comportamientos humanos y lo que se encuentra más allá del conocimiento personal.',
-  'La elección del número noventa y nueve, por lo que se refiere a las citas que dan vida en su sucesión a la narración de un viaje solitario – durante el que tienen lugar encuentros asombrosos – reside en la convicción de que la perfección es tal cuando no es portadora de la perfección misma y se puede entrar en ella sólo ofreciendo la propia contribución final con la elaboración subjetiva de la reflexión número cien, estimulada por la lectura de los anteriores enunciados.',
-  'Denise Alesi tiene intención de animar el interés alrededor de temas imprescindibles para el crecimiento emotivo, dirigidos a la comprensión de los fenómenos del vivir, más allá de las creencias comunes. Se vale de un estilo de escritura conciso, directo, inmediato, con la intención de acceder a un público que ya está acostumbrado a la rapidez de la comunicación propia de la época contemporánea que - por su estructuración - no estimula el acercamiento a aquellas lecturas que requieren escandir el tiempo para profundizar en conceptos cuya elaboración es alimento para una conciencia propia. Con sequedad que caracteriza la fórmula del razonamiento, la narradora exhorta a aquellos que encuentran su escritura a tantear y profundizar en lo que ya está más allá del esquema de lo conocido: para alcanzar este objetivo, resulta necesaria una importante actividad de estudio y trabajo sobre la propia persona sostenido – en lo posible – por las enseñanzas de los grandes personajes que a su vez han indagado y han puesto en duda dogmas, para madurar consideraciones que analicen la entidad desde nuevas perspectivas.',
-  'La reflexión número uno explicita inmediatamente el mensaje que se desarrolla en la composición, o sea que nadie puede sustituirse a nuestra persona a la hora de alcanzar los instrumentos que pueden llevar a la adquisición de mecanismos de razonamiento distintivos, planteados para la búsqueda del bien, alejados de tópicos y de un conocimientos exclusivamente hereditario. Cada uno debe poder llegar a alcanzar un día la capacidad de gobernarse a sí mismo, sus debilidades y retorcimientos de pensamiento; sólo de esta manera no será manipulable y se convertirá en un maestro también para los demás, mostrando coherencia entre acción y rectitud de la idea. Las noventa y nueve reflexiones viajan surcando los mares de la aventura de la vida, pidiéndole al lector su participación e implicación, con la esperanza de que pueda convertirse en autor del postulado final y llegar más allá de lo que sólo parece conocido.',
 ].join('\n\n')
 
 const silenceDescription = 'Silenzio è un progetto artistico il quale, attraverso una successione di autoritratti fotografici, racconta un percorso di crescita individuale che trae origine dall’esperienza dell’inferno. L’affiorare di una maggiore consapevolezza, conduce al purgatorio dove ha luogo il processo evolutivo che consente, infine, di accedere alla conoscenza, dunque al paradiso (metafora della compiutezza del sé).'
 
-function toPortableText(text, key = 'silenzio-description') {
-  return [{
-    _key: key,
+function toPortableText(text, key = 'description') {
+  return text.split(/\n\n+/).map((paragraph, index) => ({
+    _key: `${key}-${index + 1}`,
     _type: 'block',
     style: 'normal',
     markDefs: [],
-    children: [{_key: `${key}-span`, _type: 'span', marks: [], text}],
-  }]
+    children: [{_key: `${key}-${index + 1}-span`, _type: 'span', marks: [], text: paragraph}],
+  }))
 }
 
 const works = await client.fetch(`*[_type == "opera"]{
@@ -98,7 +95,8 @@ if (!video) throw new Error('Video Silenzio non trovato.')
 
 const galleries = await client.fetch(`*[_type == "galleriaFotografica"]{
   _id,
-  traduzioni[]{language, titolo}
+  traduzioni[]{language, titolo},
+  "primaFotografia": fotografie[0]
 }`)
 const galleryTitleOf = (gallery) => gallery.traduzioni?.find((translation) => translation.language === 'it')?.titolo
   || gallery.traduzioni?.[0]?.titolo
@@ -109,6 +107,11 @@ const galleryLinks = [
   ['Firenze, tu', 'Firenze, tu'],
   ['Immagini e parole', 'Immagini e parole'],
 ]
+
+const lightsAndShadowsGallery = galleriesByTitle.get('Luci e ombre')
+const lightsAndShadowsWork = byTitle.get('Luci e ombre')
+if (!lightsAndShadowsGallery) throw new Error('Galleria non trovata: Luci e ombre')
+if (!lightsAndShadowsGallery.primaFotografia?.asset?._ref) throw new Error('La galleria “Luci e ombre” non contiene fotografie.')
 
 for (const [workTitle, galleryTitle] of galleryLinks) {
   if (!byTitle.has(workTitle)) throw new Error(`Opera non trovata: ${workTitle}`)
@@ -122,6 +125,7 @@ console.log('Edizione spagnola:', existingSpanishEdition ? {
   amazonFormato: existingSpanishEdition.amazonFormato || 'non impostato',
 } : {azione: 'da creare', amazonUrl: 'non impostato'})
 console.log('Video Silenzio:', 'da aggiornare con la descrizione')
+console.log('Opera Luci e ombre:', lightsAndShadowsWork ? 'da aggiornare e collegare' : 'da creare e collegare')
 console.log('Collegamenti gallerie:', galleryLinks.map(([opera, galleria]) => ({opera, galleria})))
 
 if (!execute) {
@@ -144,6 +148,28 @@ for (const [workTitle, galleryTitle] of galleryLinks) {
   }
 
   await client.patch(work._id).set(fields).commit()
+}
+
+const {_key: unusedPhotoKey, ...lightsAndShadowsImage} = lightsAndShadowsGallery.primaFotografia
+void unusedPhotoKey
+const lightsAndShadowsFields = {
+  categoria: 'visiva',
+  stato: 'pubblicata',
+  ordine: 80,
+  immagine: lightsAndShadowsImage,
+  galleriaCollegata: {_type: 'reference', _ref: lightsAndShadowsGallery._id},
+  traduzioni: lightsAndShadowsWork?.traduzioni?.length ? lightsAndShadowsWork.traduzioni : [{
+    _key: 'it',
+    _type: 'object',
+    language: 'it',
+    titolo: 'Luci e ombre',
+  }],
+}
+
+if (lightsAndShadowsWork) {
+  await client.patch(lightsAndShadowsWork._id).set(lightsAndShadowsFields).commit()
+} else {
+  await client.create({_type: 'opera', ...lightsAndShadowsFields})
 }
 
 const coverPath = path.resolve('migration/assets/mas-alla-de-lo-conocido.jpg')
@@ -172,6 +198,7 @@ const spanishEdition = {
     language: 'es',
     titolo: 'Más allá de lo conocido',
     descrizione: spanishDescription,
+    descrizioneRichText: toPortableText(spanishDescription, 'mas-alla-description'),
   }],
 }
 

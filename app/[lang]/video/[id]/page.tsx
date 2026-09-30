@@ -51,13 +51,18 @@ export default async function VideoDetailPage({params}: Props) {
   if (!video) notFound()
   const embedUrl = getVideoEmbedUrl(video.url)
   const archiveLabel = lang === 'en' ? 'Back to visual works' : lang === 'es' ? 'Volver a las obras visuales' : 'Torna alle opere visive'
+  const silenceTitle = video.titolo.match(/^[“"]?Silenzio[”"]?\s*[-–—]\s*(.+)$/i)
+  const displayTitle = silenceTitle ? 'Silenzio' : video.titolo
+  const displaySubtitle = silenceTitle?.[1]
 
   return <main className="min-h-screen bg-[#eee8dc] px-6 pb-28 pt-36 text-[#20231f] md:px-12 md:pt-44">
     <div className="mx-auto max-w-7xl">
       <Link href={`/${lang}/opere-visive`} className="mb-12 inline-flex items-center gap-4 text-[9px] uppercase tracking-[0.28em] text-black/45 transition-colors hover:text-black">← {archiveLabel}</Link>
-      <header className="mb-12 grid gap-8 border-b border-black/20 pb-10 md:grid-cols-[1fr_auto] md:items-end">
-        <h1 className="max-w-5xl font-serif text-4xl leading-[1.05] tracking-[-0.035em] sm:text-6xl lg:text-7xl">{video.titolo}</h1>
-        {video.data && <time dateTime={video.data} className="text-[10px] uppercase tracking-[0.25em] text-[#8a704b]">{new Intl.DateTimeFormat(lang, {day: 'numeric', month: 'long', year: 'numeric', timeZone: 'UTC'}).format(new Date(`${video.data}T12:00:00Z`))}</time>}
+      <header className="mb-12 border-b border-black/20 pb-10">
+        <h1 className="max-w-5xl font-serif text-4xl leading-[1.05] tracking-[-0.035em] sm:text-5xl lg:text-6xl">
+          <span className="block">{displayTitle}</span>
+          {displaySubtitle ? <span className="mt-3 block text-xl leading-tight tracking-[-0.02em] sm:text-2xl lg:text-3xl">{displaySubtitle}</span> : null}
+        </h1>
       </header>
 
       <div className={`grid items-start gap-10 ${video.descrizione?.length || video.descrizioneTesto ? 'lg:grid-cols-[minmax(0,1.7fr)_minmax(18rem,0.7fr)]' : ''}`}>
