@@ -35,7 +35,7 @@ export default async function VideosPage({params}: {params: Promise<{lang: strin
 
   if (videos.length === 1) redirect(`/${language}/video/${videos[0]._id}`)
 
-  return <main className="min-h-screen bg-[#eee8dc] px-6 pb-28 pt-36 text-[#20231f] md:px-12 md:pt-44">
+  return <main className="min-h-screen bg-[#eee8dc] px-6 pb-28 pt-28 text-[#20231f] md:px-12 md:pt-32">
     <header className="mx-auto mb-20 grid max-w-7xl gap-8 border-b border-black/20 pb-12 md:grid-cols-2 md:items-end">
       <div>
         <span className="mb-5 block text-[9px] uppercase tracking-[0.34em] text-black/40">Archivio audiovisivo</span>

@@ -27,7 +27,7 @@ export default async function GalleriePage({params}: {params: Promise<{lang: str
   const text = labels[lang as keyof typeof labels] || labels.it
   const gallerie = await client.fetch<GalleriaFotografica[]>(GALLERIES_QUERY, {lang})
 
-  return <div className="min-h-screen bg-[#eee8dc] px-6 pb-28 pt-36 text-[#20231f] md:px-12 md:pt-44">
+  return <div className="min-h-screen bg-[#eee8dc] px-6 pb-28 pt-28 text-[#20231f] md:px-12 md:pt-32">
     <header className="mx-auto mb-20 grid max-w-7xl gap-8 border-b border-black/20 pb-12 md:grid-cols-2 md:items-end">
       <h1 className="font-serif text-5xl tracking-[-0.04em] md:text-8xl">{text.title}</h1>
       <p className="max-w-md font-serif text-xl italic leading-relaxed text-[#625d53] md:justify-self-end">{text.intro}</p>

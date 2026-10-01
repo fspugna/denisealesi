@@ -35,5 +35,5 @@ export default async function OperaPage({params}: Props) {
   const {id, lang} = await params
   const opera = await getOpera(id, lang)
   if (!opera) notFound()
-  return <div className="min-h-screen bg-[#eee8dc] px-6 pb-24 pt-36 text-[#20231f] md:px-12 md:pt-44"><div className="mx-auto max-w-6xl"><OperaDetailView opera={opera} /></div></div>
+  return <div className="min-h-screen bg-[#eee8dc] px-6 pb-24 pt-28 text-[#20231f] md:px-12 md:pt-32"><div className="mx-auto max-w-6xl"><OperaDetailView opera={opera} /></div></div>
 }

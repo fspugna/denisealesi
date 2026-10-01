@@ -28,7 +28,7 @@ export default async function GalleryPage({params}: Props) {
   const {id, lang} = await params
   const gallery = await getGallery(id, lang)
   if (!gallery) notFound()
-  return <div className="min-h-screen bg-[#eee8dc] px-6 pb-28 pt-36 text-[#20231f] md:px-12 md:pt-44">
+  return <div className="min-h-screen bg-[#eee8dc] px-6 pb-28 pt-28 text-[#20231f] md:px-12 md:pt-32">
     <header className="mx-auto mb-16 max-w-7xl border-b border-black/20 pb-12">
       <Link href={`/${lang}/gallerie`} className="mb-10 inline-block text-[10px] uppercase tracking-[0.24em] text-black/45">← {lang === 'en' ? 'Galleries' : lang === 'es' ? 'Galerías' : 'Gallerie'}</Link>
       <h1 className="max-w-4xl font-serif text-5xl tracking-[-0.04em] md:text-8xl">{gallery.titolo}</h1>

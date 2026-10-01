@@ -55,7 +55,7 @@ export default async function VideoDetailPage({params}: Props) {
   const displayTitle = silenceTitle ? 'Silenzio' : video.titolo
   const displaySubtitle = silenceTitle?.[1]
 
-  return <main className="min-h-screen bg-[#eee8dc] px-6 pb-28 pt-36 text-[#20231f] md:px-12 md:pt-44">
+  return <main className="min-h-screen bg-[#eee8dc] px-6 pb-28 pt-28 text-[#20231f] md:px-12 md:pt-32">
     <div className="mx-auto max-w-7xl">
       <Link href={`/${lang}/opere-visive`} className="mb-12 inline-flex items-center gap-4 text-[9px] uppercase tracking-[0.28em] text-black/45 transition-colors hover:text-black">← {archiveLabel}</Link>
       <header className="mb-12 border-b border-black/20 pb-10">

@@ -51,7 +51,7 @@ export default function AboutView({aboutData, lang}: AboutProps) {
   const t = labelsTranslations[language]
   const biography = emphasizeAuthorName(aboutData.biografia)
 
-  return <section id="biografia" className="relative overflow-hidden px-6 pb-24 pt-32 md:px-8 md:pb-36 md:pt-40">
+  return <section id="biografia" className="relative overflow-hidden px-6 pb-24 pt-24 md:px-8 md:pb-36 md:pt-28">
     {aboutData.sfondo && <>
       <div
         className="absolute inset-0 z-0 bg-cover bg-center bg-no-repeat opacity-20"

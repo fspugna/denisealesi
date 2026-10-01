@@ -26,7 +26,7 @@ export default function ContactsView({contattiData, lang}: {contattiData: Contat
   const language = lang === 'en' || lang === 'es' ? lang : 'it'
   const text = copy[language]
 
-  return <section id="contatti" className="border-t border-white/10 bg-[#20251f] px-6 py-24 text-[#eee8dc] sm:px-10 lg:py-36">
+  return <section id="contatti" className="border-t border-white/10 bg-[#20251f] px-6 pb-24 pt-20 text-[#eee8dc] sm:px-10 lg:pb-36 lg:pt-28">
     <div className="mx-auto max-w-7xl">
       <div className="mb-14 flex items-center gap-5 text-[#c5a46d]">
         <span className="text-[9px] uppercase tracking-[0.34em]">{text.eyebrow}</span>
