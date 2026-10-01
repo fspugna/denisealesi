@@ -14,6 +14,7 @@ const menuLabels = {
 
 export default function MainMenu({lang = 'it'}: {lang?: string}) {
   const [openPath, setOpenPath] = useState<string | null>(null)
+  const [mobileHeaderVisible, setMobileHeaderVisible] = useState(true)
   const pathname = usePathname()
   const isOpen = openPath === pathname
   const segments = pathname.split('/').filter(Boolean)
@@ -46,6 +47,36 @@ export default function MainMenu({lang = 'it'}: {lang?: string}) {
     window.addEventListener('keydown', closeOnEscape)
     return () => window.removeEventListener('keydown', closeOnEscape)
   }, [])
+
+  useEffect(() => {
+    let lastScrollY = window.scrollY
+    let animationFrame: number | null = null
+
+    const updateHeader = () => {
+      const currentScrollY = window.scrollY
+
+      if (isOpen || currentScrollY <= 16) {
+        setMobileHeaderVisible(true)
+        lastScrollY = currentScrollY
+      } else if (Math.abs(currentScrollY - lastScrollY) >= 8) {
+        setMobileHeaderVisible(currentScrollY < lastScrollY)
+        lastScrollY = currentScrollY
+      }
+
+      animationFrame = null
+    }
+
+    const handleScroll = () => {
+      if (animationFrame === null) animationFrame = window.requestAnimationFrame(updateHeader)
+    }
+
+    window.addEventListener('scroll', handleScroll, {passive: true})
+
+    return () => {
+      window.removeEventListener('scroll', handleScroll)
+      if (animationFrame !== null) window.cancelAnimationFrame(animationFrame)
+    }
+  }, [isOpen, pathname])
 
   const links = [
     [labels.home, '/'], [labels.biography, '/biografia'], [labels.literary, '/opere-letterarie'],
@@ -80,7 +111,7 @@ export default function MainMenu({lang = 'it'}: {lang?: string}) {
 
       </header>
 
-      <div className="fixed inset-x-0 top-0 z-50 flex items-center justify-between px-5 py-5 text-[#f4efe5] mix-blend-difference md:px-9 md:py-7 lg:hidden">
+      <div className={`fixed inset-x-0 top-0 z-50 flex items-center justify-between border-b border-white/10 bg-[#1d211d]/95 px-5 py-5 text-[#f4efe5] shadow-[0_8px_30px_rgba(0,0,0,0.12)] backdrop-blur-md transition-transform duration-300 ease-out will-change-transform motion-reduce:transition-none md:px-9 md:py-7 lg:hidden ${mobileHeaderVisible || isOpen ? 'translate-y-0' : '-translate-y-full'}`}>
         <Link href={href('/')} className="font-serif text-xl tracking-[0.08em] md:text-2xl" aria-label="Denise Alesi, home">
           Denise Alesi
         </Link>
