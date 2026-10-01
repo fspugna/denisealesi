@@ -5,8 +5,8 @@ import "./globals.css";
 import { EB_Garamond, Inter } from 'next/font/google';
 import { AnalyticsConsent } from '@/components/AnalyticsConsent';
 
-const garamond = EB_Garamond({ subsets: ['latin'], variable: '--font-serif', display: 'swap' });
-const inter = Inter({ subsets: ['latin'], variable: '--font-sans' });
+const garamond = EB_Garamond({ subsets: ['latin'], variable: '--font-eb-garamond', display: 'swap' });
+const inter = Inter({ subsets: ['latin'], variable: '--font-inter' });
 
 export const metadata: Metadata = {
   title: "Denise Alesi — Autrice e artista visiva",
