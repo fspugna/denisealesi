@@ -30,7 +30,7 @@ export default async function GalleriePage({params}: {params: Promise<{lang: str
   return <div className="min-h-screen bg-[#eee8dc] px-6 pb-28 pt-28 text-[#20231f] md:px-12 md:pt-32">
     <header className="mx-auto mb-20 grid max-w-7xl gap-8 border-b border-black/20 pb-12 md:grid-cols-2 md:items-end">
       <h1 className="font-serif text-5xl tracking-[-0.04em] md:text-8xl">{text.title}</h1>
-      <p className="max-w-md font-serif text-xl italic leading-relaxed text-[#625d53] md:justify-self-end">{text.intro}</p>
+      <p className="body-copy max-w-md italic text-[#625d53] md:justify-self-end">{text.intro}</p>
     </header>
     {gallerie.length ? <div className="mx-auto grid max-w-7xl gap-x-8 gap-y-16 md:grid-cols-2">
       {gallerie.map((galleria) => <Link key={galleria._id} href={`/${lang}/gallerie/${galleria._id}`} className="group block">

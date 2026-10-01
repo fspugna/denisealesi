@@ -41,7 +41,7 @@ export default async function VideosPage({params}: {params: Promise<{lang: strin
         <span className="mb-5 block text-[9px] uppercase tracking-[0.34em] text-black/40">Archivio audiovisivo</span>
         <h1 className="font-serif text-6xl tracking-[-0.05em] md:text-8xl">{text.title}</h1>
       </div>
-      <p className="max-w-md font-serif text-xl italic leading-relaxed text-[#625d53] md:justify-self-end">{text.intro}</p>
+      <p className="body-copy max-w-md italic text-[#625d53] md:justify-self-end">{text.intro}</p>
     </header>
 
     {videos.length ? <div className="mx-auto grid max-w-7xl gap-x-8 gap-y-16 md:grid-cols-2">

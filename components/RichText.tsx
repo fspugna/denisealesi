@@ -24,5 +24,5 @@ const components: PortableTextComponents = {
 export default function RichText({value, className = ''}: {value?: PortableTextBlock[]; className?: string}) {
   if (!value?.length) return null
 
-  return <div className={`space-y-5 ${className}`}><PortableText value={value} components={components} /></div>
+  return <div className={`body-copy ${className}`}><PortableText value={value} components={components} /></div>
 }

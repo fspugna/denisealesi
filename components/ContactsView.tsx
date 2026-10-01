@@ -36,7 +36,7 @@ export default function ContactsView({contattiData, lang}: {contattiData: Contat
       <div className={`grid items-start gap-14 ${contattiData.fotoUrl ? 'lg:grid-cols-[1.15fr_0.7fr] lg:gap-[10vw]' : 'lg:grid-cols-[1.1fr_0.9fr] lg:gap-[12vw]'}`}>
         <FadeUp>
           <h2 className="max-w-3xl font-serif text-5xl leading-[0.95] tracking-[-0.04em] sm:text-6xl lg:text-7xl">{text.title}</h2>
-          <p className="mt-8 max-w-xl text-base font-light leading-7 text-white/60 md:text-lg">{text.intro}</p>
+          <p className="body-copy mt-8 max-w-xl text-white/60">{text.intro}</p>
 
           {contattiData.email && <a href={`mailto:${contattiData.email}`} className="group mt-12 block border-b border-white/20 pb-5 transition-colors hover:border-[#c5a46d]">
             <span className="mb-3 block text-[9px] uppercase tracking-[0.3em] text-[#c5a46d]">{text.email}</span>

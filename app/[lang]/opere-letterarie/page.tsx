@@ -46,7 +46,7 @@ export default async function OpereLetterariePage({params}: {params: Promise<{la
           <span className="mb-5 block text-[9px] uppercase tracking-[0.34em] text-black/40">{text.eyebrow}</span>
           <h1 className="font-serif text-5xl tracking-[-0.04em] md:text-8xl">{text.title}</h1>
         </div>
-        <p className="max-w-md font-serif text-xl italic leading-relaxed text-[#625d53] md:justify-self-end">{text.intro}</p>
+        <p className="body-copy max-w-md italic text-[#625d53] md:justify-self-end">{text.intro}</p>
       </header>
       <div className="mx-auto max-w-7xl">
         {opere.length ? <OperaGrid opere={opere} lang={language} /> : <p className="font-serif text-2xl italic text-black/45">{text.empty}</p>}

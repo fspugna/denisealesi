@@ -120,7 +120,7 @@ export default async function Home({params}: {params: Promise<{lang: string}>}) 
         <div className="relative flex min-h-[72vh] flex-col items-center justify-center px-7 py-20 text-center sm:px-12 lg:min-h-screen lg:px-[10vw] lg:pb-16 lg:pt-36">
           <span className="mb-8 font-sans text-[13px] uppercase tracking-[0.3em] text-[#766e60]">{text.role}</span>
           <FadeUp delay={0.15}>
-            <div className="mx-auto max-w-2xl font-serif text-[clamp(1rem,1.35vw,1.25rem)] leading-[1.65] text-[#4e4b43] [&_p+p]:mt-5 [&_p:last-child]:text-[0.82em] [&_p:last-child]:italic [&_p:last-child]:text-[#766e60]">
+            <div className="body-copy mx-auto max-w-2xl text-[#4e4b43] [&_p:last-child]:italic [&_p:last-child]:text-[#766e60]">
               {data.header?.citazione?.length ? <PortableText value={data.header.citazione} /> : <>
                 <p>Non può esistere spazio tra ciò che fu, che è, e che sarà. Ogni accadimento assume le sembianze di ciò che crediamo, di ciò del quale abbiamo bisogno fosse anche dell’inferno. Solo quando la verità ha luogo è possibile scostare il velo che avvolge ogni pensiero, ogni immagine, allora tutto si trasforma, tutto accade. Il racconto crea la storia, nutre l&apos;immaginazione, contribuisce alla conoscenza di se stessi e delle cose. Si racconta con la parola, si racconta con le ombre, si racconta con la luce.</p>
                 <p>(tratto da <em>Immagini e parole</em> di Denise Alesi)</p>

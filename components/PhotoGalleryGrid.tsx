@@ -8,7 +8,7 @@ import Lightbox from 'yet-another-react-lightbox'
 import Captions from 'yet-another-react-lightbox/plugins/captions'
 import Zoom from 'yet-another-react-lightbox/plugins/zoom'
 
-export default function PhotoGalleryGrid({fotografie}: {fotografie: Fotografia[]}) {
+export default function PhotoGalleryGrid({fotografie, compact = false}: {fotografie: Fotografia[]; compact?: boolean}) {
   const [index, setIndex] = useState(-1)
   const slides = fotografie.map((foto) => ({
     src: urlFor(foto).width(2000).fit('max').url(),
@@ -17,7 +17,7 @@ export default function PhotoGalleryGrid({fotografie}: {fotografie: Fotografia[]
   }))
 
   return <>
-    <div className="columns-1 gap-5 sm:columns-2 lg:columns-3">
+    <div className={`columns-1 gap-5 sm:columns-2 ${compact ? '' : 'lg:columns-3'}`}>
       {fotografie.map((foto, photoIndex) => {
         const match = foto.asset?._ref?.match(/-(\d+)x(\d+)-[^-]+$/)
         const width = match ? Number(match[1]) : 1200

@@ -98,7 +98,7 @@ export default function AboutView({aboutData, lang}: AboutProps) {
         </FadeIn>}
 
         <FadeUp delay={0.15} className={aboutData.foto ? 'md:col-span-7' : 'md:col-span-8 md:col-start-3'}>
-          <div className="font-serif text-[15px] font-normal leading-[1.65] text-[#4e4b43] md:text-base [&_p]:m-0 [&_strong]:font-semibold [&_strong]:text-[#20231f]">
+          <div className="body-copy font-normal text-[#4e4b43] [&_strong]:font-semibold [&_strong]:text-[#20231f]">
             <PortableText value={biography} />
           </div>
         </FadeUp>

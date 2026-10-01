@@ -28,12 +28,18 @@ export default async function GalleryPage({params}: Props) {
   const {id, lang} = await params
   const gallery = await getGallery(id, lang)
   if (!gallery) notFound()
+  const hasDescription = Boolean(gallery.descrizione?.length || gallery.descrizioneTesto)
+
   return <div className="min-h-screen bg-[#eee8dc] px-6 pb-28 pt-28 text-[#20231f] md:px-12 md:pt-32">
-    <header className="mx-auto mb-16 max-w-7xl border-b border-black/20 pb-12">
+    <header className="mx-auto mb-10 max-w-7xl border-b border-black/20 pb-10">
       <Link href={`/${lang}/gallerie`} className="mb-10 inline-block text-[10px] uppercase tracking-[0.24em] text-black/45">← {lang === 'en' ? 'Galleries' : lang === 'es' ? 'Galerías' : 'Gallerie'}</Link>
       <h1 className="max-w-4xl font-serif text-5xl tracking-[-0.04em] md:text-8xl">{gallery.titolo}</h1>
-      {gallery.descrizione?.length ? <RichText value={gallery.descrizione} className="mt-8 max-w-2xl font-serif text-xl text-[#625d53]" /> : gallery.descrizioneTesto ? <p className="mt-8 max-w-2xl whitespace-pre-line font-serif text-xl leading-relaxed text-[#625d53]">{gallery.descrizioneTesto}</p> : null}
     </header>
-    <main className="mx-auto max-w-7xl"><PhotoGalleryGrid fotografie={gallery.fotografie || []} /></main>
+    <main className={`mx-auto max-w-7xl ${hasDescription ? 'grid items-start gap-10 lg:grid-cols-[minmax(15rem,0.55fr)_minmax(0,1.45fr)] lg:gap-16' : ''}`}>
+      {hasDescription ? <aside className="border-t border-black/15 pt-6 lg:sticky lg:top-28">
+        {gallery.descrizione?.length ? <RichText value={gallery.descrizione} className="text-[#625d53]" /> : <p className="body-copy whitespace-pre-line text-[#625d53]">{gallery.descrizioneTesto}</p>}
+      </aside> : null}
+      <PhotoGalleryGrid fotografie={gallery.fotografie || []} compact={hasDescription} />
+    </main>
   </div>
 }
