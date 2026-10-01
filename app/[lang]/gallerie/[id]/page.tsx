@@ -36,7 +36,7 @@ export default async function GalleryPage({params}: Props) {
       <h1 className="max-w-4xl font-serif text-5xl tracking-[-0.04em] md:text-8xl">{gallery.titolo}</h1>
     </header>
     <main className={`mx-auto max-w-7xl ${hasDescription ? 'grid items-start gap-10 lg:grid-cols-[minmax(15rem,0.55fr)_minmax(0,1.45fr)] lg:gap-16' : ''}`}>
-      {hasDescription ? <aside className="border-t border-black/15 pt-6 lg:sticky lg:top-28">
+      {hasDescription ? <aside className="lg:sticky lg:top-28">
         {gallery.descrizione?.length ? <RichText value={gallery.descrizione} className="text-[#625d53]" /> : <p className="body-copy whitespace-pre-line text-[#625d53]">{gallery.descrizioneTesto}</p>}
       </aside> : null}
       <PhotoGalleryGrid fotografie={gallery.fotografie || []} compact={hasDescription} />
