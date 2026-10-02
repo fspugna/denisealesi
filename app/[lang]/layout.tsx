@@ -14,7 +14,7 @@ export default async function LangLayout({
     return (
         <>
             <MainMenu lang={lang} />
-            <main className="flex-grow">{children}</main>
+            <main lang={lang} className="flex-grow">{children}</main>
             <Footer lang={lang} />
         </>
     );

@@ -26,6 +26,7 @@ body {
   font-family: var(--font-eb-garamond), Georgia, serif;
   font-size: 0.9375rem;
   line-height: 1.65;
+  text-align: left;
 }
 
 .body-copy p {
@@ -35,7 +36,16 @@ body {
 @media (min-width: 48rem) {
   .body-copy {
     font-size: 1rem;
+    hyphens: auto;
+    text-align: justify;
+    text-justify: inter-word;
   }
+
+}
+
+.body-copy--natural {
+  hyphens: none;
+  text-align: inherit;
 }
 
 /* Forza il nero profondo per il lightbox */
