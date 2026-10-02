@@ -107,7 +107,7 @@ export default function OperaDetailView({ opera }: { opera: Opera }) {
                 <div className="flex flex-col gap-6 md:pt-10">
                     <div>
                         {opera.anno && <p className="mb-5 text-[9px] uppercase tracking-[0.28em] text-black/45">{opera.anno}</p>}
-                        <h1 className="mb-6 font-serif text-4xl leading-tight md:text-6xl">{opera.titolo}</h1>
+                        <h1 className="mb-4 font-serif text-3xl leading-tight md:text-5xl">{opera.titolo}</h1>
                         {opera.descrizione?.length ? <RichText value={opera.descrizione} className="max-w-xl text-[#625d53]" /> : opera.descrizioneTesto ? (
                             <p className="body-copy max-w-xl whitespace-pre-line text-[#625d53]">{opera.descrizioneTesto}</p>
                         ) : null}

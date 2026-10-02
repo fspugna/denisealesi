@@ -28,14 +28,14 @@ export default function ContactsView({contattiData, lang}: {contattiData: Contat
 
   return <section id="contatti" className="border-t border-white/10 bg-[#20251f] px-6 pb-24 pt-20 text-[#eee8dc] sm:px-10 lg:pb-36 lg:pt-28">
     <div className="mx-auto max-w-7xl">
-      <div className="mb-14 flex items-center gap-5 text-[#c5a46d]">
+      <div className="mb-10 flex items-center gap-5 text-[#c5a46d]">
         <span className="text-[9px] uppercase tracking-[0.34em]">{text.eyebrow}</span>
         <span className="h-px flex-1 bg-current opacity-30" />
       </div>
 
       <div className={`grid items-start gap-14 ${contattiData.fotoUrl ? 'lg:grid-cols-[1.15fr_0.7fr] lg:gap-[10vw]' : 'lg:grid-cols-[1.1fr_0.9fr] lg:gap-[12vw]'}`}>
         <FadeUp>
-          <h2 className="max-w-3xl font-serif text-5xl leading-[0.95] tracking-[-0.04em] sm:text-6xl lg:text-7xl">{text.title}</h2>
+          <h2 className="max-w-3xl font-serif text-4xl leading-[0.95] tracking-[-0.04em] sm:text-5xl lg:text-6xl">{text.title}</h2>
           <p className="body-copy mt-8 max-w-xl text-white/60">{text.intro}</p>
 
           {contattiData.email && <a href={`mailto:${contattiData.email}`} className="group mt-12 block border-b border-white/20 pb-5 transition-colors hover:border-[#c5a46d]">

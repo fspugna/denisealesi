@@ -66,10 +66,10 @@ export default function AboutView({aboutData, lang}: AboutProps) {
     </>}
 
     <div className="relative z-10 mx-auto max-w-7xl">
-      <FadeUp className="mb-12 border-b border-black/20 pb-10 md:mb-16 md:flex md:items-end md:justify-between">
+      <FadeUp className="mb-10 border-b border-black/20 pb-8 md:mb-12 md:flex md:items-end md:justify-between">
         <div>
           <p className="mb-5 text-xs uppercase tracking-[0.42em] text-[#8a704b]">{t.artistLabel}</p>
-          <h1 className="font-serif text-5xl leading-none tracking-tight text-[#20231f] md:text-7xl">
+          <h1 className="font-serif text-4xl leading-none tracking-tight text-[#20231f] md:text-6xl">
             {aboutData.titolo || 'Biografia'}
           </h1>
         </div>

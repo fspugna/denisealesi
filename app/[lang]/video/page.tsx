@@ -35,11 +35,11 @@ export default async function VideosPage({params}: {params: Promise<{lang: strin
 
   if (videos.length === 1) redirect(`/${language}/video/${videos[0]._id}`)
 
-  return <main className="min-h-screen bg-[#eee8dc] px-6 pb-28 pt-28 text-[#20231f] md:px-12 md:pt-32">
-    <header className="mx-auto mb-20 grid max-w-7xl gap-8 border-b border-black/20 pb-12 md:grid-cols-2 md:items-end">
+  return <main className="min-h-screen bg-[#eee8dc] px-6 pb-28 pt-24 text-[#20231f] md:px-12 md:pt-28">
+    <header className="mx-auto mb-12 grid max-w-7xl gap-6 border-b border-black/20 pb-8 md:grid-cols-2 md:items-end">
       <div>
         <span className="mb-5 block text-[9px] uppercase tracking-[0.34em] text-black/40">Archivio audiovisivo</span>
-        <h1 className="font-serif text-6xl tracking-[-0.05em] md:text-8xl">{text.title}</h1>
+        <h1 className="font-serif text-4xl tracking-[-0.04em] md:text-6xl">{text.title}</h1>
       </div>
       <p className="body-copy max-w-md italic text-[#625d53] md:justify-self-end">{text.intro}</p>
     </header>
@@ -56,7 +56,7 @@ export default async function VideosPage({params}: {params: Promise<{lang: strin
             </div>
             <div className="mt-5 flex items-start justify-between gap-6 border-t border-black/20 pt-5">
               <div>
-                <h2 className="max-w-2xl font-serif text-2xl leading-tight md:text-3xl">{video.titolo}</h2>
+                <h2 className="max-w-2xl font-serif text-xl leading-tight md:text-2xl">{video.titolo}</h2>
                 <span className="mt-4 inline-block text-[9px] uppercase tracking-[0.28em] text-black/45">{text.watch} →</span>
               </div>
               {video.data && <time dateTime={video.data} className="shrink-0 text-[9px] tracking-widest text-black/45">{new Date(`${video.data}T12:00:00`).getFullYear()}</time>}

@@ -23,7 +23,7 @@ export default function OperaGrid({opere, lang}: {opere: Opera[]; lang: string})
             ) : null}
           </div>
           <div className="flex min-h-16 items-baseline justify-between gap-4 border-t border-black/20 pt-4">
-            <h2 className="font-serif text-2xl">{opera.titolo}</h2>
+            <h2 className="font-serif text-xl md:text-2xl">{opera.titolo}</h2>
             {opera.anno ? <span className="shrink-0 text-[9px] tracking-widest text-black/45">{opera.anno}</span> : null}
           </div>
         </Link>

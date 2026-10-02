@@ -40,11 +40,11 @@ export default async function OpereLetterariePage({params}: {params: Promise<{la
   const opere = await client.fetch<Opera[]>(LITERARY_WORKS_QUERY, {lang: language})
 
   return (
-    <main className="min-h-screen bg-[#eee8dc] px-6 pb-28 pt-28 text-[#20231f] md:px-12 md:pt-32">
-      <header className="mx-auto mb-20 grid max-w-7xl gap-8 border-b border-black/20 pb-12 md:grid-cols-2 md:items-end">
+    <main className="min-h-screen bg-[#eee8dc] px-6 pb-28 pt-24 text-[#20231f] md:px-12 md:pt-28">
+      <header className="mx-auto mb-12 grid max-w-7xl gap-6 border-b border-black/20 pb-8 md:grid-cols-2 md:items-end">
         <div>
           <span className="mb-5 block text-[9px] uppercase tracking-[0.34em] text-black/40">{text.eyebrow}</span>
-          <h1 className="font-serif text-5xl tracking-[-0.04em] md:text-8xl">{text.title}</h1>
+          <h1 className="font-serif text-4xl tracking-[-0.04em] md:text-6xl">{text.title}</h1>
         </div>
         <p className="body-copy max-w-md italic text-[#625d53] md:justify-self-end">{text.intro}</p>
       </header>

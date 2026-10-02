@@ -57,24 +57,24 @@ export default async function OpereVisivePage({params}: {params: Promise<{lang: 
   const data = await client.fetch<VisualWorksData>(VISUAL_WORKS_QUERY, {lang: language})
 
   return (
-    <main className="min-h-screen bg-[#eee8dc] px-6 pb-28 pt-28 text-[#20231f] md:px-12 md:pt-32">
-      <header className="mx-auto mb-20 grid max-w-7xl gap-8 border-b border-black/20 pb-12 md:grid-cols-2 md:items-end">
+    <main className="min-h-screen bg-[#eee8dc] px-6 pb-28 pt-24 text-[#20231f] md:px-12 md:pt-28">
+      <header className="mx-auto mb-12 grid max-w-7xl gap-6 border-b border-black/20 pb-8 md:grid-cols-2 md:items-end">
         <div>
           <span className="mb-5 block text-[9px] uppercase tracking-[0.34em] text-black/40">{text.eyebrow}</span>
-          <h1 className="font-serif text-5xl tracking-[-0.04em] md:text-8xl">{text.title}</h1>
+          <h1 className="font-serif text-4xl tracking-[-0.04em] md:text-6xl">{text.title}</h1>
         </div>
         <p className="body-copy max-w-md italic text-[#625d53] md:justify-self-end">{text.intro}</p>
       </header>
 
       <section className="mx-auto max-w-7xl">
-        <h2 className="mb-10 border-b border-black/20 pb-5 font-serif text-4xl">{text.works}</h2>
+        <h2 className="mb-8 border-b border-black/20 pb-4 font-serif text-3xl md:text-4xl">{text.works}</h2>
         {data.opere.length ? <OperaGrid opere={data.opere} lang={language} /> : <p className="font-serif text-2xl italic text-black/45">{text.empty}</p>}
       </section>
 
       {data.gallerie.length ? (
         <section className="mx-auto mt-28 max-w-7xl">
           <div className="mb-10 flex items-end justify-between border-b border-black/20 pb-5">
-            <h2 className="font-serif text-4xl">{text.galleries}</h2>
+            <h2 className="font-serif text-3xl md:text-4xl">{text.galleries}</h2>
             <Link href={`/${language}/gallerie`} className="text-[9px] uppercase tracking-[0.24em] text-black/50 hover:text-black">{text.allGalleries} →</Link>
           </div>
           <div className="grid gap-8 md:grid-cols-2">
@@ -83,7 +83,7 @@ export default async function OpereVisivePage({params}: {params: Promise<{lang: 
                 <div className="relative aspect-[3/2] overflow-hidden bg-[#d8d0c2]">
                   {galleria.fotografie?.[0] ? <Image src={urlFor(galleria.fotografie[0]).width(1200).height(800).fit('crop').url()} alt={galleria.fotografie[0].alt || galleria.titolo} fill sizes="(max-width: 768px) 100vw, 50vw" className="object-cover transition duration-700 group-hover:scale-[1.02]" /> : null}
                 </div>
-                <h3 className="mt-5 border-t border-black/20 pt-4 font-serif text-3xl">{galleria.titolo}</h3>
+                <h3 className="mt-5 border-t border-black/20 pt-4 font-serif text-2xl">{galleria.titolo}</h3>
               </Link>
             ))}
           </div>
@@ -93,7 +93,7 @@ export default async function OpereVisivePage({params}: {params: Promise<{lang: 
       {data.video.length ? (
         <section className="mx-auto mt-28 max-w-7xl">
           <div className="mb-10 flex items-end justify-between border-b border-black/20 pb-5">
-            <h2 className="font-serif text-4xl">{text.videos}</h2>
+            <h2 className="font-serif text-3xl md:text-4xl">{text.videos}</h2>
             <Link href={`/${language}/video`} className="text-[9px] uppercase tracking-[0.24em] text-black/50 hover:text-black">{text.allVideos} →</Link>
           </div>
           <div className="grid gap-8 md:grid-cols-2">
@@ -105,7 +105,7 @@ export default async function OpereVisivePage({params}: {params: Promise<{lang: 
                     {thumbnail ? <Image src={thumbnail} alt={video.titolo} fill sizes="(max-width: 768px) 100vw, 50vw" className="object-cover opacity-85 transition duration-700 group-hover:scale-[1.025] group-hover:opacity-100" /> : null}
                     <span className="absolute bottom-5 right-5 flex size-14 items-center justify-center rounded-full border border-white/60 bg-black/15 text-lg text-white backdrop-blur-sm">▶</span>
                   </div>
-                  <h3 className="mt-5 border-t border-black/20 pt-4 font-serif text-3xl">{video.titolo}</h3>
+                  <h3 className="mt-5 border-t border-black/20 pt-4 font-serif text-2xl">{video.titolo}</h3>
                 </Link>
               </FadeIn>
             })}
