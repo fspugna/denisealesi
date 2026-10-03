@@ -3,23 +3,23 @@ import {client} from '@/sanity/lib/client'
 import type {Opera} from '@/types'
 import {toPlainText} from '@portabletext/react'
 import type {Metadata} from 'next'
-import {notFound} from 'next/navigation'
+import {notFound, permanentRedirect} from 'next/navigation'
 
 type Props = {params: Promise<{id: string; lang: string}>}
 
 async function getOpera(id: string, lang: string): Promise<Opera | null> {
-  return client.fetch(`*[_type == "opera" && _id == $id && (!defined(stato) || stato == "pubblicata")][0]{
-    _id, categoria, immagine, anno, amazonUrl, amazonFormato,
+  return client.fetch(`*[_type == "opera" && (_id == $id || slug.current == $id) && (!defined(stato) || stato == "pubblicata")][0]{
+    _id, "slug": slug.current, categoria, immagine, anno, amazonUrl, amazonFormato,
     "titolo": coalesce(traduzioni[language == $lang][0].titolo, traduzioni[language == "it"][0].titolo, traduzioni[0].titolo),
     "descrizione": coalesce(traduzioni[language == $lang][0].descrizioneRichText, traduzioni[language == "it"][0].descrizioneRichText, traduzioni[0].descrizioneRichText),
     "descrizioneTesto": coalesce(traduzioni[language == $lang][0].descrizione, traduzioni[language == "it"][0].descrizione, traduzioni[0].descrizione),
     "audio": coalesce(traduzioni[language == $lang][0].audio, traduzioni[language == "it"][0].audio, audio){titolo, asset->{url}},
     "galleriaCollegata": galleriaCollegata->{
-      _id,
+      _id, "slug": slug.current,
       "titolo": coalesce(traduzioni[language == $lang][0].titolo, traduzioni[language == "it"][0].titolo, traduzioni[0].titolo)
     },
     "videoCollegato": videoCollegato->{
-      _id,
+      _id, "slug": slug.current,
       "titolo": coalesce(traduzioni[language == $lang][0].titolo, traduzioni[language == "it"][0].titolo, traduzioni[0].titolo)
     }
   }`, {id, lang}, {cache: 'no-store'})
@@ -35,5 +35,6 @@ export default async function OperaPage({params}: Props) {
   const {id, lang} = await params
   const opera = await getOpera(id, lang)
   if (!opera) notFound()
+  if (opera.slug && id !== opera.slug) permanentRedirect(`/${lang}/opere/${opera.slug}`)
   return <div className="min-h-screen bg-[#eee8dc] px-6 pb-24 pt-24 text-[#20231f] md:px-12 md:pt-28"><div className="mx-auto max-w-6xl"><OperaDetailView opera={opera} /></div></div>
 }

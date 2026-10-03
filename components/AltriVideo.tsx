@@ -8,6 +8,7 @@ import {defineQuery} from 'next-sanity'
 const OTHER_VIDEOS_QUERY = defineQuery(`
   *[_type == "video" && _id != $currentId] | order(inEvidenza desc, data desc)[0...3]{
     _id,
+    "slug": slug.current,
     url,
     "titolo": coalesce(
       traduzioni[language == $lang][0].titolo,
@@ -32,7 +33,7 @@ export default async function AltriVideo({currentId, lang}: {currentId: string; 
     <div className="grid gap-8 md:grid-cols-3">
       {videos.map((video) => {
         const thumbnail = getYouTubeThumbnail(video.url)
-        return <Link key={video._id} href={`/${lang}/video/${video._id}`} className="group block">
+        return <Link key={video._id} href={`/${lang}/video/${video.slug || video._id}`} className="group block">
           <div className="relative aspect-video overflow-hidden bg-black/30">
             {thumbnail && <Image src={thumbnail} alt={video.titolo} fill sizes="(max-width: 768px) 100vw, 33vw" className="object-cover opacity-70 transition duration-500 group-hover:scale-[1.025] group-hover:opacity-100" />}
           </div>

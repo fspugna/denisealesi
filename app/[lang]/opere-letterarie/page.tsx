@@ -16,6 +16,7 @@ const amazonBadgeUrl = 'https://www.amazon.it/s?k=denise+Alesi&__mk_it_IT=%C3%85
 const LITERARY_WORKS_QUERY = defineQuery(/* groq */ `
   *[_type == "opera" && categoria == "letteraria" && (!defined(stato) || stato == "pubblicata")] | order(ordine asc, anno desc, _id asc){
     _id,
+    "slug": slug.current,
     categoria,
     immagine,
     anno,

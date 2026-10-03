@@ -1,6 +1,7 @@
 import {defineArrayMember, defineField, defineType} from 'sanity'
 import {BookIcon} from '@sanity/icons'
 import {richTextBlock} from './shared/richText'
+import {contentSlugField} from './shared/contentSlug'
 
 export const opera = defineType({
     name: 'opera',
@@ -8,6 +9,7 @@ export const opera = defineType({
     type: 'document',
     icon: BookIcon,
     fields: [
+        contentSlugField,
         defineField({
             name: 'categoria',
             title: 'Percorso',

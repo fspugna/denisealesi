@@ -15,6 +15,7 @@ const GALLERIES_QUERY = defineQuery(/* groq */ `
   *[_type == "galleriaFotografica"]
     | order(defined(orderRank) desc, orderRank asc, data asc, _createdAt asc){
       _id,
+      "slug": slug.current,
       orderRank,
       data,
       "titolo": coalesce(traduzioni[language == $lang][0].titolo, traduzioni[language == "it"][0].titolo, traduzioni[0].titolo),
@@ -33,7 +34,7 @@ export default async function GalleriePage({params}: {params: Promise<{lang: str
       <p className="body-copy max-w-md italic text-[#625d53] md:justify-self-end">{text.intro}</p>
     </header>
     {gallerie.length ? <div className="mx-auto grid max-w-7xl gap-x-8 gap-y-16 md:grid-cols-2">
-      {gallerie.map((galleria) => <Link key={galleria._id} href={`/${lang}/gallerie/${galleria._id}`} className="group block">
+      {gallerie.map((galleria) => <Link key={galleria._id} href={`/${lang}/gallerie/${galleria.slug || galleria._id}`} className="group block">
         <div className="relative aspect-[3/2] overflow-hidden bg-[#d8d0c2]">{galleria.fotografie?.[0] && <Image src={urlFor(galleria.fotografie[0]).width(1200).height(800).fit('crop').url()} alt={galleria.fotografie[0].alt || galleria.titolo} fill sizes="(max-width: 768px) 100vw, 50vw" className="object-cover transition duration-700 group-hover:scale-[1.02]" />}</div>
         <div className="mt-5 flex items-baseline justify-between gap-5 border-t border-black/20 pt-4"><h2 className="font-serif text-2xl">{galleria.titolo}</h2><time className="text-[9px] tracking-widest text-black/45">{galleria.data ? new Date(galleria.data).getFullYear() : ''}</time></div>
       </Link>)}

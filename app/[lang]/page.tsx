@@ -28,11 +28,11 @@ const HOME_QUERY = defineQuery(`{
       "citazione": coalesce(traduzioni[language == $lang][0].citazione, traduzioni[language == "it"][0].citazione)
     },
     "letterarie": *[_type == "opera" && categoria == "letteraria" && (!defined(stato) || stato == "pubblicata")] | order(ordine asc, _createdAt desc){
-      _id, categoria, immagine, anno, ordine,
+      _id, "slug": slug.current, categoria, immagine, anno, ordine,
       "titolo": coalesce(traduzioni[language == $lang][0].titolo, traduzioni[language == "it"][0].titolo, traduzioni[0].titolo)
     },
     "visive": *[_type == "opera" && categoria == "visiva" && (!defined(stato) || stato == "pubblicata")] | order(ordine asc, _createdAt desc){
-      _id, categoria, immagine, anno, ordine,
+      _id, "slug": slug.current, categoria, immagine, anno, ordine,
       "titolo": coalesce(traduzioni[language == $lang][0].titolo, traduzioni[language == "it"][0].titolo, traduzioni[0].titolo)
     },
     "contatti": *[_id == "contatti"][0]{
@@ -60,7 +60,7 @@ function HomeWorksSection({title, linkLabel, href, opere, lang, alternate = fals
           <div className="grid gap-px bg-black/15 sm:grid-cols-2 lg:grid-cols-4">
             {opere.map((opera, index) => (
               <FadeIn key={opera._id} delay={index * 0.12} className={alternate ? 'bg-[#e5ddd0]' : 'bg-[#eee8dc]'}>
-                <Link href={`/${lang}/opere/${opera._id}`} className="group block p-4 pb-7">
+                <Link href={`/${lang}/opere/${opera.slug || opera._id}`} className="group block p-4 pb-7">
                   <div className="relative mb-5 aspect-[4/5] overflow-hidden bg-black/5">
                     {opera.immagine ? <Image
                       src={opera.categoria === 'letteraria'

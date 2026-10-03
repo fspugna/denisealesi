@@ -59,6 +59,7 @@ export interface SanityAudioFile {
 
 export interface Opera {
     _id: string;
+    slug?: string;
     titolo: string;
     immagine: SanityImage;
     descrizione?: PortableTextBlock[];
@@ -68,8 +69,8 @@ export interface Opera {
     audio?: SanityAudioFile;
     ordine?: number;
     anno?: number;
-    galleriaCollegata?: { _id: string; titolo: string };
-    videoCollegato?: { _id: string; titolo: string };
+    galleriaCollegata?: { _id: string; slug?: string; titolo: string };
+    videoCollegato?: { _id: string; slug?: string; titolo: string };
     amazonUrl?: string;
     amazonFormato?: 'ebook' | 'cartaceo';
 }
@@ -80,6 +81,7 @@ export interface Fotografia extends SanityImage {
 
 export interface GalleriaFotografica {
     _id: string;
+    slug?: string;
     orderRank?: string;
     titolo: string;
     titoloDescrizione?: string;
@@ -91,6 +93,7 @@ export interface GalleriaFotografica {
 
 export interface Video {
     _id: string;
+    slug?: string;
     titolo: string;
     descrizione?: PortableTextBlock[];
     descrizioneTesto?: string;

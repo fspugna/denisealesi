@@ -6,7 +6,7 @@ import {toPlainText} from '@portabletext/react'
 import type {PortableTextBlock} from '@portabletext/types'
 import type {Metadata} from 'next'
 import Link from 'next/link'
-import {notFound} from 'next/navigation'
+import {notFound, permanentRedirect} from 'next/navigation'
 
 type Props = {params: Promise<{id: string; lang: string}>}
 
@@ -24,8 +24,8 @@ function stripLeadingDescriptionTitle(blocks: PortableTextBlock[] | undefined, t
 }
 
 async function getGallery(id: string, lang: string): Promise<GalleriaFotografica | null> {
-  return client.fetch(`*[_type == "galleriaFotografica" && _id == $id][0]{
-    _id, data, fotografie,
+  return client.fetch(`*[_type == "galleriaFotografica" && (_id == $id || slug.current == $id)][0]{
+    _id, "slug": slug.current, data, fotografie,
     "titolo": coalesce(traduzioni[language == $lang][0].titolo, traduzioni[language == "it"][0].titolo, traduzioni[0].titolo),
     "titoloDescrizione": coalesce(traduzioni[language == $lang][0].titoloDescrizione, traduzioni[language == "it"][0].titoloDescrizione, traduzioni[0].titoloDescrizione),
     "descrizione": coalesce(traduzioni[language == $lang][0].descrizioneRichText, traduzioni[language == "it"][0].descrizioneRichText, traduzioni[0].descrizioneRichText),
@@ -43,6 +43,7 @@ export default async function GalleryPage({params}: Props) {
   const {id, lang} = await params
   const gallery = await getGallery(id, lang)
   if (!gallery) notFound()
+  if (gallery.slug && id !== gallery.slug) permanentRedirect(`/${lang}/gallerie/${gallery.slug}`)
   const description = stripLeadingDescriptionTitle(gallery.descrizione, gallery.titoloDescrizione)
   const hasDescription = Boolean(gallery.titoloDescrizione || description?.length || gallery.descrizioneTesto)
 

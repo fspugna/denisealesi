@@ -1,6 +1,7 @@
 import {defineArrayMember, defineField, defineType} from 'sanity'
 import {orderRankField, orderRankOrdering} from '@sanity/orderable-document-list'
 import {richTextBlock} from './shared/richText'
+import {contentSlugField} from './shared/contentSlug'
 
 export const galleriaFotografica = defineType({
   name: 'galleriaFotografica',
@@ -9,6 +10,7 @@ export const galleriaFotografica = defineType({
   orderings: [orderRankOrdering],
   fields: [
     orderRankField({type: 'galleriaFotografica'}),
+    contentSlugField,
     defineField({
       name: 'data',
       title: 'Data',

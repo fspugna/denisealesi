@@ -6,14 +6,15 @@ import type {Video} from '@/types'
 import {toPlainText} from '@portabletext/react'
 import type {Metadata} from 'next'
 import Link from 'next/link'
-import {notFound} from 'next/navigation'
+import {notFound, permanentRedirect} from 'next/navigation'
 import {defineQuery} from 'next-sanity'
 
 type Props = {params: Promise<{id: string; lang: string}>}
 
 const VIDEO_QUERY = defineQuery(`
-  *[_type == "video" && _id == $id][0]{
+  *[_type == "video" && (_id == $id || slug.current == $id)][0]{
     _id,
+    "slug": slug.current,
     data,
     url,
     "titolo": coalesce(
@@ -49,6 +50,7 @@ export default async function VideoDetailPage({params}: Props) {
   const {id, lang} = await params
   const video = await getVideo(id, lang)
   if (!video) notFound()
+  if (video.slug && id !== video.slug) permanentRedirect(`/${lang}/video/${video.slug}`)
   const embedUrl = getVideoEmbedUrl(video.url)
   const archiveLabel = lang === 'en' ? 'Back to visual works' : lang === 'es' ? 'Volver a las obras visuales' : 'Torna alle opere visive'
   const silenceTitle = video.titolo.match(/^[“"]?Silenzio[”"]?\s*[-–—]\s*(.+)$/i)
@@ -72,7 +74,7 @@ export default async function VideoDetailPage({params}: Props) {
         {video.descrizione?.length ? <RichText value={video.descrizione} className="border-t border-black/15 pt-6 text-[#625d53] lg:pt-8" /> : video.descrizioneTesto ? <p className="body-copy whitespace-pre-line border-t border-black/15 pt-6 text-[#625d53] lg:pt-8">{video.descrizioneTesto}</p> : null}
       </div>
 
-      <AltriVideo currentId={id} lang={lang} />
+      <AltriVideo currentId={video._id} lang={lang} />
     </div>
   </main>
 }

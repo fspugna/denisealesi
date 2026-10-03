@@ -7,7 +7,7 @@ export default function OperaGrid({opere, lang}: {opere: Opera[]; lang: string})
   return (
     <div className="grid gap-x-8 gap-y-20 sm:grid-cols-2 lg:grid-cols-4">
       {opere.map((opera, index) => (
-        <Link key={opera._id} href={`/${lang}/opere/${opera._id}`} className="group flex h-full flex-col">
+        <Link key={opera._id} href={`/${lang}/opere/${opera.slug || opera._id}`} className="group flex h-full flex-col">
           <div className="relative mb-6 aspect-[4/5] overflow-hidden bg-[#d8d0c2]">
             {opera.immagine ? (
               <Image

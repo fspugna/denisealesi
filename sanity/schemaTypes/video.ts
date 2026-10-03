@@ -1,11 +1,13 @@
 import {defineArrayMember, defineField, defineType} from 'sanity'
 import {richTextBlock} from './shared/richText'
+import {contentSlugField} from './shared/contentSlug'
 
 export const video = defineType({
     name: 'video',
     title: 'Video',
     type: 'document',
     fields: [
+        contentSlugField,
         defineField({
             name: 'traduzioni',
             title: 'Traduzioni',

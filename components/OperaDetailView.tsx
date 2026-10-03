@@ -146,10 +146,10 @@ export default function OperaDetailView({ opera }: { opera: Opera }) {
                         <div className="mt-6 border-t border-black/15 pt-7">
                             <p className="mb-4 text-[9px] uppercase tracking-[0.28em] text-black/45">{related.title}</p>
                             <div className="flex flex-col gap-3">
-                                {opera.galleriaCollegata && <Link href={`/${lang}/gallerie/${opera.galleriaCollegata._id}`} className="group flex items-center justify-between border-b border-black/15 py-3 font-serif text-lg">
+                                {opera.galleriaCollegata && <Link href={`/${lang}/gallerie/${opera.galleriaCollegata.slug || opera.galleriaCollegata._id}`} className="group flex items-center justify-between border-b border-black/15 py-3 font-serif text-lg">
                                     <span>{related.gallery}: <em>{opera.galleriaCollegata.titolo}</em></span><span className="transition-transform group-hover:translate-x-1">→</span>
                                 </Link>}
-                                {opera.videoCollegato && <Link href={`/${lang}/video/${opera.videoCollegato._id}`} className="group flex items-center justify-between border-b border-black/15 py-3 font-serif text-lg">
+                                {opera.videoCollegato && <Link href={`/${lang}/video/${opera.videoCollegato.slug || opera.videoCollegato._id}`} className="group flex items-center justify-between border-b border-black/15 py-3 font-serif text-lg">
                                     <span>{related.video}: <em>{opera.videoCollegato.titolo}</em></span><span className="transition-transform group-hover:translate-x-1">→</span>
                                 </Link>}
                             </div>

@@ -24,6 +24,7 @@ const copy = {
 const VISUAL_WORKS_QUERY = defineQuery(/* groq */ `{
   "opere": *[_type == "opera" && categoria == "visiva" && (!defined(stato) || stato == "pubblicata")] | order(ordine asc, anno desc, _id asc){
     _id,
+    "slug": slug.current,
     categoria,
     immagine,
     anno,
@@ -32,6 +33,7 @@ const VISUAL_WORKS_QUERY = defineQuery(/* groq */ `{
   },
   "gallerie": *[_type == "galleriaFotografica"] | order(defined(orderRank) desc, orderRank asc, data asc, _createdAt asc){
     _id,
+    "slug": slug.current,
     orderRank,
     data,
     "titolo": coalesce(traduzioni[language == $lang][0].titolo, traduzioni[language == "it"][0].titolo, traduzioni[0].titolo),
@@ -39,6 +41,7 @@ const VISUAL_WORKS_QUERY = defineQuery(/* groq */ `{
   },
   "video": *[_type == "video"] | order(inEvidenza desc, data desc, _createdAt desc)[0...2]{
     _id,
+    "slug": slug.current,
     data,
     url,
     "titolo": coalesce(traduzioni[language == $lang][0].titolo, traduzioni[language == "it"][0].titolo, traduzioni[0].titolo, titolo)
@@ -78,7 +81,7 @@ export default async function OpereVisivePage({params}: {params: Promise<{lang: 
           </div>
           <div className="grid gap-8 md:grid-cols-2">
             {data.gallerie.map((galleria) => (
-              <Link key={galleria._id} href={`/${language}/gallerie/${galleria._id}`} className="group block">
+              <Link key={galleria._id} href={`/${language}/gallerie/${galleria.slug || galleria._id}`} className="group block">
                 <div className="relative aspect-[3/2] overflow-hidden bg-[#d8d0c2]">
                   {galleria.fotografie?.[0] ? <Image src={urlFor(galleria.fotografie[0]).width(1200).height(800).fit('crop').url()} alt={galleria.fotografie[0].alt || galleria.titolo} fill sizes="(max-width: 768px) 100vw, 50vw" className="object-cover transition duration-700 group-hover:scale-[1.02]" /> : null}
                 </div>
@@ -99,7 +102,7 @@ export default async function OpereVisivePage({params}: {params: Promise<{lang: 
             {data.video.map((video, index) => {
               const thumbnail = getYouTubeThumbnail(video.url)
               return <FadeIn key={video._id} delay={index * 0.1}>
-                <Link href={`/${language}/video/${video._id}`} className="group block">
+                <Link href={`/${language}/video/${video.slug || video._id}`} className="group block">
                   <div className="relative aspect-video overflow-hidden bg-[#20251f]">
                     {thumbnail ? <Image src={thumbnail} alt={video.titolo} fill sizes="(max-width: 768px) 100vw, 50vw" className="object-cover opacity-85 transition duration-700 group-hover:scale-[1.025] group-hover:opacity-100" /> : null}
                     <span className="absolute bottom-5 right-5 flex size-14 items-center justify-center rounded-full border border-white/60 bg-black/15 text-lg text-white backdrop-blur-sm">▶</span>
