@@ -16,9 +16,9 @@ type VisualWorksData = {
 }
 
 const copy = {
-  it: {title: 'Opere visive', eyebrow: 'Immagine', intro: 'Fotografia, autoritratto e immagini in movimento come forme di ricerca e racconto.', works: 'Progetti visivi', galleries: 'Gallerie', videos: 'Video', allGalleries: 'Tutte le gallerie', allVideos: 'Tutti i video', empty: 'Nessun progetto visivo pubblicato.'},
-  en: {title: 'Visual works', eyebrow: 'Image', intro: 'Photography, self-portraiture and moving images as forms of exploration and storytelling.', works: 'Visual projects', galleries: 'Galleries', videos: 'Videos', allGalleries: 'All galleries', allVideos: 'All videos', empty: 'No visual projects published yet.'},
-  es: {title: 'Obras visuales', eyebrow: 'Imagen', intro: 'Fotografía, autorretrato e imágenes en movimiento como formas de investigación y relato.', works: 'Proyectos visuales', galleries: 'Galerías', videos: 'Vídeos', allGalleries: 'Todas las galerías', allVideos: 'Todos los vídeos', empty: 'Todavía no hay proyectos visuales publicados.'},
+  it: {title: 'Opere visive', eyebrow: 'Immagine', intro: 'Fotografia, autoritratto e immagini in movimento come forme di ricerca e racconto.', galleries: 'Gallerie', videos: 'Video', allGalleries: 'Tutte le gallerie', allVideos: 'Tutti i video', empty: 'Nessun progetto visivo pubblicato.'},
+  en: {title: 'Visual works', eyebrow: 'Image', intro: 'Photography, self-portraiture and moving images as forms of exploration and storytelling.', galleries: 'Galleries', videos: 'Videos', allGalleries: 'All galleries', allVideos: 'All videos', empty: 'No visual projects published yet.'},
+  es: {title: 'Obras visuales', eyebrow: 'Imagen', intro: 'Fotografía, autorretrato e imágenes en movimiento como formas de investigación y relato.', galleries: 'Galerías', videos: 'Vídeos', allGalleries: 'Todas las galerías', allVideos: 'Todos los vídeos', empty: 'Todavía no hay proyectos visuales publicados.'},
 } as const
 
 const VISUAL_WORKS_QUERY = defineQuery(/* groq */ `{
@@ -67,7 +67,6 @@ export default async function OpereVisivePage({params}: {params: Promise<{lang: 
       </header>
 
       <section className="mx-auto max-w-7xl">
-        <h2 className="mb-8 border-b border-black/20 pb-4 font-serif text-3xl md:text-4xl">{text.works}</h2>
         {data.opere.length ? <OperaGrid opere={data.opere} lang={language} /> : <p className="font-serif text-2xl italic text-black/45">{text.empty}</p>}
       </section>
 

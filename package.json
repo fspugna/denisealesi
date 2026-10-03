@@ -17,6 +17,8 @@
     "migration:client-update:run": "node migration/scripts/apply-client-update.mjs --execute",
     "migration:galleries-order:analyze": "node migration/scripts/order-galleries.mjs",
     "migration:galleries-order:run": "node migration/scripts/order-galleries.mjs --execute",
+    "migration:gallery-description-title:analyze": "node migration/scripts/add-gallery-description-title.mjs",
+    "migration:gallery-description-title:run": "node migration/scripts/add-gallery-description-title.mjs --execute",
     "migration:rich-text:analyze": "node migration/scripts/migrate-rich-text-and-contacts.mjs",
     "migration:rich-text:run": "node migration/scripts/migrate-rich-text-and-contacts.mjs --execute"
   },

@@ -21,9 +21,9 @@ const backLabels = {
 } as const;
 
 const relatedLabels = {
-    it: {title: 'Approfondisci', gallery: 'Apri la galleria fotografica', video: 'Guarda il video', amazon: 'Disponibile su Amazon', amazonEbook: 'E-book disponibile su Amazon'},
-    en: {title: 'Explore', gallery: 'Open the photo gallery', video: 'Watch the video', amazon: 'Available on Amazon', amazonEbook: 'E-book available on Amazon'},
-    es: {title: 'Descubre más', gallery: 'Abrir la galería fotográfica', video: 'Ver el vídeo', amazon: 'Disponible en Amazon', amazonEbook: 'E-book disponible en Amazon'},
+    it: {title: 'Approfondisci', gallery: 'Apri la galleria fotografica', video: 'Guarda il video', amazon: 'Disponibile su Amazon'},
+    en: {title: 'Explore', gallery: 'Open the photo gallery', video: 'Watch the video', amazon: 'Available on Amazon'},
+    es: {title: 'Descubre más', gallery: 'Abrir la galería fotográfica', video: 'Ver el vídeo', amazon: 'Disponible en Amazon'},
 } as const;
 
 export default function OperaDetailView({ opera }: { opera: Opera }) {
@@ -37,7 +37,7 @@ export default function OperaDetailView({ opera }: { opera: Opera }) {
     const backLabel = backLabels[language][category];
     const backHref = category === 'visiva' ? `/${language}/opere-visive` : `/${language}/opere-letterarie`;
     const related = relatedLabels[lang as keyof typeof relatedLabels] || relatedLabels.it;
-    const amazonLabel = opera.amazonFormato === 'ebook' ? related.amazonEbook : related.amazon;
+    const amazonLabel = related.amazon;
 
     // Le copertine vengono mostrate per intero; soltanto le opere visive usano
     // il ritaglio e l'hotspot impostati nello Studio.
@@ -104,10 +104,11 @@ export default function OperaDetailView({ opera }: { opera: Opera }) {
                 </div>
 
                 {/* Dettagli e Audio Player */}
-                <div className="flex flex-col gap-6 md:pt-10">
+                <div className={`flex flex-col gap-6 ${category === 'visiva' ? 'md:pt-10' : ''}`}>
                     <div>
-                        {opera.anno && <p className="mb-5 text-[9px] uppercase tracking-[0.28em] text-black/45">{opera.anno}</p>}
+                        {category === 'visiva' && opera.anno && <p className="mb-5 text-[9px] uppercase tracking-[0.28em] text-black/45">{opera.anno}</p>}
                         <h1 className="mb-4 font-serif text-3xl leading-tight md:text-5xl">{opera.titolo}</h1>
+                        {category === 'letteraria' && opera.anno && <p className="mb-5 text-[9px] uppercase tracking-[0.28em] text-black/45">{opera.anno}</p>}
                         {opera.descrizione?.length ? <RichText value={opera.descrizione} className="max-w-xl text-[#625d53]" /> : opera.descrizioneTesto ? (
                             <p className="body-copy max-w-xl whitespace-pre-line text-[#625d53]">{opera.descrizioneTesto}</p>
                         ) : null}

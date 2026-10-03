@@ -82,6 +82,7 @@ export interface GalleriaFotografica {
     _id: string;
     orderRank?: string;
     titolo: string;
+    titoloDescrizione?: string;
     descrizione?: PortableTextBlock[];
     descrizioneTesto?: string;
     data?: string;

@@ -25,6 +25,12 @@ export const galleriaFotografica = defineType({
           defineField({name: 'language', title: 'Lingua', type: 'string', options: {list: [{title: 'Italiano', value: 'it'}, {title: 'English', value: 'en'}, {title: 'Español', value: 'es'}]}, validation: (rule) => rule.required()}),
           defineField({name: 'titolo', title: 'Titolo', type: 'string', validation: (rule) => rule.required()}),
           defineField({
+            name: 'titoloDescrizione',
+            title: 'Titolo della descrizione',
+            type: 'string',
+            description: 'Facoltativo. Viene mostrato sopra il testo descrittivo come titolo di sezione.',
+          }),
+          defineField({
             name: 'descrizioneRichText',
             title: 'Descrizione',
             type: 'array',
