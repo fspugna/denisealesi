@@ -28,13 +28,16 @@ const VIDEOS_QUERY = defineQuery(`
   }
 `)
 
-export default async function VideosPage({params}: {params: Promise<{lang: string}>}) {
+export default async function VideosPage({params, searchParams}: {params: Promise<{lang: string}>; searchParams: Promise<{from?: string}>}) {
   const {lang} = await params
+  const {from} = await searchParams
   const language = lang === 'en' || lang === 'es' ? lang : 'it'
+  const fromVisualWorks = from === 'opere-visive'
+  const visualWorksContext = fromVisualWorks ? '?from=opere-visive' : ''
   const text = copy[language]
   const videos = await client.fetch<Video[]>(VIDEOS_QUERY, {lang: language})
 
-  if (videos.length === 1) redirect(`/${language}/video/${videos[0].slug || videos[0]._id}`)
+  if (videos.length === 1) redirect(`/${language}/video/${videos[0].slug || videos[0]._id}${visualWorksContext}`)
 
   return <main className="min-h-screen bg-[#eee8dc] px-6 pb-28 pt-20 text-[#20231f] md:px-12 md:pt-20">
     <header className="mx-auto mb-12 grid max-w-7xl gap-6 border-b border-black/20 pb-8 md:grid-cols-2 md:items-end">
@@ -49,7 +52,7 @@ export default async function VideosPage({params}: {params: Promise<{lang: strin
       {videos.map((video, index) => {
         const thumbnail = getYouTubeThumbnail(video.url)
         return <FadeIn key={video._id} delay={index * 0.1}>
-          <Link href={`/${language}/video/${video.slug || video._id}`} className="group block">
+          <Link href={`/${language}/video/${video.slug || video._id}${visualWorksContext}`} className="group block">
             <div className="relative aspect-video overflow-hidden bg-[#20251f]">
               {thumbnail ? <Image src={thumbnail} alt={video.titolo} fill sizes="(max-width: 768px) 100vw, 50vw" className="object-cover opacity-85 transition duration-700 group-hover:scale-[1.025] group-hover:opacity-100" /> : null}
               <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent" />

@@ -9,7 +9,10 @@ import Link from 'next/link'
 import {notFound, permanentRedirect} from 'next/navigation'
 import {defineQuery} from 'next-sanity'
 
-type Props = {params: Promise<{id: string; lang: string}>}
+type Props = {
+  params: Promise<{id: string; lang: string}>
+  searchParams: Promise<{from?: string}>
+}
 
 const VIDEO_QUERY = defineQuery(`
   *[_type == "video" && (_id == $id || slug.current == $id)][0]{
@@ -46,11 +49,13 @@ export async function generateMetadata({params}: Props): Promise<Metadata> {
   return video ? {title: `${video.titolo} | Denise Alesi`, description: video.descrizioneTesto || (video.descrizione ? toPlainText(video.descrizione) : undefined)} : {title: 'Video non trovato'}
 }
 
-export default async function VideoDetailPage({params}: Props) {
+export default async function VideoDetailPage({params, searchParams}: Props) {
   const {id, lang} = await params
+  const {from} = await searchParams
+  const fromVisualWorks = from === 'opere-visive'
   const video = await getVideo(id, lang)
   if (!video) notFound()
-  if (video.slug && id !== video.slug) permanentRedirect(`/${lang}/video/${video.slug}`)
+  if (video.slug && id !== video.slug) permanentRedirect(`/${lang}/video/${video.slug}${fromVisualWorks ? '?from=opere-visive' : ''}`)
   const embedUrl = getVideoEmbedUrl(video.url)
   const archiveLabel = lang === 'en' ? 'Back to visual works' : lang === 'es' ? 'Volver a las obras visuales' : 'Torna alle opere visive'
   const silenceTitle = video.titolo.match(/^[“"]?Silenzio[”"]?\s*[-–—]\s*(.+)$/i)
@@ -59,7 +64,7 @@ export default async function VideoDetailPage({params}: Props) {
 
   return <main className="min-h-screen bg-[#eee8dc] px-6 pb-28 pt-20 text-[#20231f] md:px-12 md:pt-20">
     <div className="mx-auto max-w-7xl">
-      <Link href={`/${lang}/opere-visive`} className="mb-5 inline-flex items-center gap-4 text-[9px] uppercase tracking-[0.28em] text-black/45 transition-colors hover:text-black">← {archiveLabel}</Link>
+      {fromVisualWorks ? <Link href={`/${lang}/opere-visive`} className="mb-5 inline-flex items-center gap-4 text-[9px] uppercase tracking-[0.28em] text-black/45 transition-colors hover:text-black">← {archiveLabel}</Link> : null}
       <header className="mb-5 border-b border-black/20 pb-5">
         <h1 className="max-w-5xl font-serif text-3xl leading-[1.05] tracking-[-0.035em] sm:text-4xl lg:text-5xl">
           <span className="block">{displayTitle}</span>

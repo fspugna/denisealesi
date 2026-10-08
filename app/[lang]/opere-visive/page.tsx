@@ -96,13 +96,13 @@ export default async function OpereVisivePage({params}: {params: Promise<{lang: 
         <section className="mx-auto mt-28 max-w-7xl">
           <div className="mb-10 flex items-end justify-between border-b border-black/20 pb-5">
             <h2 className="font-serif text-3xl md:text-4xl">{text.videos}</h2>
-            <Link href={`/${language}/video`} className="text-[9px] uppercase tracking-[0.24em] text-black/50 hover:text-black">{text.allVideos} →</Link>
+            <Link href={`/${language}/video?from=opere-visive`} className="text-[9px] uppercase tracking-[0.24em] text-black/50 hover:text-black">{text.allVideos} →</Link>
           </div>
           <div className="grid gap-8 md:grid-cols-2">
             {data.video.map((video, index) => {
               const thumbnail = getYouTubeThumbnail(video.url)
               return <FadeIn key={video._id} delay={index * 0.1}>
-                <Link href={`/${language}/video/${video.slug || video._id}`} className="group block">
+                <Link href={`/${language}/video/${video.slug || video._id}?from=opere-visive`} className="group block">
                   <div className="relative aspect-video overflow-hidden bg-[#20251f]">
                     {thumbnail ? <Image src={thumbnail} alt={video.titolo} fill sizes="(max-width: 768px) 100vw, 50vw" className="object-cover opacity-85 transition duration-700 group-hover:scale-[1.025] group-hover:opacity-100" /> : null}
                     <span className="absolute bottom-5 right-5 flex size-14 items-center justify-center rounded-full border border-white/60 bg-black/15 text-lg text-white backdrop-blur-sm">▶</span>
