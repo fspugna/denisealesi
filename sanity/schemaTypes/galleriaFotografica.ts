@@ -56,6 +56,16 @@ export const galleriaFotografica = defineType({
       }),
     }),
     defineField({
+      name: 'copertina',
+      title: 'Foto di copertina',
+      type: 'image',
+      description: 'Facoltativa. Scegli l’immagine usata nelle anteprime della galleria. Se non la imposti, verrà usata la prima fotografia della galleria.',
+      options: {hotspot: true},
+      fields: [
+        defineField({name: 'alt', title: 'Testo alternativo', type: 'string'}),
+      ],
+    }),
+    defineField({
       name: 'fotografie',
       title: 'Fotografie',
       type: 'array',
@@ -93,7 +103,7 @@ export const galleriaFotografica = defineType({
     }),
   ],
   preview: {
-    select: {title: 'traduzioni.0.titolo', subtitle: 'data', media: 'fotografie.0'},
-    prepare: ({title, subtitle, media}) => ({title: title || 'Galleria senza titolo', subtitle, media}),
+    select: {title: 'traduzioni.0.titolo', subtitle: 'data', cover: 'copertina', firstPhoto: 'fotografie.0'},
+    prepare: ({title, subtitle, cover, firstPhoto}) => ({title: title || 'Galleria senza titolo', subtitle, media: cover || firstPhoto}),
   },
 })

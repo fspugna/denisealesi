@@ -104,7 +104,7 @@ export default function OperaDetailView({ opera }: { opera: Opera }) {
                 </div>
 
                 {/* Dettagli e Audio Player */}
-                <div className={`flex flex-col gap-6 ${category === 'visiva' ? 'md:pt-10' : ''}`}>
+                <div className="flex flex-col gap-6">
                     <div>
                         {category === 'visiva' && opera.anno && <p className="mb-5 text-[9px] uppercase tracking-[0.28em] text-black/45">{opera.anno}</p>}
                         <h1 className="mb-4 font-serif text-3xl leading-tight md:text-5xl">{opera.titolo}</h1>

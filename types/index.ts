@@ -88,6 +88,7 @@ export interface GalleriaFotografica {
     descrizione?: PortableTextBlock[];
     descrizioneTesto?: string;
     data?: string;
+    copertina?: SanityImage;
     fotografie: Fotografia[];
 }
 

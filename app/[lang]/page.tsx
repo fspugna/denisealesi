@@ -1,9 +1,10 @@
 import {FadeIn, FadeUp} from '@/components/Animate'
 import ContactsView from '@/components/ContactsView'
 import {withContactFallback} from '@/lib/contacts'
+import {getYouTubeThumbnail} from '@/lib/video'
 import {client} from '@/sanity/lib/client'
 import {urlFor} from '@/sanity/lib/image'
-import type {Contatti, Header, Opera} from '@/types'
+import type {Contatti, Header, Opera, Video} from '@/types'
 import {PortableText} from '@portabletext/react'
 import Image from 'next/image'
 import Link from 'next/link'
@@ -13,6 +14,7 @@ type HomePageData = {
   header: Header | null
   letterarie: Opera[]
   visive: Opera[]
+  video: Video[]
   contatti: Contatti | null
 }
 
@@ -35,6 +37,10 @@ const HOME_QUERY = defineQuery(`{
       _id, "slug": slug.current, categoria, immagine, anno, ordine,
       "titolo": coalesce(traduzioni[language == $lang][0].titolo, traduzioni[language == "it"][0].titolo, traduzioni[0].titolo)
     },
+    "video": *[_type == "video"] | order(inEvidenza desc, data desc, _createdAt desc){
+      _id, "slug": slug.current, data, url,
+      "titolo": coalesce(traduzioni[language == $lang][0].titolo, traduzioni[language == "it"][0].titolo, traduzioni[0].titolo, titolo)
+    },
     "contatti": *[_id == "contatti"][0]{
       telefono,
       email,
@@ -48,7 +54,9 @@ async function getHomeData(lang: string): Promise<HomePageData> {
   return client.fetch<HomePageData>(HOME_QUERY, {lang})
 }
 
-function HomeWorksSection({title, linkLabel, href, opere, lang, alternate = false}: {title: string; linkLabel: string; href: string; opere: Opera[]; lang: string; alternate?: boolean}) {
+function HomeWorksSection({title, linkLabel, href, opere, videos = [], lang, alternate = false}: {title: string; linkLabel: string; href: string; opere: Opera[]; videos?: Video[]; lang: string; alternate?: boolean}) {
+  const hasItems = opere.length > 0 || videos.length > 0
+
   return (
     <section className={`border-t border-black/15 px-6 py-24 text-[#20231f] md:px-12 lg:py-32 ${alternate ? 'bg-[#e5ddd0]' : 'bg-[#eee8dc]'}`}>
       <div className="mx-auto max-w-7xl">
@@ -56,7 +64,7 @@ function HomeWorksSection({title, linkLabel, href, opere, lang, alternate = fals
           <h2 className="font-serif text-4xl tracking-[-0.03em] md:text-6xl">{title}</h2>
           <Link href={`/${lang}/${href}`} className="hidden text-[10px] uppercase tracking-[0.24em] text-black/55 transition-colors hover:text-black sm:block">{linkLabel} →</Link>
         </div>
-        {opere.length ? (
+        {hasItems ? (
           <div className="grid gap-px bg-black/15 sm:grid-cols-2 lg:grid-cols-4">
             {opere.map((opera, index) => (
               <FadeIn key={opera._id} delay={index * 0.12} className={alternate ? 'bg-[#e5ddd0]' : 'bg-[#eee8dc]'}>
@@ -79,6 +87,29 @@ function HomeWorksSection({title, linkLabel, href, opere, lang, alternate = fals
                 </Link>
               </FadeIn>
             ))}
+            {videos.map((video, index) => {
+              const thumbnail = getYouTubeThumbnail(video.url)
+              return (
+                <FadeIn key={video._id} delay={(opere.length + index) * 0.12} className={alternate ? 'bg-[#e5ddd0]' : 'bg-[#eee8dc]'}>
+                  <Link href={`/${lang}/video/${video.slug || video._id}`} className="group block p-4 pb-7">
+                    <div className="relative mb-5 aspect-[4/5] overflow-hidden bg-[#20251f]">
+                      {thumbnail ? <Image
+                        src={thumbnail}
+                        alt={video.titolo}
+                        fill
+                        sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
+                        className="object-cover opacity-85 transition duration-700 group-hover:scale-[1.025] group-hover:opacity-100"
+                      /> : null}
+                      <span aria-hidden="true" className="absolute bottom-4 right-4 flex size-12 items-center justify-center rounded-full border border-white/70 bg-black/25 pl-0.5 text-base text-white backdrop-blur-sm">▶</span>
+                    </div>
+                    <div className="flex items-baseline justify-between gap-4">
+                      <h3 className="font-serif text-xl leading-tight text-[#20231f]">{video.titolo}</h3>
+                      {video.data ? <span className="shrink-0 text-[9px] tracking-widest text-black/40">{new Date(`${video.data}T12:00:00`).getFullYear()}</span> : null}
+                    </div>
+                  </Link>
+                </FadeIn>
+              )
+            })}
           </div>
         ) : <p className="font-serif text-2xl italic text-black/45">Le opere abiteranno presto questo spazio.</p>}
         <Link href={`/${lang}/${href}`} className="mt-12 inline-block text-[10px] uppercase tracking-[0.24em] text-black/55 sm:hidden">{linkLabel} →</Link>
@@ -132,7 +163,7 @@ export default async function Home({params}: {params: Promise<{lang: string}>}) 
       </section>
 
       <HomeWorksSection title={text.literary} linkLabel={text.allLiterary} href="opere-letterarie" opere={data.letterarie} lang={lang} />
-      <HomeWorksSection title={text.visual} linkLabel={text.allVisual} href="opere-visive" opere={data.visive} lang={lang} alternate />
+      <HomeWorksSection title={text.visual} linkLabel={text.allVisual} href="opere-visive" opere={data.visive} videos={data.video} lang={lang} alternate />
       <ContactsView contattiData={contacts} lang={lang} />
     </div>
   )

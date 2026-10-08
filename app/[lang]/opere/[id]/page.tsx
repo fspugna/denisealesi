@@ -36,5 +36,5 @@ export default async function OperaPage({params}: Props) {
   const opera = await getOpera(id, lang)
   if (!opera) notFound()
   if (opera.slug && id !== opera.slug) permanentRedirect(`/${lang}/opere/${opera.slug}`)
-  return <div className="min-h-screen bg-[#eee8dc] px-6 pb-24 pt-24 text-[#20231f] md:px-12 md:pt-28"><div className="mx-auto max-w-6xl"><OperaDetailView opera={opera} /></div></div>
+  return <div className={`min-h-screen bg-[#eee8dc] px-6 pb-24 text-[#20231f] md:px-12 ${opera.categoria === 'visiva' ? 'pt-20 md:pt-20' : 'pt-24 md:pt-28'}`}><div className="mx-auto max-w-6xl"><OperaDetailView opera={opera} /></div></div>
 }

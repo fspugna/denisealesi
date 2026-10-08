@@ -37,7 +37,7 @@ const VISUAL_WORKS_QUERY = defineQuery(/* groq */ `{
     orderRank,
     data,
     "titolo": coalesce(traduzioni[language == $lang][0].titolo, traduzioni[language == "it"][0].titolo, traduzioni[0].titolo),
-    "fotografie": fotografie[0...1]
+    "copertina": coalesce(copertina, fotografie[0])
   },
   "video": *[_type == "video"] | order(inEvidenza desc, data desc, _createdAt desc)[0...2]{
     _id,
@@ -60,7 +60,7 @@ export default async function OpereVisivePage({params}: {params: Promise<{lang: 
   const data = await client.fetch<VisualWorksData>(VISUAL_WORKS_QUERY, {lang: language})
 
   return (
-    <main className="min-h-screen bg-[#eee8dc] px-6 pb-28 pt-24 text-[#20231f] md:px-12 md:pt-28">
+    <main className="min-h-screen bg-[#eee8dc] px-6 pb-28 pt-20 text-[#20231f] md:px-12 md:pt-20">
       <header className="mx-auto mb-12 grid max-w-7xl gap-6 border-b border-black/20 pb-8 md:grid-cols-2 md:items-end">
         <div>
           <span className="mb-5 block text-[9px] uppercase tracking-[0.34em] text-black/40">{text.eyebrow}</span>
@@ -83,7 +83,7 @@ export default async function OpereVisivePage({params}: {params: Promise<{lang: 
             {data.gallerie.map((galleria) => (
               <Link key={galleria._id} href={`/${language}/gallerie/${galleria.slug || galleria._id}`} className="group block">
                 <div className="relative aspect-[3/2] overflow-hidden bg-[#d8d0c2]">
-                  {galleria.fotografie?.[0] ? <Image src={urlFor(galleria.fotografie[0]).width(1200).height(800).fit('crop').url()} alt={galleria.fotografie[0].alt || galleria.titolo} fill sizes="(max-width: 768px) 100vw, 50vw" className="object-cover transition duration-700 group-hover:scale-[1.02]" /> : null}
+                  {galleria.copertina ? <Image src={urlFor(galleria.copertina).width(1200).height(800).fit('crop').url()} alt={galleria.copertina.alt || galleria.titolo} fill sizes="(max-width: 768px) 100vw, 50vw" className="object-cover transition duration-700 group-hover:scale-[1.02]" /> : null}
                 </div>
                 <h3 className="mt-5 border-t border-black/20 pt-4 font-serif text-2xl">{galleria.titolo}</h3>
               </Link>
