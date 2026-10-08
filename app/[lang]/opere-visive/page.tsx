@@ -60,7 +60,7 @@ export default async function OpereVisivePage({params}: {params: Promise<{lang: 
   const data = await client.fetch<VisualWorksData>(VISUAL_WORKS_QUERY, {lang: language})
 
   return (
-    <main className="min-h-screen bg-[#eee8dc] px-6 pb-28 pt-20 text-[#20231f] md:px-12 md:pt-20">
+    <main className="min-h-screen bg-[#eee8dc] px-6 pb-28 pt-24 text-[#20231f] md:px-12 md:pt-28">
       <header className="mx-auto mb-12 grid max-w-7xl gap-6 border-b border-black/20 pb-8 md:grid-cols-2 md:items-end">
         <div>
           <span className="mb-5 block text-[9px] uppercase tracking-[0.34em] text-black/40">{text.eyebrow}</span>

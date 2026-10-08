@@ -71,7 +71,7 @@ export default async function VideoDetailPage({params}: Props) {
         {embedUrl ? <div className="aspect-video w-full overflow-hidden bg-black shadow-[0_35px_100px_rgba(0,0,0,0.35)]">
           <iframe className="h-full w-full" src={embedUrl} title={video.titolo} allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowFullScreen />
         </div> : <a href={video.url} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-4 border-b border-[#8a704b] pb-2 text-sm uppercase tracking-[0.2em]">Apri il video originale →</a>}
-        {video.descrizione?.length ? <RichText value={video.descrizione} className="border-t border-black/15 pt-6 text-[#625d53] lg:pt-8" /> : video.descrizioneTesto ? <p className="body-copy whitespace-pre-line border-t border-black/15 pt-6 text-[#625d53] lg:pt-8">{video.descrizioneTesto}</p> : null}
+        {video.descrizione?.length ? <RichText value={video.descrizione} className="border-t border-black/15 pt-6 text-[#625d53] lg:border-t-0 lg:pt-8" /> : video.descrizioneTesto ? <p className="body-copy whitespace-pre-line border-t border-black/15 pt-6 text-[#625d53] lg:border-t-0 lg:pt-8">{video.descrizioneTesto}</p> : null}
       </div>
 
       <AltriVideo currentId={video._id} lang={lang} />
