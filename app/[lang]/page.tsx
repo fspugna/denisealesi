@@ -65,18 +65,18 @@ function HomeWorksSection({title, linkLabel, href, opere, videos = [], lang, alt
           <Link href={`/${lang}/${href}`} className="hidden text-[10px] uppercase tracking-[0.24em] text-black/55 transition-colors hover:text-black sm:block">{linkLabel} →</Link>
         </div>
         {hasItems ? (
-          <div className="grid gap-px bg-black/15 sm:grid-cols-2 lg:grid-cols-4">
+          <div className={`grid gap-px bg-black/15 sm:grid-cols-2 ${alternate ? 'lg:grid-cols-3' : 'lg:grid-cols-4'}`}>
             {opere.map((opera, index) => (
               <FadeIn key={opera._id} delay={index * 0.12} className={alternate ? 'bg-[#e5ddd0]' : 'bg-[#eee8dc]'}>
                 <Link href={`/${lang}/opere/${opera.slug || opera._id}`} className="group block p-4 pb-7">
-                  <div className="relative mb-5 aspect-[4/5] overflow-hidden bg-black/5">
+                  <div className={`relative mb-5 overflow-hidden bg-black/5 ${alternate ? 'aspect-video' : 'aspect-[4/5]'}`}>
                     {opera.immagine ? <Image
                       src={opera.categoria === 'letteraria'
                         ? urlFor(opera.immagine).ignoreImageParams().width(900).url()
-                        : urlFor(opera.immagine).width(750).height(938).fit('crop').url()}
+                        : urlFor(opera.immagine).width(1200).height(675).fit('crop').url()}
                       alt={opera.titolo || 'Opera'}
                       fill
-                      sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
+                      sizes={`(max-width: 640px) 100vw, (max-width: 1024px) 50vw, ${alternate ? '33vw' : '25vw'}`}
                       className={`${opera.categoria === 'letteraria' ? 'object-contain p-2' : 'object-cover'} transition duration-700 group-hover:scale-[1.025]`}
                     /> : null}
                   </div>
@@ -92,12 +92,12 @@ function HomeWorksSection({title, linkLabel, href, opere, videos = [], lang, alt
               return (
                 <FadeIn key={video._id} delay={(opere.length + index) * 0.12} className={alternate ? 'bg-[#e5ddd0]' : 'bg-[#eee8dc]'}>
                   <Link href={`/${lang}/video/${video.slug || video._id}`} className="group block p-4 pb-7">
-                    <div className="relative mb-5 aspect-[4/5] overflow-hidden bg-[#20251f]">
+                    <div className="relative mb-5 aspect-video overflow-hidden bg-[#20251f]">
                       {thumbnail ? <Image
                         src={thumbnail}
                         alt={video.titolo}
                         fill
-                        sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
+                        sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
                         className="object-cover opacity-85 transition duration-700 group-hover:scale-[1.025] group-hover:opacity-100"
                       /> : null}
                       <span aria-hidden="true" className="absolute bottom-4 right-4 flex size-12 items-center justify-center rounded-full border border-white/70 bg-black/25 pl-0.5 text-base text-white backdrop-blur-sm">▶</span>
