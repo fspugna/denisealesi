@@ -1,5 +1,5 @@
 import {defineArrayMember, defineField, defineType} from 'sanity'
-import {BookIcon} from '@sanity/icons'
+import {BookIcon} from '@sanity/icons/Book'
 import {richTextBlock} from './shared/richText'
 import {contentSlugField} from './shared/contentSlug'
 

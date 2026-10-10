@@ -1,4 +1,5 @@
-import {BookIcon, ImageIcon} from '@sanity/icons'
+import {BookIcon} from '@sanity/icons/Book'
+import {ImageIcon} from '@sanity/icons/Image'
 import {orderableDocumentListDeskItem} from '@sanity/orderable-document-list'
 import type {StructureResolver} from 'sanity/structure'
 
