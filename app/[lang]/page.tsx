@@ -27,7 +27,8 @@ const copy = {
 const HOME_QUERY = defineQuery(`{
     "header": *[_id == "header"][0]{
       ritratto,
-      "citazione": coalesce(traduzioni[language == $lang][0].citazione, traduzioni[language == "it"][0].citazione)
+      "citazione": coalesce(traduzioni[language == $lang][0].citazione, traduzioni[language == "it"][0].citazione),
+      "fonteCitazione": coalesce(traduzioni[language == $lang][0].fonteCitazione, traduzioni[language == "it"][0].fonteCitazione)
     },
     "letterarie": *[_type == "opera" && categoria == "letteraria" && (!defined(stato) || stato == "pubblicata")] | order(ordine asc, _createdAt desc){
       _id, "slug": slug.current, categoria, immagine, anno, ordine,
@@ -151,11 +152,13 @@ export default async function Home({params}: {params: Promise<{lang: string}>}) 
         <div className="relative flex min-h-[72vh] flex-col items-center justify-center px-7 py-20 text-center sm:px-12 lg:min-h-screen lg:px-[10vw] lg:pb-16 lg:pt-36">
           <span className="mb-8 font-sans text-[13px] uppercase tracking-[0.3em] text-[#766e60]">{text.role}</span>
           <FadeUp delay={0.15}>
-            <div className="body-copy body-copy--natural mx-auto max-w-2xl text-[#4e4b43] [&_p:last-child]:mt-4 [&_p:last-child]:italic [&_p:last-child]:text-[#766e60]">
-              {data.header?.citazione?.length ? <PortableText value={data.header.citazione} /> : <>
-                <p>Non può esistere spazio tra ciò che fu, che è, e che sarà. Ogni accadimento assume le sembianze di ciò che crediamo, di ciò del quale abbiamo bisogno fosse anche dell’inferno. Solo quando la verità ha luogo è possibile scostare il velo che avvolge ogni pensiero, ogni immagine, allora tutto si trasforma, tutto accade. Il racconto crea la storia, nutre l&apos;immaginazione, contribuisce alla conoscenza di se stessi e delle cose. Si racconta con la parola, si racconta con le ombre, si racconta con la luce.</p>
-                <p>(tratto da <em>Immagini e parole</em> di Denise Alesi)</p>
-              </>}
+            <div className="mx-auto max-w-2xl">
+              <div className="body-copy body-copy--natural text-[#4e4b43]">
+                {data.header?.citazione?.length ? <PortableText value={data.header.citazione} /> : <p>Non può esistere spazio tra ciò che fu, che è, e che sarà. Ogni accadimento assume le sembianze di ciò che crediamo, di ciò del quale abbiamo bisogno fosse anche dell’inferno. Solo quando la verità ha luogo è possibile scostare il velo che avvolge ogni pensiero, ogni immagine, allora tutto si trasforma, tutto accade. Il racconto crea la storia, nutre l&apos;immaginazione, contribuisce alla conoscenza di se stessi e delle cose. Si racconta con la parola, si racconta con le ombre, si racconta con la luce.</p>}
+              </div>
+              <div className="body-copy body-copy--natural mt-5 italic text-[#766e60]">
+                {data.header?.fonteCitazione?.length ? <PortableText value={data.header.fonteCitazione} /> : <p>(tratto da <em>Immagini e parole</em> di Denise Alesi)</p>}
+              </div>
             </div>
           </FadeUp>
           <span className="absolute bottom-8 right-8 hidden text-[9px] uppercase tracking-[0.3em] text-[#82796a] lg:block [writing-mode:vertical-rl]">Scorri per entrare</span>

@@ -18,6 +18,7 @@ export interface SanityImage {
 export interface Header {
     ritratto?: SanityImage & {alt?: string};
     citazione?: PortableTextBlock[];
+    fonteCitazione?: PortableTextBlock[];
     operaInEvidenza?: {
         immagine?: SanityImage & {alt?: string};
         didascalia?: string;

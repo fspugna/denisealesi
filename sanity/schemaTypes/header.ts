@@ -31,8 +31,24 @@ export const header = defineType({
                         title: 'Citazione',
                         type: 'array',
                         of: [defineArrayMember({type: 'block'})],
-                        description: 'Inserisci il testo e, in un secondo paragrafo, la fonte. Puoi formattare “Immagini e parole” in corsivo.',
+                        description: 'Inserisci soltanto il testo della citazione. La fonte ha un campo separato qui sotto.',
                         validation: (rule) => rule.required().min(1),
+                    }),
+                    defineField({
+                        name: 'fonteCitazione',
+                        title: 'Fonte della citazione',
+                        type: 'array',
+                        of: [defineArrayMember({
+                            type: 'block',
+                            styles: [{title: 'Normale', value: 'normal'}],
+                            lists: [],
+                            marks: {
+                                decorators: [{title: 'Corsivo', value: 'em'}],
+                                annotations: [],
+                            },
+                        })],
+                        description: 'Per esempio: “(tratto da Immagini e parole di Denise Alesi)”. Puoi lasciare in corsivo il titolo dell’opera.',
+                        validation: (rule) => rule.max(1),
                     }),
                 ],
                 preview: {
