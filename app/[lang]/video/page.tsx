@@ -17,7 +17,6 @@ const VIDEOS_QUERY = defineQuery(`
   *[_type == "video"] | order(inEvidenza desc, data desc, _createdAt desc){
     _id,
     "slug": slug.current,
-    data,
     url,
     "titolo": coalesce(
       traduzioni[language == $lang][0].titolo,
@@ -58,12 +57,11 @@ export default async function VideosPage({params, searchParams}: {params: Promis
               <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent" />
               <span className="absolute bottom-5 right-5 flex size-14 items-center justify-center rounded-full border border-white/60 bg-black/15 text-lg text-white backdrop-blur-sm transition duration-300 group-hover:scale-110 group-hover:bg-[#c5a46d] group-hover:text-[#20231f]">▶</span>
             </div>
-            <div className="mt-5 flex items-start justify-between gap-6 border-t border-black/20 pt-5">
+            <div className="mt-5 border-t border-black/20 pt-5">
               <div>
                 <h2 className="max-w-2xl font-serif text-xl leading-tight md:text-2xl">{video.titolo}</h2>
                 <span className="mt-4 inline-block text-[9px] uppercase tracking-[0.28em] text-black/45">{text.watch} →</span>
               </div>
-              {video.data && <time dateTime={video.data} className="shrink-0 text-[9px] tracking-widest text-black/45">{new Date(`${video.data}T12:00:00`).getFullYear()}</time>}
             </div>
           </Link>
         </FadeIn>
