@@ -13,8 +13,9 @@ declare global {
   }
 }
 
-const storageKey = 'sfp-analytics-consent-v1'
-const consentEvent = 'sfp:open-cookie-settings'
+const storageKey = 'denise-analytics-consent-v1'
+const cookieName = 'denise_analytics_consent'
+const consentEvent = 'denise:open-cookie-settings'
 const copy = {
   it: {title: 'La tua privacy', description: 'Usiamo cookie analitici di Google Analytics solo con il tuo consenso, per capire come viene utilizzato il sito e migliorarlo. Puoi cambiare scelta in qualsiasi momento.', accept: 'Accetta analytics', reject: 'Rifiuta', google: 'Informazioni su Google Analytics'},
   en: {title: 'Your privacy', description: 'We use Google Analytics cookies only with your consent, to understand how the website is used and improve it. You can change your choice at any time.', accept: 'Accept analytics', reject: 'Reject', google: 'About Google Analytics'},
@@ -41,6 +42,24 @@ function updateGoogleConsent(choice: ConsentChoice) {
   })
 }
 
+function readSavedChoice(): ConsentChoice | null {
+  const stored = window.localStorage.getItem(storageKey)
+  if (stored === 'granted' || stored === 'denied') return stored
+
+  const cookie = document.cookie
+    .split('; ')
+    .find((entry) => entry.startsWith(`${cookieName}=`))
+    ?.split('=')[1]
+
+  return cookie === 'granted' || cookie === 'denied' ? cookie : null
+}
+
+function persistChoice(choice: ConsentChoice) {
+  window.localStorage.setItem(storageKey, choice)
+  const secure = window.location.protocol === 'https:' ? '; Secure' : ''
+  document.cookie = `${cookieName}=${choice}; Max-Age=31536000; Path=/; SameSite=Lax${secure}`
+}
+
 export function AnalyticsConsent() {
   const measurementId = process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID
   const pathname = usePathname()
@@ -60,8 +79,7 @@ export function AnalyticsConsent() {
     })
     gtag('set', 'ads_data_redaction', true)
 
-    const saved = window.localStorage.getItem(storageKey)
-    const initialChoice = saved === 'granted' || saved === 'denied' ? saved : null
+    const initialChoice = readSavedChoice()
     queueMicrotask(() => {
       setChoice(initialChoice)
       setIsOpen(initialChoice === null)
@@ -83,7 +101,7 @@ export function AnalyticsConsent() {
   }, [analyticsReady, choice, measurementId, pathname])
 
   const saveChoice = (nextChoice: ConsentChoice) => {
-    window.localStorage.setItem(storageKey, nextChoice)
+    persistChoice(nextChoice)
     updateGoogleConsent(nextChoice)
     setChoice(nextChoice)
     setIsOpen(false)
